@@ -1,0 +1,166 @@
+syntax = "proto2";
+
+package SystemMsg;
+
+message EmptyRequest
+{
+
+}
+
+message NormalResponse
+{
+	
+}
+
+//客户端发送心跳包
+message HeartbeatRequest
+{
+}
+
+message HeartbeatResponse
+{
+	 
+	 optional int32  interval = 1;
+}
+
+//发送RCP消息
+message RPCRequest
+{
+   optional bytes jsonString = 1;
+}
+
+message RPCResponse
+{
+	 
+	optional bytes jsonString = 1;
+}
+
+message SessionSilentRequest
+{
+	optional int32 silentInterval = 1;
+}
+
+message SessionSilentResponse
+{
+	 
+}
+
+
+message SessionCloseRequest
+{
+	optional int32 errCode = 1;
+}
+
+message SessionCloseResponse
+{
+	 
+}
+
+message SiteRegisterBusRequest
+{
+   optional bytes sendSiteName = 1;
+}
+
+message SiteRegisterBusResponse
+{
+	 
+	optional int32 siteId = 1;
+}
+
+message SiteToBusTransmitRequest
+{
+	optional bytes sendSiteName = 1;
+    optional bytes recvSiteName = 2;
+    optional int32 sendSiteId = 3;
+    optional int32 recvSiteId = 4;
+    optional int32 transmitMode = 5;
+    optional int32 transmitCmd = 6;
+    optional int32 transmitType = 7;
+    repeated int32 transmitData = 8;
+}
+
+message SiteToBusTransmitResponse
+{
+	 
+}
+
+message BusToSiteTransmitRequest
+{
+	optional bytes sendSiteName = 1;
+    optional bytes recvSiteName = 2;
+    optional int32 sendSiteId = 3;
+    optional int32 recvSiteId = 4;
+    optional int32 transmitMode = 5;
+    optional int32 transmitCmd = 6;
+    optional int32 transmitType = 7;
+    repeated int32 transmitData = 8;
+}
+
+message BusToSiteTransmitResponse
+{
+	 
+}
+
+message StreamOverCtrlRequest
+{
+	enum SpeedCtrl
+    {
+        send_speed_over_ctrl = 0;
+        seq_repeat_over_ctrl = 1;
+    };
+	optional int32 ctrlRuleId = 1;
+}
+
+message StreamOverCtrlResponse
+{
+	 
+}
+
+
+message ConnectFailedRequest
+{
+	optional int32 errCode = 1;
+}
+
+message ConnectFailedResponse
+{
+	 
+}
+
+
+message MQTransmitRequest
+{
+	optional bytes sendRoutkey = 1;
+    optional bytes recvRoutKey = 2;
+    optional int32 transmitMode = 3;
+    optional int32 msgCmd = 4;      //传输的消息的命令码
+	optional int32 msgType = 5;    //传输的消息类型码
+	optional int32 msgResponseResult = 6 [default=0]; //传输的消息如果是response，那么设置该字段
+	optional bytes msgData = 7;   //传输的消息字节流
+}
+
+message MQTransmitResponse
+{
+	 
+}
+
+
+message ShutDownSessionRequest
+{	 
+}
+
+
+message ShutDownSessionResponse
+{
+	 
+}
+
+message SessionOpenRequest
+{
+	
+}
+
+message SessionOpenResponse
+{
+	 
+}

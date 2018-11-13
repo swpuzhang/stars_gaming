@@ -1,0 +1,16 @@
+apt-get install cmake libssl-dev libsasl2-dev
+1.先编译好mongodb-c-driver
+2. cd build
+  cmake -DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF -DCMAKE_INSTALL_PREFIX=./result/ ..
+
+ make && make install
+
+ 3 使用
+ c++ --std=c++11 test.cpp -o test \
+    -DMONGOCXX_STATIC -DBSONCXX_STATIC -DMONGOC_STATIC -DBSON_STATIC \
+    -I/usr/local/include/libmongoc-1.0 \
+    -I/usr/local/include/libbson-1.0 \
+    -I/usr/local/include/mongocxx/v_noabi \
+    -I/usr/local/include/bsoncxx/v_noabi \
+    -L/usr/local/lib -lmongocxx-static -lbsoncxx-static
+    -lmongoc-static-1.0 -lsasl2 -lssl -lcrypto -lbson-static-1.0 -lm -lpthread

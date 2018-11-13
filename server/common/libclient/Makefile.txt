@@ -1,0 +1,50 @@
+DEBUG   := no
+
+#*************************************************
+
+FLAG_DEBUG = -g -D _DEBUG  -fpic
+FLAG_RELEASE =   -fpic
+
+TARGET_DEBUG = libserver.a
+TARGET_RELEASE = libserver.a
+
+ifeq (yes, $(DEBUG))
+   CFLAG       = $(FLAG_DEBUG)
+   TARGET       = $(TARGET_DEBUG)
+else
+   CFLAG       = $(FLAG_RELEASE)
+   TARGET = $(TARGET_RELEASE)
+endif
+
+
+CC = g++
+
+
+OBJ = \
+Session.o \
+GG_Game_Message.o \
+SessionManager.o \
+Client.o \
+Server.o
+
+INCLUDE = -I./ \
+-I../commen
+
+
+LIBS := -lmessage -ltask_manager -lboost_system -lpthread -lboost_thread
+
+LIB_DIR := -L../commen/lib
+
+$(TARGET) : $(OBJ)
+        ar crv $(TARGET) *.o
+        cp -f $(TARGET) ../lib
+
+$(OBJ): %.o: %.cpp
+        $(CC) -c $(CFLAG) $(INCLUDE) $< -o $@
+
+all :
+        make
+
+.PHONY : clean
+clean :
+        -rm -f $(TARGET) $(OBJ)

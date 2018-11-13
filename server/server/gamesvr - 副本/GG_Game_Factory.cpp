@@ -1,0 +1,78 @@
+#include "GG_Game_Factory.h"
+#include "GG_GameMsg.pb.h"
+#include "GG_GameCmd.pb.h"
+#include "GG_HallCmd.pb.h"
+#include "GG_HallMsg.pb.h"
+
+using namespace GG_HallMsg;
+using namespace GG_HallCmd;
+using namespace GG_GameCmd;
+using namespace GG_GameMsg;
+
+GG_Game_Factory::GG_Game_Factory(void)
+{
+}
+
+
+GG_Game_Factory::~GG_Game_Factory(void)
+{
+}
+
+void GG_Game_Factory::register_cmd_message(void)
+{
+	REGISTER_GG_CMD_MESSAGE( GG_CMD_APPLY_ENTER_ROOM, GG_ApplyEnterRoomRequest, GG_ApplyEnterRoomResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_FLUSH_ROOM, GG_FlushRoomRequest, GG_FlushRoomResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_APPLY_QUIT_ROOM, GG_ApplyQuitRoomRequest, GG_ApplyQuitRoomResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_APPLY_SEAT, GG_ApplySeatRequest, GG_ApplySeatResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_PLAYER_SITDOWN, GG_PlayerSitDownRequest, GG_PlayerSitDownResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_APPLY_STANDUP, GG_ApplyStandupRequest, GG_ApplyStandupResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_PLAYER_STANDUP, GG_PlayerStandUpRequest, GG_PlayerStandUpResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_APPLY_FLUSHROOM, GG_ApplyFlushRoomRequest, GG_ApplyFlushRoomResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_PLAYER_BUYIN, GG_PlayerBuyinRequest, GG_PlayerBuyinResponse);
+
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_DEAL_CARDS, GG_DealCardsReqeust, GG_DealCardsResponse);
+
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_APPLY_FACESHOW, GG_ApplyFaceShowRequest, GG_ApplyFaceShowResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_PLAYER_FACESHOW, GG_PlayerFaceShowRequest, GG_PlayerFaceShowResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_APPLY_CHAT, GG_ApplyChatRequest, GG_ApplyChatResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_PLAYER_CHAT, GG_PlayerChatRequest, GG_PlayerChatResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_APPLY_USE_PROPS, GG_ApplyUsePropsRequest, GG_ApplyUsePropsResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_PLAYER_USE_PROPS, GG_PlayerUsePropsRequest, GG_PlayerUsePropsResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_APPLY_PRESENT_CHIPS, GG_ApplyPresentChipsRequest, GG_ApplyPresentChipsResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_PLAYER_PRESENT_CHIPS, GG_PlayerPresentChipsRequest, GG_PlayerPresentChipsResponse);
+
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_APPLY_PRESENT_GIFT, GG_ApplyPresentGiftRequest, GG_ApplyPresentGiftResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_PLAYER_PRESENT_GIFT, GG_PlayerPresentGiftRequest, GG_PlayerPresentGiftResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_PLAYER_ENTER_ROOM, GG_PlayerEnterRoomRequest, GG_PlayerEnterRoomResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_PLAYER_QUIT_ROOM, GG_PlayerQuitRoomRequest, GG_PlayerQuitRoomResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_APPLY_TRANSMIT_MESSAGE, GG_ApplyTransmitMessageRequest, GG_ApplyTransmitMessageResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_PLAYER_TRANSMIT_MESSAGE, GG_PlayerTransmitMessageRequest, GG_PlayerTransmitMessageResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_USER_TOKEN_LOGIN_GAMESVR, GG_UserTokenLoginRequest, GG_UserTokenLoginResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_APPLY_PRESENT_GIFT_NEWINTER, GG_ApplyPresentGiftNewInterRequest, GG_ApplyPresentGiftNewInterResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_PLAYER_PRESENT_GIFT_NEWINTER, GG_PlayerPresentGiftNewInterRequest, GG_PlayerPresentGiftNewInterResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_PLAYER_LOGIN_ELSEWHERE, GG_PlayerLoginElsewhereRequest, GG_PlayerLoginElsewhereResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_PLAYER_TRUSTEE_ON, GG_PlayerTrusteeOnRequest, GG_PlayerTrusteeOnResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_PLAYER_TRUSTEE_OFF, GG_PlayerTrusteeOffRequest, GG_PlayerTrusteeOffResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_APPLY_TRUSTEE_OFF, GG_ApplyTrusteeOffRequest, GG_ApplyTrusteeOffResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_ACTIVE_PLAYER, GG_ActivePlayerRequest, GG_ActivePlayerResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_APPLY_POST_CARD, GG_ApplyPostCardRequest, GG_ApplyPostCardResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_PLAYER_POST_CARD, GG_PlayerPostCardRequest, GG_PlayerPostCardResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_APPLY_DIG_CARD, GG_ApplyDigCardRequest, GG_ApplyDigCardResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_PLAYER_DIG_CARD, GG_PlayerDigCardRequest, GG_PlayerDigCardResponse);
+
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_APPLY_DROP, GG_ApplyDropRequest, GG_ApplyDropResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_PLAYER_DROP, GG_PlayerDropRequest, GG_PlayerDropResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_APPLY_DECLARE, GG_ApplyDeclareRequest, GG_ApplyDeclareResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_PLAYER_DECLARE, GG_PlayerDeclareRequest, GG_PlayerDeclareResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_APPLY_LOSE_DECLARE, GG_ApplyLoseDeclareRequest, GG_ApplyLoseDeclareResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_PLAYER_LOSE_DECLARE, GG_PlayerLoseDeclareRequest, GG_PlayerLoseDeclareResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_APPLY_ROOM_STATUS, GG_ApplyRoomStatusRequest, GG_ApplyRoomStatusResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_NOTIFY_WAIT_GAME, GG_NotifyWaitGameRequest, GG_NotifyWaitGameResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_SHUFFLE_CARD, GG_ShuffleCardRequest, GG_ShuffleCardResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_SHUFFLE_CARD, GG_ShuffleCardRequest, GG_ShuffleCardResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_APPLY_CLOSE_ACCOUNT_BOX, GG_ApplyCloseAccountBoxRequest, GG_ApplyCloseAccountBoxResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_PLAYER_CLOSE_ACCOUNT_BOX, GG_PlayerCloseAccountBoxRequest, GG_PlayerCloseAccountBoxResponse);
+	REGISTER_GG_CMD_MESSAGE(GG_CMD_GAME_OVER, GG_GameOverRequest, GG_GameOverResponse);
+
+}
+

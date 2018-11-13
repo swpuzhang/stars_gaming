@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package LoginCmd;
+enum EnumLoginCmd
+{
+	CMD_BEGIN = 0;
+	CMD_LOGIN = 500;
+}
+

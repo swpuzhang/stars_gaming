@@ -1,0 +1,41 @@
+syntax = "proto2";
+
+package SvrPhpMsg;
+
+
+message LevelupRewardRequest
+{
+	optional int32 userId = 1;
+	optional int32 level = 2;
+	optional int64 awardChips = 3;
+	optional bytes awardGoods = 4;
+}
+
+message LevelupRewardResponse
+{
+	
+}
+
+message BankruptRewardRequest
+{
+	optional int32 userId = 1;
+	optional int64 awardChips = 2;
+}
+
+message BankruptRewardResponse
+{
+
+}
+
+
+//发送RCP消息
+message PhpRpcRequest
+{
+   optional bytes jsonString = 1;
+}
+
+message PhpRpcResponse
+{
+	 
+	optional bytes jsonString = 1;
+}

@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package LoginMsg;
+
+message LoginRequest
+{
+	 bytes account = 1; //账号
+	 bytes device_code = 2;//设备号
+	 bytes device_name = 3;//设备名
+	 int32 screen_h = 4;//屏幕高
+	 int32 screen_w = 5;//屏幕宽
+	 bytes resolution_ratio = 6; //分辨率
+     bytes version = 7; //版本号
+	 int32 platform_type = 8; //平台类型 0 安卓 1 iphone 2 html 3 windows 4 mac 5 linux
+}
+
+message LoginResponse
+{
+	bytes token = 1;
+	bytes cur_version = 2;
+	bool update_type = 3;  //0 不需要更新, 1 需要更新 3 强制更新 4热更新
+}
+

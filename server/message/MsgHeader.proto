@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package MsgHeader;
+
+message Header
+{
+	int32 cmdtype = 1;
+	int32 type = 2;
+	uint64 sequenceid = 3;
+	int32 length = 4;
+	uint64 check_result = 5;
+	int32 response_result = 6 ;
+}
+
+
+message MqHeader
+{
+	int32 cmdtype = 1;
+	int32 type = 2;
+	uint64 sequenceid = 3;
+	int32 length = 4;
+	int32 check_result = 5;
+	uint64 response_result = 6 ;
+	bytes send_routkey = 7;
+    bytes recv_routkey = 8;
+    bytes send_exchange = 9;
+	bytes recv_exchange = 10;
+}

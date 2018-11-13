@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package SystemCmd;
+
+enum EnumSystemCmd
+{
+	CMD_UNKNOWN = 0;// 未知消息
+	CMD_HEARTBEAT = 1;// 心跳消息
+	CMD_SESSION_OPEN = 2; //回话成功建立
+	CMD_SESSION_CLOSE = 3;// 协议栈回话关闭
+	CMD_CONNECT_FAILED = 4;  //连接服务器失败
+	CMD_COMM_RPC = 5;			// RPC
+	CMD_SHUTDOWN_SESSION = 6;	//server强制关闭会话
+    CMD_SESSION_SILENT = 7;       // 会话链路上超过6秒没有数据
+    CMD_SITE_REGISTER_BUS = 8;
+    CMD_SITE_TO_BUS_TRANSMIT = 9;
+    CMD_BUS_TO_SITE_TRANSMIT = 10;
+	CMD_SESSION_REOPEN = 11;
+    CMD_STREAM_OVER_CTRL = 12;  // 回话超过流控
+	CMD_MQ_TRANSMIT = 13;
+};
+
+

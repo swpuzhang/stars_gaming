@@ -1,0 +1,112 @@
+syntax = "proto3";
+
+package RoomMsg;
+
+message GameRoomInfo
+{
+	 int32 roomId = 1;
+     int32 playingCount = 2;
+     uint32 idleTimeBegin = 3;
+     uint32 idleTimeEnd = 4;
+	 int32 priority = 5;
+}
+
+message FlushRoomAliveRequest
+{
+	 int32 svrPort = 1;
+	 repeated GameRoomInfo roomInfo = 2;
+}
+
+message FlushRoomAliveResponse
+{
+	 
+}
+	
+message GameMsg
+{
+   int32 userId = 1;
+   int32 roomId = 2;
+}
+
+
+message UserEscapeGameRequest
+{
+	int32 userId = 1;
+	int32 roomId = 2;
+	int64 smallBlind = 3;
+	int32 playingCount = 4;
+}
+
+message UserEscapeGameResponse
+{
+	
+}
+
+message FlushRoomIdleRequest
+{
+	int32 svrPort = 1;
+    int32 roomId = 2;
+    int32 playingCount = 3;
+    int32 idleTimeBegin = 4;
+    int32 idleTimeEnd = 5;
+    repeated int32 userInRoom = 6;
+}
+
+message FlushRoomIdleResponse
+{
+	 
+}
+
+//发送RCP消息
+message GetUserRoomInfoRequest
+{
+    bytes jsonString = 1;
+}
+
+message GetUserRoomInfoResponse
+{
+	 
+	 bytes jsonString = 1;
+}
+
+
+message RoomStatusInfo
+{
+	int32 roomId = 1;
+	int32 status = 2;
+	int32 playingCount = 3;
+}
+
+message FlushRoomStausRequest
+{
+	enum EnumStatus
+	{
+		ROOM_IDLE = 0;
+		ROOM_END1 = 1;   //小于15分时可以进
+		ROOM_PLAYING = 2;
+	};
+	int32 svrPort = 1;
+	repeated  RoomStatusInfo roomInfo = 2;
+}
+
+
+message FlushRoomStausResponse
+{
+	
+	
+}
+
+message NotifyRoomStausRequest
+{
+
+	int32 svrPort = 1;
+	RoomStatusInfo info = 2;
+}
+
+
+message NotifyRoomStausResponse
+{
+	
+	
+}
+

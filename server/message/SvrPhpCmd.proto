@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package SvrPhpCmd;
+
+enum EnumSvrPhpCmd
+{
+	CMD_UNKNOWN = 0;// 枚举开始
+	CMD_PHP_RPC = 50000;    //RPC调用
+	CMD_LEVELUP_REWARD = 50001;  //升级奖励
+	CMD_BANKRUPT_REWARD = 50002;   //破产通知
+};
+
+

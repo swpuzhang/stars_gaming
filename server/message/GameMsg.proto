@@ -1,0 +1,763 @@
+syntax = "proto2";
+
+package GameMsg;
+
+message EmptyGameRequest
+{
+
+}
+
+message NormalGameResponse
+{
+	
+}
+
+enum EnumPokerColor
+{
+	//黑桃
+	spades = 1;
+	//红桃
+	hearts = 2;
+	//梅花
+	clubs = 3;
+	//方块
+	diamonds = 4;
+};
+
+//牌点数
+enum EnumPokerPoint
+{
+	P2 = 2;
+	P3 = 3;
+	P4 = 4;
+	P5 = 5;
+	P6 = 6;
+	P7 = 7;
+	P8 = 8;
+	P9 = 9;
+	P10 = 10;
+	J = 11;
+	Q = 12;
+	K = 13;
+	A = 14;
+	JOKER1 = 15;
+	JOKER2 = 16;
+}
+
+
+message MsgCard
+{
+	optional int32 point = 1; 
+	optional int32 color = 2;
+}
+
+message PB_CardGroup
+{
+	enum EnumGroupType
+	{
+		GROUP_INVALID = 0; //散牌
+		GROUP_STAIGHT = 1; //同花顺
+		GROUP_THREE_KIND = 2; //三条
+	};
+	repeated MsgCard cards = 1;   //牌组里的牌
+	optional int32 type = 2;           //该牌组的类型
+};
+
+message UserTokenLoginRequest
+{
+	 optional bytes userToken = 1;
+}
+
+message UserTokenLoginResponse
+{
+	 
+}
+
+message ApplyFlushRoomRequest
+{
+	optional int32 userId = 1;
+	optional int32 roomId = 2;
+	optional bytes playerName = 3;
+}
+
+message ApplyFlushRoomResponse
+{
+	
+}
+
+message ApplyEnterRoomRequest
+{
+	optional int32 userId = 1;
+	optional int32 roomId = 2;
+	optional bytes playerName = 3;
+}
+
+message ApplyEnterRoomResponse
+{
+	 
+}
+	
+
+message PlayerInfo
+{
+	enum  EnumPlayerStatus
+	{
+	
+		PLAYER_STATUS_FIRST = 0;
+		PLAYER_WAIT_NEXT_GAME = 1;
+		PLAYER_UNREADY = 2;
+		PLAYER_PLAYING = 3;		
+		PLAYER_DROP = 4;   //玩家drop
+		PLAYER_DECLARE = 5;     //玩家declare
+		PLAYER_STAND_UP = 6;
+		PLAYER_MASK = 0x000F;   //掩码
+		PLAYER_TRUSTEED = 0x0080; // 玩家托管状态，注意：托管状态为组合状态。  状态必须通过 & 来获取，而不是 == 来获取。 取托管状态写法，例如：  if (m_status & PLAYER_TRUSTEED)
+		PLAYER_OFFLINE = 0x0100; // 玩家不在线，逃跑也算不在线
+		PLAYER_ESCAPED = 0x0200; //玩家逃跑
+	};
+	
+	optional int32 id = 1;
+	optional bytes name = 2;
+	optional int64 totalChips =3;
+	optional int32 status = 4;                       
+	optional int32 seatNumber = 5;					// 玩家的座位号，0开始
+	optional int32 score = 6;	   //结算分数, 不是手牌的分数, 在激活状态是20或者40，表示drop扣的分数，
+								   //在drop后或者decalre后表示结算分数
+	repeated PB_CardGroup cardGroup = 7;  //declare后的牌组信息 
+	optional int32 handCardCount = 8; //手牌数量
+};
+
+message PB_IngamePlayer
+{
+	optional int32 userId = 1;
+	optional int32 seatNum = 2;
+};
+
+message FlushRoomRequest
+{
+	enum EnumGameStatus
+	{
+		GAME_STATUS_FIRST = 0;  //probuf第一个必须为0
+		GAME_ROUND_MASK			 = 0x0000FFFF;
+		GAME_UNREADY			 = 0x00000001;      //牌局未开始
+		GAME_WAIT_PLAYING			 = 0x00000002;  //牌局开始倒计时
+		GAME_DEALER_CARD           = 0x00000004;    //发牌
+		GAME_ACTIVE1   = 0x00000008;                //激活状态
+		GAME_ACTIVE2 = 0x00000010;                  //摸牌后再次激活
+		GAME_DECLARE = 0x00000020;                  //declare状态
+		GAME_DISTRIBUTE = 0x00000040;               //结算状态
+		GAME_SHUFFLE_CARD = 0x00000080;             //洗牌状态
+	}
+
+	optional int64 smallBlind = 1;
+	optional int64 minCarry = 2;
+	optional int32 gameStatus = 3;
+	optional int32 maxPlaying = 4;
+	repeated PlayerInfo player = 5;		// 当前坐在牌桌的玩家
+	optional int32 roomType = 6;				// 房间类型
+	optional int32 deskType = 7;				// 牌桌类型， 
+	repeated MsgCard cardPool = 8;	//当前牌池
+	optional int32 bottomCardCount = 9; //底牌数量
+	optional MsgCard jokerCard = 10; //癞子牌
+	optional int64 chipsPool = 11;        //当前奖池
+	optional int32 currentActiveSeat = 12;	// 当前激活操作的座位号 0 开始, 如果为-1，则表示当前无激活玩家
+	optional int32 dealerIndex = 13;			// 庄家座位号
+	optional int32 timeLeft = 14;//剩余时间，如果是激活状态那么是激活玩家剩余时间，如果是结算状态那么是结算剩余时间，
+								 //如果是declare状态那么是declare剩余时间
+								 //如果是等待开局状态，那么是等待开局剩余时间
+	optional int32 applyDeclareSeatnum = 15; //赢家declare座位号
+	
+	optional int32 active1Sec = 16;    //激活第一轮时间
+	optional int32 active2Sec = 17;    //激活第二轮时间
+	optional int32 distributSec = 18;  //结算时间
+	optional int32 declareSec = 19;    //declare时间
+	optional int32 waitGameSec = 20;  //等待开局时间
+	repeated MsgCard handCard = 21;        //自己的手牌  
+	optional int32 dropScore1 = 22;    //没摸牌drop
+	optional int32 dropScore2 = 23;    //摸牌后drop
+	optional bool isPoolCardCanDig = 24; //牌池的牌是否可抓
+	repeated PB_IngamePlayer ingamePlayer = 25; //参与当前牌局的玩家
+}
+
+message FlushRoomResponse
+{
+	 
+}
+
+message ApplySeatRequest
+{
+	optional int32 userId = 1;
+	optional int32 roomId = 2;
+	optional int32 seatNumber = 3;
+	optional int32 autoBuyIn = 4;   // 是否自动买入
+}
+
+message ApplySeatResponse
+{
+	 
+}
+
+message PlayerSitDownRequest
+{
+	optional int32 userId = 1;
+	optional bytes playerName = 2;
+	optional int32 seatNumber = 3;
+}
+
+message PlayerSitDownResponse
+{
+	 
+}
+
+message ApplyStandupRequest
+{
+	optional int32 userId = 1;
+	optional int32 roomId = 2;
+}
+
+message ApplyStandupResponse
+{
+	 
+}
+
+message PlayerStandUpRequest
+{
+	enum StandReason
+	{
+		APPLY_STAND_UP = 0; //玩家主动站起
+		QUIT_ROOM = 1;	// 玩家离开游戏
+		NO_MORE_CHIPS = 2;	//玩家筹码不足
+		OFFLINE_TIMEOUT = 3;
+		OTHER_REASON = 4;
+	};
+	optional int32 userId = 1;
+	optional int32 standUpReason = 2;
+}
+
+message PlayerStandUpResponse
+{
+	 
+}
+
+message ApplyQuitRoomRequest
+{
+	optional int32 userId = 1;
+	optional int32 roomId = 2;
+}
+
+message ApplyQuitRoomResponse
+{
+	 
+}
+
+message PlayerQuitRoomRequest
+{
+	optional int32 userId = 1;
+	optional int32 quitReason = 2;
+}
+
+message PlayerQuitRoomResponse
+{
+	 
+}
+
+message PlayerChips
+{
+	optional int32 userId = 1;
+	optional int64 currentChips = 2;
+}
+
+message PlayerBuyinRequest
+{
+	optional bool buyResult = 1;	//购买筹码是否成功
+	optional int64 buyinCount = 2;	//实际购买的筹码数
+}
+
+message PlayerBuyinResponse
+{
+	 
+}
+
+
+message ApplyFaceShowRequest
+{
+	optional int32 userId = 1;
+	optional int32 roomId = 2;
+	optional int32 faceId = 3;
+}
+
+message ApplyFaceShowResponse
+{
+	 
+}
+
+message PlayerFaceShowRequest
+{
+	optional int32 userId = 1;
+	optional int32 faceId = 2;
+}
+
+message PlayerFaceShowResponse
+{
+	 
+}
+
+message ApplyChatRequest
+{
+	optional int32 userId = 1;
+	optional int32 roomId = 2;
+	optional int32 IsShortcut = 3;		//是否快捷聊天		
+	optional bytes chatContent = 4;
+}
+
+message ApplyChatResponse
+{
+	 
+}
+
+message PlayerChatRequest
+{
+	optional int32 isShortcut = 1;			//是否快捷聊天
+	optional bytes chatContent = 2;
+    optional int32 chatUserId = 3;
+    optional bytes chatUserName = 4;
+}
+
+message PlayerChatResponse
+{
+	 
+}
+
+message ApplyUsePropsRequest
+{
+	optional int32 userId = 1;
+	optional int32 roomId = 2;
+	optional int32 acceptUserId = 3;		// 被使用道具的玩家ID
+	optional bytes propsName = 4;	//道具名称
+}
+
+message ApplyUsePropsResponse
+{
+	 
+}
+
+message PlayerUsePropsRequest
+{
+	optional int32 applyUserId = 1;		// 用道具的玩家ID
+	optional int32 acceptUserId = 2;		// 被使用道具的玩家ID
+	optional bytes propsName = 3;	// 道具名称
+}
+
+message PlayerUsePropsResponse
+{
+	 
+}
+
+
+message ApplyPresentGiftRequest
+{
+	optional int32 userId = 1;
+	optional int32 roomId = 2;
+	optional int32 giftId = 3;		
+	repeated int32 acceptorId = 4; //被赠送礼物的玩家ID
+}
+
+message ApplyPresentGiftResponse
+{
+	 
+}
+
+message PlayerPresentGiftRequest
+{
+	
+	optional int32 presenterId = 1;		// 赠送的玩家ID
+	optional int32 giftId	= 2;	// 礼物id
+	repeated int32 acceptorId = 3; //被赠送礼物的玩家ID
+}
+
+message PlayerPresentGiftResponse
+{
+	 
+}
+
+message ApplyPresentGiftNewInterRequest
+{
+	optional int32 userId = 1;
+	optional int32 roomId = 2;
+	optional int32 giftId = 3;		
+	optional bytes giftUrl = 4;
+	repeated int32 acceptorId = 5; //被赠送礼物的玩家ID
+}
+
+message ApplyPresentGiftNewInterResponse
+{
+	 
+}
+
+message ApplyPresentChipsRequest
+{
+	optional int32 userId = 1;
+	optional int32 roomId = 2;
+	optional int32 acceptorId = 3;			// 被赠送筹码的玩家ID
+	optional int64 chipsCount = 4;		// 赠送筹码是数量
+}
+
+message ApplyPresentChipsResponse
+{
+}
+
+message PlayerPresentChipsRequest
+{
+	optional int32 presenterId = 1;				// 赠送的玩家ID
+	optional int32 acceptorId = 2;				// 被赠送筹码的玩家ID
+	optional int64 chipsCount = 3;			// 赠送筹码是数量
+	optional int64 presenterCarry = 4;		//	赠送者新的携带数量
+	optional int64 acceptorCarry = 5;		//	被赠送新的携带数量
+}
+
+message PlayerPresentChipsResponse
+{
+
+}
+
+message PlayerPresentGiftNewInterRequest
+{
+	
+	optional int32 presenterId = 1;		// 赠送的玩家ID
+	optional int32 giftId	= 2	;		// 礼物id
+	optional bytes giftUrl = 3;
+	repeated int32 acceptorId = 4; //被赠送礼物的玩家ID
+}
+
+message PlayerPresentGiftNewInterResponse
+{
+	 
+}
+
+message PlayerEnterRoomRequest
+{
+	optional int32 userId = 1;	// 玩家ID
+}
+
+message PlayerEnterRoomResponse
+{
+	 
+}
+
+message ApplyTransmitMessageRequest
+{
+	optional int32 userId = 1;
+	optional int32 roomId = 2;
+	optional int32 transmitMsgType = 3;
+	optional int32 transmitMsgId = 4;
+	optional bytes transmitJsonData = 5;	// 转发消息，json字符串
+	repeated int32 recvUserId = 6;	// 接受消息的玩家ID，如果为空，则广播到房间内所有玩家
+}
+
+message ApplyTransmitMessageResponse
+{
+	 
+}
+
+
+message PlayerTransmitMessageRequest
+{
+	optional int32 transmitMsgType = 1;
+	optional int32 transmitMsgId = 2;
+	optional bytes transmitJsonData = 3;	// 转发消息，json字符串
+	optional int32 sendUserId = 4;  // 发送消息的玩家ID
+}
+
+message PlayerTransmitMessageResponse
+{
+	 
+}
+
+
+message ApplyTrusteeOnRequest
+{
+	optional int32 userId = 1;
+	optional int32 roomId = 2;
+}
+
+message ApplyTrusteeOnResponse
+{
+	 
+}
+
+message PlayerTrusteeOnRequest
+{
+	optional int32 userId = 1;
+}
+
+message PlayerTrusteeOnResponse
+{
+	 
+}
+
+
+message ApplyTrusteeOffRequest
+{
+	optional int32 userId = 1;
+	optional int32 roomId = 2;
+}
+
+message ApplyTrusteeOffResponse
+{
+	 
+}
+
+message PlayerTrusteeOffRequest
+{
+	optional int32 userId = 1;
+}
+
+message PlayerTrusteeOffResponse
+{
+	 
+}
+
+message ReadyStartGameRequest
+{
+
+}
+
+message ReadyStartGameResponse
+{
+}
+
+
+message DealCardsReqeust
+{
+	optional int32 dealerSeat = 1; // 庄位号
+	repeated MsgCard handCard = 2;// 手牌,如果玩家不参与此局游戏，则手牌为空
+	repeated int32  dealCardsOrder = 3;// 发牌的位置序列，从庄家位置开始
+	optional int32 dealCardCount = 4;				// 游戏开始发手牌的数量
+	optional MsgCard jokerCard = 5;        //癞子牌
+	optional MsgCard firstPoolCard = 6;    //第一张翻起来的牌
+	optional int32 bottomCardCount = 7;               // 剩余底牌数量
+}
+
+message DealCardsResponse
+{
+	 
+}
+
+message ActivePlayerRequest
+{
+	optional int32 userId = 1; // 玩家ID
+	optional bool isPoolCardCanDig = 2; //牌池的牌是否可抓
+}
+
+message ActivePlayerResponse
+{
+	 
+}
+
+
+message ApplyDigCardRequest
+{
+	optional int32 userId = 1;
+	optional int32 roomId = 2; 
+	optional int32 digType = 3; //从哪里摸牌  0底牌， 1牌池里面的牌
+}
+
+message ApplyDigCardResponse
+{
+
+}
+
+message PlayerDigCardRequest
+{
+	optional int32 userId = 1;
+	optional int32 digType = 2; //从哪里摸牌  0底牌， 1牌池里面的牌
+	optional MsgCard card = 3; //摸到的牌
+}
+
+message PlayerDigCardResponse
+{}
+
+
+message ApplyDropRequest
+{
+	optional int32 userId = 1;
+	optional int32 roomId = 2; 
+}
+
+message ApplyDropResponse
+{
+}
+
+
+message PlayerDropRequest
+{
+	optional int32 userId = 1;
+	optional int32 dropScore = 2;  //drop分数
+	optional int64 dropChips = 3;  //drop筹码
+	optional MsgCard dropCard = 4; //如果摸了牌要丢一张牌
+}
+
+message PlayerDropResponse
+{
+}
+
+
+
+message ApplyDeclareRequest
+{
+	optional int32 userId = 1;
+	optional int32 roomId = 2; 
+	optional MsgCard declareCard = 3;  //玩家declare的牌
+	repeated PB_CardGroup cardGroup = 4;     //玩家declare牌组
+}
+
+message ApplyDeclareResponse
+{
+}
+
+
+message PlayerDeclareRequest
+{
+	optional int32 userId = 1;
+	optional MsgCard declareCard = 2;  //玩家declare的牌
+	repeated PB_CardGroup cardGroup = 3;     //玩家declare牌组
+}
+
+message PlayerDeclareResponse
+{
+}
+
+
+message ApplyLoseDeclareRequest
+{
+	optional int32 userId = 1;
+	optional int32 roomId = 2; 
+	repeated PB_CardGroup cardGroup = 3;     //玩家declare牌组
+}
+
+message ApplyLoseDeclareResponse
+{
+}
+
+
+message PlayerLoseDeclareRequest
+{
+	optional int32 userId = 1;
+	repeated PB_CardGroup cardGroup = 2;//玩家declare牌组
+	optional int32 score = 3;  //分数
+	optional int64 chips = 4;  //筹码
+	
+}
+
+message PlayerLoseDeclareResponse
+{
+}
+
+
+message ApplyPostCardRequest
+{
+	optional int32 userId = 1;
+	optional int32 roomId = 2; 
+	optional MsgCard card = 3; //出的牌
+	optional int32 appScore = 4 [default=-1];  //客户端当前分数
+}
+
+message ApplyPostCardResponse
+{
+	repeated MsgCard handCards = 1; //手牌
+	repeated MsgCard poolCards = 2; //牌池里面的牌
+}
+
+message PlayerPostCardRequest
+{
+	optional int32 userId = 1; 
+	optional MsgCard card = 2; //出的牌
+}
+
+message PlayerPostCardResponse
+{
+	 
+}
+
+message LoserInfo
+{
+	optional int32 userId = 1;	  
+	optional int64 loseAccount = 2; //输掉的钱
+	repeated PB_CardGroup cardGroup = 3;//手牌
+	optional int32 score = 4;   //分数
+	optional int32 isDrop = 5;  //是否放弃 0 没有， 1 放弃
+	optional int32 cardScore = 6; //牌面上的分数
+}
+
+message GameOverRequest
+{
+	optional int32 winnerId = 1;         //赢家ID
+	optional int64 winAccount = 2;       //赢多少
+	repeated PB_CardGroup winnerCardGroup = 3;//赢家手牌信息
+	repeated LoserInfo loserInfo = 4;      //输家结算信息 
+	repeated PlayerChips  playerChips = 5; //当前玩家身上筹码, 如果当前座位上的玩家和结算玩家不一致，那么为0
+	optional int32 winnerScore = 6;     //赢家分数
+	optional int32 gameoverType = 7;    //0:正常结算  1:drop结算  2:平局结算
+	optional int32 winnerCardScore = 8; //牌面上的分数
+}
+
+message GameOverResponse
+{
+	 
+}
+
+message ApplyRoomStatusRequest
+{
+	optional int32 userId = 1;
+	optional int32 roomId = 2; 
+}
+
+message ApplyRoomStatusResponse
+{
+	 optional int32 status = 2;  //房间状态
+}
+
+message NotifyWaitGameRequest
+{
+	
+	optional int32 flag = 1;   //1开始倒计时， 0停止倒计时
+	optional int32 seconds = 2;  //倒计时秒数
+}
+
+message NotifyWaitGameResponse
+{
+
+}
+
+
+// 玩家准备开始倒计时
+message ShuffleCardRequest
+{
+
+	optional int32 poolCardCount = 1;    //弃牌数量
+	optional int32 bottomCardCount = 2;   //底牌数量
+}
+
+message ShuffleCardResponse
+{}
+
+message ApplyCloseAccountBoxRequest
+{
+	optional int32 userId = 1;
+	optional int32 roomId = 2; 
+}
+
+message ApplyCloseAccountBoxResponse
+{
+	
+}
+
+message PlayerCloseAccountBoxRequest
+{
+	optional int32 userId = 1;
+}
+
+message PlayerCloseAccountBoxResponse
+{
+	
+}

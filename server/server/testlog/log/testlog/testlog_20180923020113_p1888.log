@@ -1,0 +1,4 @@
+[2018-09-23 02:01:13.866] [logger] [debug] hello[main.cpp:main:26]
+[2018-09-23 02:01:13.866] [logger] [debug] world[main.cpp:main:27]
+[2018-09-23 02:01:13.866] [logger] [debug] jv is null[main.cpp:test_fun:17]
+[2018-09-23 02:01:23.731] [logger] [info] exchange_name:gamesvr.direct[mqinfo.h:MqInfo::parse_config:58]

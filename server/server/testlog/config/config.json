@@ -1,0 +1,67 @@
+{
+  "log": {
+    "default": {
+      "level": "0",
+      "filenum": "100",
+      "filesize": "10",
+      "dir": "./log"
+    },
+    "testgameclient": {
+      "level": "0",
+      "filenum": "100",
+      "filesize": "10",
+      "dir": "./log"
+    }
+  },
+  "mq": {
+    "default": {
+      "ip": "192.168.1.104",
+      "port": "5672",
+      "user": "zhangyang",
+      "passwd": "123456",
+      "dir": "test"
+    },
+    "gamesvr": {
+      "queue": "gamesvr",
+      "binds": [
+        {
+          "exchange": "gamesvr.direct",
+          "routkeys": [ "gamesvr" ]
+        },
+        {
+          "exchange": "matchsvr.topic",
+          "routkeys": [ "matchsvr" ]
+        }
+      ]
+    },
+
+    "loginsvr": {
+      "queue": "loginsvr",
+      "binds": [
+        {
+          "exchange": "loginsvr.direct",
+          "routkeys": [ "loginsvr" ]
+        },
+        {
+          "exchange": "matchsvr.topic",
+          "routkeys": [ "matchsvr" ]
+        }
+      ]
+    },
+
+    "testlog": {
+      "queue": "loginsvr",
+      "binds": [
+        {
+          "exchange": "gamesvr.direct",
+          "routkeys": [ "gamesvr" ]
+        },
+        {
+          "exchange": "matchsvr.topic",
+          "routkeys": [ "matchsvr" ]
+        }
+      ]
+    }
+
+  }
+}

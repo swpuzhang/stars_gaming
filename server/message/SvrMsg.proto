@@ -1,0 +1,548 @@
+syntax = "proto3";
+
+package SvrMsg;
+
+
+message GetGameSvrInstanceRequest
+{
+	 bytes hostIp = 1;
+}
+
+message GetGameSvrInstanceResponse
+{
+	 repeated int32 gamesvrPorts = 1;
+}
+
+
+message CommQueryRequest
+{
+	 bytes templateName = 1;
+	 repeated bytes queryParas = 2;
+}
+
+message DBRow
+{
+	repeated bytes dbRow= 1;
+}
+
+message CommQueryResponse
+{
+	repeated DBRow queryResult = 1;
+}
+	
+message PlayerGameResult
+{
+	enum EnumResult
+	{
+		 firstFlag = 0;
+         win = 0x0008;
+         abort = 0x00020;
+	};
+	int32 userId = 1;
+	int64 chipsIncrease = 2;
+	int32 expIncrease = 3;
+	int32 statusMask = 4;
+	int64 chipsWinPool = 5;
+}
+
+message SubmitGameResultRequest
+{
+	bytes gameId = 1;
+	repeated PlayerGameResult gameResult = 2;
+}
+
+message SubmitGameResultResponse
+{
+	
+}
+
+message AddPlayerChipsRequest
+{
+	int32 userId = 1;
+    int64 chipsAddCount = 2;
+    int32 addReason = 3;
+}
+
+message AddPlayerChipsResponse
+{
+	int64 currentChips = 1;
+}
+
+message UserJoinGameRequest
+{
+	int32 userId = 1;
+	int32 roomId = 2;
+    int64 smallBlind = 3;
+    int32 playingCount = 4;
+}
+
+message UserJoinGameResponse
+{
+}
+
+message UserLeaveGameRequest
+{
+	int32 userId = 1;
+	int32 roomId = 2;
+    int32 playingCount = 3;
+	int64 giveBackChips = 4;
+	int64 smallBlind = 5;
+}
+
+message UserLeaveGameResponse
+{
+}
+
+
+
+message UserEnterRoomRequest
+{
+	int32 userId = 1;
+	int64 roomId = 2;
+    int64 smallBlind = 3;
+}
+
+message UserEnterRoomResponse
+{
+}
+
+
+message UserQuitRoomRequest
+{
+	int32 userId = 1;
+	int32 roomId = 2;
+    int32 playingCount = 3;
+	int64 giveBackChips = 4;
+}
+
+message UserQuitRoomResponse
+{
+}
+
+message GameSvrStartRequest
+{
+	int32 gamesvrId = 1;
+}
+
+message GameSvrStartResponse
+{
+
+}
+
+message OpenGameRoomRequest
+{
+	int32 roomId = 1;
+}
+
+message OpenGameRoomResponse
+{
+
+}
+
+message GameRoomEmptyRequest
+{
+	int32 roomId = 1;
+}
+
+message GameRoomEmptyResponse
+{
+	int32 needCloseRoom = 1;
+}
+
+
+message GameSvrAliveRequest
+{
+	int32 gamesvrId = 1;
+}
+
+message GameSvrAliveResponse
+{
+
+}
+
+
+message HallStartUpRequest
+{
+}
+
+message HallStartUpResponse
+{
+
+}
+
+message FlushUserOnlineRequest
+{
+	repeated int32 onlineUserId = 1;
+}
+
+message FlushUserOnlineResponse
+{
+
+}
+
+message FlushUserGameSessionRequest
+{
+	repeated int32 onlineUserId = 1;
+}
+
+message FlushUserGameSessionResponse
+{
+
+}
+
+message UserGameStatus
+{
+	int32 userId = 1;
+	int32 roomId = 2;
+	int32 gameStatus = 3;
+}
+
+message FlushUserInGameRequest
+{
+	enum EnumGameStatus
+	{
+		FIST_GLAG = 0;
+		USER_IN_GAME = 2;
+		USER_IN_WATCH = 3;
+	}
+	
+	repeated UserGameStatus gamePlayer = 1;
+}
+
+message FlushUserInGameResponse
+{
+
+}
+
+message TellUserOfflineRequest
+{
+	int32 userId = 1;
+}
+
+message TellUserOfflineResponse
+{
+	
+}
+
+message TellUserLogoutGameRequest
+{
+	int32 userId = 1;
+}
+
+message TellUserLogoutGameResponse
+{
+	
+}
+
+message DispatchUserMsgRequest
+{
+	bytes jsonString = 1;
+}
+
+message DispatchUserMsgResponse
+{
+	bytes jsonString = 1;
+}
+
+enum EnumLoginAction
+{
+		USER_LOGOUT = 0;
+		USER_LOGIN = 1;
+};
+
+message HallLoginRecordRequest
+{
+	
+	int32 userId = 1;
+	int32 pid = 2;
+	int32 time = 3;
+	int32 action = 4;
+	bytes remoteAddr = 5;
+}
+
+message HallLoginRecordResponse
+{
+}
+
+message GameLoginRecordRequest
+{
+	int32 userId = 1;
+	int32 pid = 2;
+	int32 time = 3;
+	int32 action = 4;
+	bytes remoteAddr = 5;
+}
+
+message GameLoginRecordResponse
+{
+}
+
+message CheckUserTokenRequest
+{
+	int32 userId = 1;
+	bytes userToken = 2;
+}
+
+message CheckUserTokenResponse
+{
+}
+
+message CheckUserLoginRequest
+{
+	int32 userId = 1;
+	bytes userToken = 2;
+}
+
+message CheckUserLoginResponse
+{
+}
+
+message KickOutUserRequest
+{
+	int32 userId = 1;
+	int32 reason = 2;
+	bytes description = 3;
+}
+
+message KickOutUserResponse
+{
+}
+
+message ForbiddenUserRequest
+{
+	int32 userId = 1;
+}
+
+message ForbiddenUserResponse
+{
+	
+}
+
+message GetInGameCountRequest
+{
+
+}
+
+message GetInGameCountResponse
+{
+	int32 loginCount = 1;
+	int32 playCount = 2;
+	int32 watchCount = 3;
+}
+
+message GameBuyChipsInRequest
+{
+	int32 userId = 1;
+	int32 roomId = 2;
+	int64 smallBlind = 3;
+	int64 buyChips = 4;		// 当前需要buyin筹码数
+	int64 buyChipsMin = 5;  // 当前需要buyin的最小筹码数
+	
+	
+}
+
+message GameBuyChipsInResponse
+{
+	int64 buyChipsReal = 1;  // 实际buyin的筹码数
+	int64 chipsLeft = 2;		// buyin后剩余的筹码数
+}
+
+message GameStartBetRequest
+{
+	int32 userId = 1;
+	int32 roomId = 2;
+	int64 betChips = 3;
+	bytes gameId = 4;
+	
+	
+}
+
+message GameStartBetResponse
+{
+	
+}
+
+message GameAddCarryRequest
+{
+	int32 userId = 1;
+	int32 roomId = 2;
+	int64 curCarryChips = 3;  // 当前的carry筹码数， 用于校验
+    int64 needAddToCarry = 4;  // 当前需要增加到carry的筹码数
+	
+	
+}
+
+message GameAddCarryResponse
+{
+	
+}
+
+message MatchOverAccountRequest
+{
+	int32 userId = 1;
+	int32 roomId = 2;
+	int64 curCarryChips = 3;  // 当前的carry筹码数， 用于校验
+    int64 needAddToActive = 4;  // 当前需要增加到carry的筹码数
+	bytes gameId = 5;
+	
+}
+
+message MatchOverAccountResponse
+{
+	
+}
+
+message UserGameAccount
+{
+	int32 userId = 1;
+	int64 currentCarry = 2;
+}
+
+message GameOverAccountRequest
+{
+	int32 roomId = 1;
+	bytes gameId = 2;	
+	repeated UserGameAccount userGameResult = 3;
+}
+
+message GameOverAccountResponse
+{
+	
+}
+
+message GameLeaveAccountRequest
+{
+	int32 userId = 1;
+	int32 roomId = 2;
+	int64 currentCarry = 3;
+	bytes gameId = 4;	
+	int64 smallBlind = 5;
+}
+
+message GameLeaveAccountResponse
+{
+	
+}
+
+message UserBoxTimeRecoverRequest
+{
+	int32 userId = 1;
+}
+
+message UserBoxTimeRecoverResponse
+{
+	
+}
+
+message UserBoxTimePauseRequest
+{
+	int32 userId = 1;
+}
+
+message UserBoxTimePauseResponse
+{
+	
+}
+
+message UserLoginRequest
+{
+	int32 userId = 1;
+}
+
+message UserLoginResponse
+{
+	
+}
+
+message NotifyOpenRequest
+{
+}
+
+message NotifyOpenResponse
+{	
+}
+
+message UserLogRecordRequest
+{
+	int32 userId = 1;
+	int64 logTime = 2;
+	bytes action = 3;
+	bytes logInfo = 4;
+}
+
+message UserLogRecordResponse
+{
+}
+
+message GameLogRequest
+{
+	int32 roomId = 1;
+	int64 smallBlind = 2;
+	int64 logTime = 3;
+	int64 tipsTotal = 4;
+	bytes gameId = 5;
+	bytes logInfo = 6; 
+	repeated int32 playerId = 7;
+    int64 chipsPool = 8;  
+    bytes roomType = 9;  
+}
+
+message GameLogResponse
+{	
+}
+
+message AppLogRecordRequest
+{
+	int32 userId = 1;
+	bytes logInfo = 2;
+}
+
+message AppLogRecordResponse
+{
+}
+
+
+message UserChipsLogRequest
+{
+	int32 userId = 1;
+	int64 logTime = 2;
+	int64 oldTotal = 3;
+	int64 newTotal = 4;
+	int32 changeReaseon = 5;
+	int32 userType = 6;
+	int32 roomId = 7;
+	int64 carry = 8;
+	bytes gameId = 9;
+}
+
+message UserChipsLogResponse
+{
+}
+
+message BankruptLogRequest
+{
+	int32 userId = 1;
+	int64 logTime = 2;
+}
+
+message BankruptLogResponse
+{
+}
+
+message QueryRoomMatchRequest
+{
+}
+
+message QueryRoomMatchResponse
+{
+	bool isAvailable = 1;
+}
+
+message RoomMatchStatusRequest
+{
+	bool isAvailable = 1;
+}
+
+message RoomMatchStatusResponse
+{
+}
