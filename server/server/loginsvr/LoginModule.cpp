@@ -33,11 +33,11 @@ using namespace ErrorCode;
 using namespace LoginCmd;
 using namespace LoginMsg;
 
-bool LoginModule::is_need_generate_new_account(const AccountInfo &account) const
+bool LoginModule::is_need_generate_new_account(const std::string &account,int app_type) const
 {
-	return  account.m_account.empty() && 
-		(account.m_app_type ==  static_cast<int>(emAppType::MOBILE_ANDROID) ||
-			account.m_app_type == static_cast<int>(emAppType::MPBILE_IPHONE));
+	return  account.empty() && 
+		(app_type ==  static_cast<int>(emAppType::MOBILE_ANDROID) ||
+			app_type == static_cast<int>(emAppType::MPBILE_IPHONE));
 }
 
 LoginModule::LoginModule(IoLoop & ioloop, const std::string local_ip) : 
@@ -49,13 +49,6 @@ LoginModule::LoginModule(IoLoop & ioloop, const std::string local_ip) :
 	m_timer.async_wait(MEMFUN_THIS_BIND1(on_timeout, PLACEHOLDER::_1));
 }
 
-void LoginModule::user_query_account(const TcpMsgPtr& msg)
-{
-	//如果APP没有查找到账号文件, 而且没有获取到设备号,
-	//那么登录前向server请求获取账号信息, server会返回一个objectid(时间戳+ip+进程号+随机序号)
-
-}
-
 void LoginModule::user_login(const TcpMsgPtr& msg)
 {
 	//如果APP没有查找到账号文件, 而且没有获取到设备号,
@@ -64,54 +57,95 @@ void LoginModule::user_login(const TcpMsgPtr& msg)
 	//用户登录,APP获取隐藏文件读取账号信息,或者获取设备信息,
 	//登录的时候将账号和设备号都传过来,如果查询到数据库有,那么是老玩家,否者注册账号
 	const LoginRequest& login_req = msg->pbmessage<LoginRequest>();
-	AccountInfo account_dealer;
-	account_dealer.m_account = login_req.account();
-	account_dealer.m_device_code = login_req.device_code();
-	account_dealer.m_device_code = login_req.device_code();
-	account_dealer.m_device_name = login_req.device_name();
-	account_dealer.m_app_type = login_req.platform_type();
-	if (is_need_generate_new_account(account_dealer))
+	AccountInfo account_info;
+	account_info.m_account = login_req.account();
+	account_info.m_app_type = login_req.app_type();
+	emLoginDeal login_deal = emLoginDeal::LOGIN_ACCOUNT;
+	if (is_need_generate_new_account(account_info.m_account, account_info.m_app_type))
 	{
-		account_dealer.m_account = generate_account();
-		account_dealer.m_login_deal = static_cast<int>(emLoginDeal::REGISTER_ACCOUNT);
+		account_info.m_account = generate_account();
+		login_deal = emLoginDeal::REGISTER_ACCOUNT;
 	}
 
-	if (account_dealer.m_account.empty())
+	if (account_info.m_account.empty())
 	{
-			msg->send_failed_reason(CODE_ACOCUNT_EMPTY);
-			return;
+		msg->send_failed_reason(CODE_ACOCUNT_EMPTY);
+		return;
 	}
-	if (!query_user_account(account_dealer))
+	if (!query_user_account(account_info))
 	{
-		account_dealer.m_login_deal = static_cast<int>(emLoginDeal::REGISTER_ACCOUNT);
+		login_deal = emLoginDeal::REGISTER_ACCOUNT;
 	}
-	if (account_dealer.m_login_deal == static_cast<int>(emLoginDeal::REGISTER_ACCOUNT)
+	UserInfo user_info;
+	if (login_deal == emLoginDeal::REGISTER_ACCOUNT)
 	{
 		//生成一个新的uid
 		int new_id = 0;
-			if (!query_new_userid(new_id))
-			{
-				msg->send_failed_reason(CODE_SYSTEM_ERROR);
-					return;
-			}
+		if (!query_new_userid(new_id))
+		{
+			msg->send_failed_reason(CODE_SYSTEM_ERROR);
+			return;
+		}
 		//生成一个新玩家, 玩家信息.
+		account_info.m_user_id = new_id;
+		RedisInstance::get_mutable_instance().json_to_hash(account_info.to_json(),
+			account_redis_key(account_info.m_account), ACCOUNT_EXPIRE_SEC);
+		user_info =  generate_new_user(account_info);
+		insert_new_user(user_info);
 
 	}
 
+	else
+	{
+		//查询
 
+	}
+	
 }
 
 UserInfo LoginModule::generate_new_user(const AccountInfo& account_info)
 {
 	UserInfo user_info;
 	user_info.m_account = account_info.m_account;
-
+	user_info.m_user_id = account_info.m_user_id;
 	return user_info;
+}
+
+bool LoginModule::insert_new_user(const UserInfo& user_info)
+{
+	if (!insert_new_user_db(user_info))
+	{
+		return false;
+	}
+	insert_new_user_redis(user_info);
+}
+
+bool LoginModule::insert_new_user_redis(const UserInfo& user_info)
+{
+	cpp_redis::client& redis_client = RedisInstance::get_mutable_instance().get_client();
+	RedisInstance::get_mutable_instance().json_to_hash(user_info.to_json(), 
+		user_info_redis_key(user_info.m_user_id), ACCOUNT_EXPIRE_SEC);
+	return true;
+}
+
+bool LoginModule::insert_new_user_db(const UserInfo& user_info)
+{
+	mongocxx::database db = MongodbInstance::get_mutable_instance() .get_client();
+	mongocxx::collection  collect = db[USER_INFO_COLLECT];
+	MGOptions::update op_update;
+	op_update.upsert(true);
+	auto set_result = collect.update_one(MGDocument{ } << "user_id" << user_info.m_user_id << MGFinalize, MGDocument{} << "$set"
+		<< MGOpenDocument << "counter" << INIT_USER_ID << MGCloseDocument << MGFinalize, op_update);
+	if (!set_result)
+	{
+		return false;
+	}
+	return true;
 }
 
 bool LoginModule::query_new_userid(int &new_id)
 {
-	mongocxx::database db = MongodbInstance::get_mutable_instance().get();
+	mongocxx::database db = MongodbInstance::get_mutable_instance().get_client();
 	mongocxx::collection  collect = db[USER_ID_COLLECT];
 	/*MGOptions::update op_update;
 	op_update.upsert(true);
@@ -165,10 +199,13 @@ std::string LoginModule::generate_account()
 	return SystemTool::get_object_id(m_local_ip, SystemTool::get_pid(), m_seq++);
 }
 
+
 bool LoginModule::query_user_account(AccountInfo& account_info)
 {
 	if (query_from_redis(account_info) || query_from_mongo(account_info))
 	{
+		RedisInstance::get_mutable_instance().json_to_hash(account_info.to_json(), 
+			account_redis_key(account_info.m_account), ACCOUNT_EXPIRE_SEC);
 		return true;
 	}
 	return false;
@@ -176,7 +213,7 @@ bool LoginModule::query_user_account(AccountInfo& account_info)
 
 bool LoginModule::query_from_mongo(AccountInfo& account_info)
 {
-	mongocxx::database db = MongodbInstance::get_mutable_instance().get();
+	mongocxx::database db = MongodbInstance::get_mutable_instance().get_client();
 	auto  collect = db[USER_INFO_COLLECT];
 	auto result = collect.find_one(MGDocument{} << "user_account"
 			<< account_info.m_account << MGFinalize);
@@ -190,16 +227,25 @@ bool LoginModule::query_from_mongo(AccountInfo& account_info)
 	return true;
 }
 
+std::string LoginModule::user_info_redis_key(int user_id) const
+{
+	return std::to_string(user_id) + "|user_info";
+}
+
+std::string LoginModule::account_redis_key(const std::string& account) const
+{
+	return account + "|account";
+}
+
 bool LoginModule::query_from_redis(AccountInfo& account_info)
 {
-		cpp_redis::client& redis_client = RedisInstance::get_mutable_instance().get();
-		auto fr = redis_client.hgetall(account_info.m_account);
+		auto& redis_client = RedisInstance::get_mutable_instance().get_client();
+		auto fr = redis_client.hgetall(account_redis_key(account_info.m_account));
 		redis_client.commit();
 		cpp_redis::reply r = fr.get();
 		if (r.is_null() || r.is_error())
 		{
-			WARN_LOG << "account:" << account_info.m_account << " devoce_code:"
-				<< account_info.m_device_code << " login redis null";
+			WARN_LOG << "account:" << account_info.m_account << " login redis null";
 			return false;
 		}
 		Json result = RedisInstance::get_mutable_instance().pair_array_to_json(r, account_info.m_jv_temp);

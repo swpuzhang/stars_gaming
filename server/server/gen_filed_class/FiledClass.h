@@ -3,13 +3,13 @@
 {\
 public:\
 type1::FieldValue m_##field1 = type1::default_value ; \
-const Json m_jv_temp = {\
+Json m_jv_temp = {\
 {#field1, type1::JsonType } }; \
 void from_json(const Json& jv) \
 {\
 m_##field1 = jv[#field1].get<type1::FieldValue>();\
 }\
-Json to_json() \
+Json to_json() const \
 {\
 Json jv; \
 jv[#field1] = m_##field1; \
@@ -22,7 +22,7 @@ return jv; \
 public:\
 type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
-const Json m_jv_temp = {\
+Json m_jv_temp = {\
 {#field1, type1::JsonType } , \
 {#field2, type2::JsonType } }; \
 void from_json(const Json& jv) \
@@ -30,7 +30,7 @@ void from_json(const Json& jv) \
 m_##field1 = jv[#field1].get<type1::FieldValue>();\
 m_##field2 = jv[#field2].get<type2::FieldValue>();\
 }\
-Json to_json() \
+Json to_json() const \
 {\
 Json jv; \
 jv[#field1] = m_##field1; \
@@ -45,7 +45,7 @@ public:\
 type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
 type3::FieldValue m_##field3 = type3::default_value ; \
-const Json m_jv_temp = {\
+Json m_jv_temp = {\
 {#field1, type1::JsonType } , \
 {#field2, type2::JsonType } , \
 {#field3, type3::JsonType } }; \
@@ -55,7 +55,7 @@ m_##field1 = jv[#field1].get<type1::FieldValue>();\
 m_##field2 = jv[#field2].get<type2::FieldValue>();\
 m_##field3 = jv[#field3].get<type3::FieldValue>();\
 }\
-Json to_json() \
+Json to_json() const \
 {\
 Json jv; \
 jv[#field1] = m_##field1; \
@@ -72,7 +72,7 @@ type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
 type3::FieldValue m_##field3 = type3::default_value ; \
 type4::FieldValue m_##field4 = type4::default_value ; \
-const Json m_jv_temp = {\
+Json m_jv_temp = {\
 {#field1, type1::JsonType } , \
 {#field2, type2::JsonType } , \
 {#field3, type3::JsonType } , \
@@ -84,7 +84,7 @@ m_##field2 = jv[#field2].get<type2::FieldValue>();\
 m_##field3 = jv[#field3].get<type3::FieldValue>();\
 m_##field4 = jv[#field4].get<type4::FieldValue>();\
 }\
-Json to_json() \
+Json to_json() const \
 {\
 Json jv; \
 jv[#field1] = m_##field1; \
@@ -103,7 +103,7 @@ type2::FieldValue m_##field2 = type2::default_value ; \
 type3::FieldValue m_##field3 = type3::default_value ; \
 type4::FieldValue m_##field4 = type4::default_value ; \
 type5::FieldValue m_##field5 = type5::default_value ; \
-const Json m_jv_temp = {\
+Json m_jv_temp = {\
 {#field1, type1::JsonType } , \
 {#field2, type2::JsonType } , \
 {#field3, type3::JsonType } , \
@@ -117,7 +117,7 @@ m_##field3 = jv[#field3].get<type3::FieldValue>();\
 m_##field4 = jv[#field4].get<type4::FieldValue>();\
 m_##field5 = jv[#field5].get<type5::FieldValue>();\
 }\
-Json to_json() \
+Json to_json() const \
 {\
 Json jv; \
 jv[#field1] = m_##field1; \
@@ -138,7 +138,7 @@ type3::FieldValue m_##field3 = type3::default_value ; \
 type4::FieldValue m_##field4 = type4::default_value ; \
 type5::FieldValue m_##field5 = type5::default_value ; \
 type6::FieldValue m_##field6 = type6::default_value ; \
-const Json m_jv_temp = {\
+Json m_jv_temp = {\
 {#field1, type1::JsonType } , \
 {#field2, type2::JsonType } , \
 {#field3, type3::JsonType } , \
@@ -154,7 +154,7 @@ m_##field4 = jv[#field4].get<type4::FieldValue>();\
 m_##field5 = jv[#field5].get<type5::FieldValue>();\
 m_##field6 = jv[#field6].get<type6::FieldValue>();\
 }\
-Json to_json() \
+Json to_json() const \
 {\
 Json jv; \
 jv[#field1] = m_##field1; \
@@ -177,7 +177,7 @@ type4::FieldValue m_##field4 = type4::default_value ; \
 type5::FieldValue m_##field5 = type5::default_value ; \
 type6::FieldValue m_##field6 = type6::default_value ; \
 type7::FieldValue m_##field7 = type7::default_value ; \
-const Json m_jv_temp = {\
+Json m_jv_temp = {\
 {#field1, type1::JsonType } , \
 {#field2, type2::JsonType } , \
 {#field3, type3::JsonType } , \
@@ -195,7 +195,7 @@ m_##field5 = jv[#field5].get<type5::FieldValue>();\
 m_##field6 = jv[#field6].get<type6::FieldValue>();\
 m_##field7 = jv[#field7].get<type7::FieldValue>();\
 }\
-Json to_json() \
+Json to_json() const \
 {\
 Json jv; \
 jv[#field1] = m_##field1; \
@@ -220,7 +220,7 @@ type5::FieldValue m_##field5 = type5::default_value ; \
 type6::FieldValue m_##field6 = type6::default_value ; \
 type7::FieldValue m_##field7 = type7::default_value ; \
 type8::FieldValue m_##field8 = type8::default_value ; \
-const Json m_jv_temp = {\
+Json m_jv_temp = {\
 {#field1, type1::JsonType } , \
 {#field2, type2::JsonType } , \
 {#field3, type3::JsonType } , \
@@ -240,7 +240,7 @@ m_##field6 = jv[#field6].get<type6::FieldValue>();\
 m_##field7 = jv[#field7].get<type7::FieldValue>();\
 m_##field8 = jv[#field8].get<type8::FieldValue>();\
 }\
-Json to_json() \
+Json to_json() const \
 {\
 Json jv; \
 jv[#field1] = m_##field1; \
@@ -267,7 +267,7 @@ type6::FieldValue m_##field6 = type6::default_value ; \
 type7::FieldValue m_##field7 = type7::default_value ; \
 type8::FieldValue m_##field8 = type8::default_value ; \
 type9::FieldValue m_##field9 = type9::default_value ; \
-const Json m_jv_temp = {\
+Json m_jv_temp = {\
 {#field1, type1::JsonType } , \
 {#field2, type2::JsonType } , \
 {#field3, type3::JsonType } , \
@@ -289,7 +289,7 @@ m_##field7 = jv[#field7].get<type7::FieldValue>();\
 m_##field8 = jv[#field8].get<type8::FieldValue>();\
 m_##field9 = jv[#field9].get<type9::FieldValue>();\
 }\
-Json to_json() \
+Json to_json() const \
 {\
 Json jv; \
 jv[#field1] = m_##field1; \
@@ -318,7 +318,7 @@ type7::FieldValue m_##field7 = type7::default_value ; \
 type8::FieldValue m_##field8 = type8::default_value ; \
 type9::FieldValue m_##field9 = type9::default_value ; \
 type10::FieldValue m_##field10 = type10::default_value ; \
-const Json m_jv_temp = {\
+Json m_jv_temp = {\
 {#field1, type1::JsonType } , \
 {#field2, type2::JsonType } , \
 {#field3, type3::JsonType } , \
@@ -342,7 +342,7 @@ m_##field8 = jv[#field8].get<type8::FieldValue>();\
 m_##field9 = jv[#field9].get<type9::FieldValue>();\
 m_##field10 = jv[#field10].get<type10::FieldValue>();\
 }\
-Json to_json() \
+Json to_json() const \
 {\
 Json jv; \
 jv[#field1] = m_##field1; \
@@ -373,7 +373,7 @@ type8::FieldValue m_##field8 = type8::default_value ; \
 type9::FieldValue m_##field9 = type9::default_value ; \
 type10::FieldValue m_##field10 = type10::default_value ; \
 type11::FieldValue m_##field11 = type11::default_value ; \
-const Json m_jv_temp = {\
+Json m_jv_temp = {\
 {#field1, type1::JsonType } , \
 {#field2, type2::JsonType } , \
 {#field3, type3::JsonType } , \
@@ -399,7 +399,7 @@ m_##field9 = jv[#field9].get<type9::FieldValue>();\
 m_##field10 = jv[#field10].get<type10::FieldValue>();\
 m_##field11 = jv[#field11].get<type11::FieldValue>();\
 }\
-Json to_json() \
+Json to_json() const \
 {\
 Json jv; \
 jv[#field1] = m_##field1; \
@@ -432,7 +432,7 @@ type9::FieldValue m_##field9 = type9::default_value ; \
 type10::FieldValue m_##field10 = type10::default_value ; \
 type11::FieldValue m_##field11 = type11::default_value ; \
 type12::FieldValue m_##field12 = type12::default_value ; \
-const Json m_jv_temp = {\
+Json m_jv_temp = {\
 {#field1, type1::JsonType } , \
 {#field2, type2::JsonType } , \
 {#field3, type3::JsonType } , \
@@ -460,7 +460,7 @@ m_##field10 = jv[#field10].get<type10::FieldValue>();\
 m_##field11 = jv[#field11].get<type11::FieldValue>();\
 m_##field12 = jv[#field12].get<type12::FieldValue>();\
 }\
-Json to_json() \
+Json to_json() const \
 {\
 Json jv; \
 jv[#field1] = m_##field1; \
@@ -495,7 +495,7 @@ type10::FieldValue m_##field10 = type10::default_value ; \
 type11::FieldValue m_##field11 = type11::default_value ; \
 type12::FieldValue m_##field12 = type12::default_value ; \
 type13::FieldValue m_##field13 = type13::default_value ; \
-const Json m_jv_temp = {\
+Json m_jv_temp = {\
 {#field1, type1::JsonType } , \
 {#field2, type2::JsonType } , \
 {#field3, type3::JsonType } , \
@@ -525,7 +525,7 @@ m_##field11 = jv[#field11].get<type11::FieldValue>();\
 m_##field12 = jv[#field12].get<type12::FieldValue>();\
 m_##field13 = jv[#field13].get<type13::FieldValue>();\
 }\
-Json to_json() \
+Json to_json() const \
 {\
 Json jv; \
 jv[#field1] = m_##field1; \
@@ -562,7 +562,7 @@ type11::FieldValue m_##field11 = type11::default_value ; \
 type12::FieldValue m_##field12 = type12::default_value ; \
 type13::FieldValue m_##field13 = type13::default_value ; \
 type14::FieldValue m_##field14 = type14::default_value ; \
-const Json m_jv_temp = {\
+Json m_jv_temp = {\
 {#field1, type1::JsonType } , \
 {#field2, type2::JsonType } , \
 {#field3, type3::JsonType } , \
@@ -594,7 +594,7 @@ m_##field12 = jv[#field12].get<type12::FieldValue>();\
 m_##field13 = jv[#field13].get<type13::FieldValue>();\
 m_##field14 = jv[#field14].get<type14::FieldValue>();\
 }\
-Json to_json() \
+Json to_json() const \
 {\
 Json jv; \
 jv[#field1] = m_##field1; \
@@ -633,7 +633,7 @@ type12::FieldValue m_##field12 = type12::default_value ; \
 type13::FieldValue m_##field13 = type13::default_value ; \
 type14::FieldValue m_##field14 = type14::default_value ; \
 type15::FieldValue m_##field15 = type15::default_value ; \
-const Json m_jv_temp = {\
+Json m_jv_temp = {\
 {#field1, type1::JsonType } , \
 {#field2, type2::JsonType } , \
 {#field3, type3::JsonType } , \
@@ -667,7 +667,7 @@ m_##field13 = jv[#field13].get<type13::FieldValue>();\
 m_##field14 = jv[#field14].get<type14::FieldValue>();\
 m_##field15 = jv[#field15].get<type15::FieldValue>();\
 }\
-Json to_json() \
+Json to_json() const \
 {\
 Json jv; \
 jv[#field1] = m_##field1; \
@@ -708,7 +708,7 @@ type13::FieldValue m_##field13 = type13::default_value ; \
 type14::FieldValue m_##field14 = type14::default_value ; \
 type15::FieldValue m_##field15 = type15::default_value ; \
 type16::FieldValue m_##field16 = type16::default_value ; \
-const Json m_jv_temp = {\
+Json m_jv_temp = {\
 {#field1, type1::JsonType } , \
 {#field2, type2::JsonType } , \
 {#field3, type3::JsonType } , \
@@ -744,7 +744,7 @@ m_##field14 = jv[#field14].get<type14::FieldValue>();\
 m_##field15 = jv[#field15].get<type15::FieldValue>();\
 m_##field16 = jv[#field16].get<type16::FieldValue>();\
 }\
-Json to_json() \
+Json to_json() const \
 {\
 Json jv; \
 jv[#field1] = m_##field1; \
@@ -787,7 +787,7 @@ type14::FieldValue m_##field14 = type14::default_value ; \
 type15::FieldValue m_##field15 = type15::default_value ; \
 type16::FieldValue m_##field16 = type16::default_value ; \
 type17::FieldValue m_##field17 = type17::default_value ; \
-const Json m_jv_temp = {\
+Json m_jv_temp = {\
 {#field1, type1::JsonType } , \
 {#field2, type2::JsonType } , \
 {#field3, type3::JsonType } , \
@@ -825,7 +825,7 @@ m_##field15 = jv[#field15].get<type15::FieldValue>();\
 m_##field16 = jv[#field16].get<type16::FieldValue>();\
 m_##field17 = jv[#field17].get<type17::FieldValue>();\
 }\
-Json to_json() \
+Json to_json() const \
 {\
 Json jv; \
 jv[#field1] = m_##field1; \
@@ -870,7 +870,7 @@ type15::FieldValue m_##field15 = type15::default_value ; \
 type16::FieldValue m_##field16 = type16::default_value ; \
 type17::FieldValue m_##field17 = type17::default_value ; \
 type18::FieldValue m_##field18 = type18::default_value ; \
-const Json m_jv_temp = {\
+Json m_jv_temp = {\
 {#field1, type1::JsonType } , \
 {#field2, type2::JsonType } , \
 {#field3, type3::JsonType } , \
@@ -910,7 +910,7 @@ m_##field16 = jv[#field16].get<type16::FieldValue>();\
 m_##field17 = jv[#field17].get<type17::FieldValue>();\
 m_##field18 = jv[#field18].get<type18::FieldValue>();\
 }\
-Json to_json() \
+Json to_json() const \
 {\
 Json jv; \
 jv[#field1] = m_##field1; \
@@ -957,7 +957,7 @@ type16::FieldValue m_##field16 = type16::default_value ; \
 type17::FieldValue m_##field17 = type17::default_value ; \
 type18::FieldValue m_##field18 = type18::default_value ; \
 type19::FieldValue m_##field19 = type19::default_value ; \
-const Json m_jv_temp = {\
+Json m_jv_temp = {\
 {#field1, type1::JsonType } , \
 {#field2, type2::JsonType } , \
 {#field3, type3::JsonType } , \
@@ -999,7 +999,7 @@ m_##field17 = jv[#field17].get<type17::FieldValue>();\
 m_##field18 = jv[#field18].get<type18::FieldValue>();\
 m_##field19 = jv[#field19].get<type19::FieldValue>();\
 }\
-Json to_json() \
+Json to_json() const \
 {\
 Json jv; \
 jv[#field1] = m_##field1; \
@@ -1048,7 +1048,7 @@ type17::FieldValue m_##field17 = type17::default_value ; \
 type18::FieldValue m_##field18 = type18::default_value ; \
 type19::FieldValue m_##field19 = type19::default_value ; \
 type20::FieldValue m_##field20 = type20::default_value ; \
-const Json m_jv_temp = {\
+Json m_jv_temp = {\
 {#field1, type1::JsonType } , \
 {#field2, type2::JsonType } , \
 {#field3, type3::JsonType } , \
@@ -1092,7 +1092,7 @@ m_##field18 = jv[#field18].get<type18::FieldValue>();\
 m_##field19 = jv[#field19].get<type19::FieldValue>();\
 m_##field20 = jv[#field20].get<type20::FieldValue>();\
 }\
-Json to_json() \
+Json to_json() const \
 {\
 Json jv; \
 jv[#field1] = m_##field1; \

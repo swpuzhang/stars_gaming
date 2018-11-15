@@ -119,8 +119,10 @@
     <ClInclude Include="Json.hpp" />
     <ClInclude Include="JsonParser.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="test.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FieldClass.cpp" />
     <ClCompile Include="gen_field_class.cpp" />
     <ClCompile Include="JsonParser.cpp" />
   </ItemGroup>

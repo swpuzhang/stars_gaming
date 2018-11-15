@@ -51,10 +51,11 @@ class Mongodb: public Resource<MongoOb>
 public:
 	using SELF_TYPE = Mongodb;
 	Mongodb();
-	mongocxx::database get(const std::string& map_key = "") const;
+	mongocxx::database get_client(const std::string& map_key = "") const;
 	bool parse_one_resource(const Json& one_jv, std::unique_ptr < MongoOb>& one_resource);
 };
 
 typedef boost::serialization::singleton<Mongodb> MongodbInstance;
+#define MongoInst MongodbInstance::get_mutable_instance();
 #include "Resource.inl"
 #endif // RESOURCE_H

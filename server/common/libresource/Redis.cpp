@@ -7,7 +7,7 @@ Redis::Redis()
 	m_parse_one_fun = MEMFUN_THIS_HOLDER_BIND2(parse_one_resource);
 }
 
-RedisClient& Redis::get(const std::string& map_key)
+RedisClient& Redis::get_client(const std::string& map_key)
 {
 	auto threadid = std::this_thread::get_id();
 	auto iter = m_thread_resource.find(threadid);
@@ -18,6 +18,57 @@ RedisClient& Redis::get(const std::string& map_key)
 	auto iter_find = iter->second.find(map_key);
 	return *(iter_find->second);
 }
+
+void Redis::json_to_hash(const Json& jv, const std::string& key_name, TY_UINT64 expire_sec, const std::string& redis_name)
+{
+	RedisClient& rclient = get_client(redis_name);
+	for (auto iter = jv.begin(); iter != jv.end(); ++iter)
+	{
+		auto& jv_key = iter.key();
+		auto& jv_value = iter.value();
+		switch (jv_value.type())
+		{
+		case JsonValue::string:
+			rclient.hset(key_name, jv_key, jv_value.get<std::string>(), 
+				[key_name, jv_key, jv_value](cpp_redis::reply& reply) {
+				if (!reply)
+				{
+					ERROR_LOG << "hset " << key_name << " " << jv_key << " " << jv_value.get<std::string>() << " failed";
+				}
+			}).commit();
+			break;
+		case JsonValue::number_integer:
+			rclient.hset(key_name, jv_key, std::to_string( jv_value.get<TY_INT64>()), 
+				[key_name, jv_key, jv_value](cpp_redis::reply& reply) {
+			if (!reply)
+			{
+					ERROR_LOG << "hset " << key_name << " " << jv_key << " " << jv_value.get<TY_INT64>() << " failed";
+			}}).commit();
+			break;
+		case JsonValue::number_unsigned:
+				rclient.hset(key_name, jv_key, std::to_string(jv_value.get<TY_UINT64>()),
+					[key_name, jv_key, jv_value](cpp_redis::reply& reply) {
+				if (!reply)
+				{
+					ERROR_LOG << "hset " << key_name << " " << jv_key << " " << jv_value.get<TY_UINT64>() << " failed";
+				}}).commit();
+			break;
+		default:
+			ERROR_LOG << "jv_temp error: key:" << key_name << " type:" << jv_value.type_name() << " failed";
+			break;
+		}
+	}
+	if (expire_sec != 0)
+	{
+		rclient.expire(key_name, expire_sec, [key_name, expire_sec](cpp_redis::reply& reply) {
+			if (!reply)
+			{
+				ERROR_LOG << "expire " << key_name << " " << expire_sec << " failed";
+			}}).commit();
+	}
+	
+}
+
 Json Redis::pair_array_to_json(const cpp_redis::reply& reply, const Json& jv_temp)
 {
 	Json jv_out;
@@ -43,8 +94,8 @@ Json Redis::pair_array_to_json(const cpp_redis::reply& reply, const Json& jv_tem
 		}
 		auto str_key = ar[i].as_string();
 		auto str_value = ar[i].as_string();
-		auto& jv_key = jv_temp[str_key];
-		switch (jv_key.type())
+		auto& jv_value = jv_temp[str_key];
+		switch (jv_value.type())
 		{
 		case JsonValue::string:
 			jv_out[str_key] = str_value;
@@ -56,7 +107,7 @@ Json Redis::pair_array_to_json(const cpp_redis::reply& reply, const Json& jv_tem
 			jv_out[str_key] = static_cast<TY_UINT64>(std::atoll(str_value.c_str()));
 			break;
 		default:
-			ERROR_LOG << "jv_temp error: key:" << str_key << " type:" << jv_key.type_name();
+			ERROR_LOG << "jv_temp error: key:" << str_key << " type:" << jv_value.type_name();
 			break;
 		}
 	}

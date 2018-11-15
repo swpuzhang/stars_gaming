@@ -1,5 +1,5 @@
-#ifndef LOGIN_TASK_MANAGER_H
-#define LOGIN_TASK_MANAGER_H
+#ifndef LOGIN_MODULE_MANAGER_H
+#define LOGIN_MODULE_MANAGER_H
 
 #include "libtask_manager/TaskManager.h"
 #include "libtools/IoLoop.h"
@@ -21,11 +21,13 @@ constexpr char USER_INFO_COLLECT[] = "c_user_info";
 constexpr char USER_ID_COLLECT[] = "c_user_id";
 constexpr char USER_MONEY_COLLECT[] = "c_user_money";
 constexpr int INIT_USER_ID = 10000500;
+constexpr int ACCOUNT_EXPIRE_SEC = 7 * 3600 * 24;
+
 enum class emAppType 
 {
 	MOBILE_ANDROID  =  0,
 	MPBILE_IPHONE,
-	HTME_5 ,
+	HTME5 ,
 	PC_WINDOWS,
 	PC_MAC,
 };
@@ -37,13 +39,10 @@ enum class emLoginDeal
 };
 
 
-FIELD_CLASS6(AccountInfo,
+FIELD_CLASS3(AccountInfo,
 	StringType, account,
-	StringType, device_code,
-	StringType, device_name,
 	IntType, app_type,
-	IntType, user_id,
-	IntType, login_deal);
+	IntType, user_id);
 
 FIELD_CLASS13(UserInfo,
 	StringType, account,
@@ -68,11 +67,14 @@ public:
 	void user_session_open(const TcpSessionPtr& user_sessoin);
 	void user_session_close(const TcpSessionPtr& user_sessoin);
 	void user_login(const TcpMsgPtr& msg);
-	void user_query_account(const TcpMsgPtr& msg);
-	
 private:
+	bool insert_new_user(const UserInfo& user_info);
+	bool insert_new_user_redis(const UserInfo& user_info);
+	bool insert_new_user_db(const UserInfo& user_info);
+	std::string user_info_redis_key(int user_id) const;
+	std::string account_redis_key(const std::string& account) const;
 	bool query_new_userid(int &new_id);
-	bool is_need_generate_new_account(const AccountInfo &account) const;
+	bool is_need_generate_new_account(const std::string &account, int app_type) const;
 	std::string generate_account();
 	bool query_user_account(AccountInfo& account_info);
 	bool query_from_redis(AccountInfo& account_info);

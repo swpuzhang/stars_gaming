@@ -106,6 +106,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../common;../../3rd/bson;../../3rd/mongoc;../../3rd/bsoncxx/v_noabi;../../3rd/mongocxx/v_noabi;../../3rd;../../3rd/amqp;../../3rd/protobuf;../../message/cpp;../../common/liblog</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

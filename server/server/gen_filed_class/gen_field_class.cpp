@@ -4,12 +4,12 @@
 #include "Json.hpp"
 #include "FiledClass.h"
 #include "JsonParser.h"
+#include "test.h"
 
 
 void gen_file()
 {
 	std::ofstream ofile("FiledClass.h");
-	ofile << R"(#include "JsonParser.h")";
 	for (int i = 1; i <= 20; ++i)
 	{
 		ofile << "\n#define FIELD_CLASS" << i << "(class_name, ";
@@ -29,7 +29,7 @@ void gen_file()
 		{
 			ofile << "type" << j << "::FieldValue m_##field" << j << " = type" << j << "::default_value ; \\\n";
 		}
-		ofile << "const Json m_jv_temp = {\\\n";
+		ofile << "Json m_jv_temp = {\\\n";
 		for (int j = 1; j <= i; ++j)
 		{
 			if (j != i)
@@ -48,7 +48,7 @@ void gen_file()
 		{
 			ofile << "m_##field" << j << " = jv[#field" << j << "].get<type" << j << "::FieldValue>();\\\n";
 		}
-		ofile << "}\\\nJson to_json() \\\n{\\\nJson jv; \\\n";
+		ofile << "}\\\nJson to_json() const \\\n{\\\nJson jv; \\\n";
 		for (int j = 1; j <= i; ++j)
 		{
 			ofile << "jv[#field" << j << "] = m_##field" << j << "; \\\n";
@@ -65,13 +65,16 @@ FIELD_CLASS3(UserAccount3, StringType, account,
 	StringType, device_code,
 	IntType, user_id
 );
-FIELD_CLASS6(AccountInfo,
-	StringType, account,
-	StringType, device_code,
-	StringType, device_name,
-	IntType, app_type,
-	IntType, user_id,
-	IntType, login_deal);
+
+
+
+UserInfo generate_new_user(const AccountInfo& account_info)
+{
+	UserInfo user_info;
+	user_info.m_account = account_info.m_account;
+	user_info.m_user_id = account_info.m_user_id;
+	return user_info;
+}
 
 int main()
 {
@@ -98,10 +101,18 @@ int main()
 	std::cout << a3.m_jv_temp << std::endl;
 	Json jv = a3.to_json();
 	std::cout << jv << std::endl;
-
-	AccountInfo info{ "123", "123", "123", 1, 2 ,3 };
-	Json jv_info = info.to_json();
+	UserAccount3 a4 = a3;
+	Json jv4 = a4.to_json();
+	std::cout << jv4 << std::endl;
+	UserInfo user_info;
+	Json jv_info = user_info.to_json();
 	std::cout << jv_info << std::endl;
+	AccountInfo acc_info;
+	UserInfo user_info2 = generate_new_user(acc_info);
+	
+	Json jv_info2 = user_info2.to_json();
+	user_info2.from_json(jv_info2);
+	std::cout << jv_info2 << std::endl;
 	gen_file(); 
 	return 0;
 }

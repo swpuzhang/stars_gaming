@@ -7,7 +7,7 @@ Mongodb::Mongodb() : Resource<MongoOb>()
 	m_parse_one_fun = MEMFUN_THIS_HOLDER_BIND2(parse_one_resource);
 }
 
- mongocxx::database  Mongodb::get(const std::string& map_key) const
+ mongocxx::database  Mongodb::get_client(const std::string& map_key) const
 {
 	auto iter = this->m_thread_resource.find(std::this_thread::get_id());
 
