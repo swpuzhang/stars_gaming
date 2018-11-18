@@ -6,6 +6,8 @@
 #include <vector>
 #include <unordered_map>
 
+class LoginModule;
+
 class LoginTaskManager : public TcpTask
 {
 public:

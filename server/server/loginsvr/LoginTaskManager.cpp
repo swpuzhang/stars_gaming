@@ -48,14 +48,16 @@ void LoginTaskManager::on_heart_beat(const TcpMsgPtr& msg)
 void LoginTaskManager::on_session_close(const TcpMsgPtr& msg)
 {
 	DEBUG_LOG << "session(" << msg->session_ptr().get() << ")  close";
+	LoginInstance::get_mutable_instance().user_session_close(msg->session_ptr());
 }
 
 void LoginTaskManager::on_session_open(const TcpMsgPtr& msg)
 {
 	DEBUG_LOG << "session(" << msg->session_ptr().get() << ")  open";
+	LoginInstance::get_mutable_instance().user_session_open(msg->session_ptr());
 }
 
 void LoginTaskManager::on_login(const TcpMsgPtr& msg)
 {
-
+	LoginInstance::get_mutable_instance().user_login(msg);
 }

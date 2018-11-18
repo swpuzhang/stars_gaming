@@ -18,12 +18,29 @@ public:
 class IntType
 {
 public:
-	using FieldValue = std::int64_t;
+	using FieldValue = std::int32_t;
 	const static JsonValue JsonType;
 	const static FieldValue default_value;
 };
 
 class UIntType
+{
+public:
+	using FieldValue = std::uint32_t;
+	const static JsonValue JsonType;
+	const static FieldValue default_value;
+};
+
+
+class Int64Type
+{
+public:
+	using FieldValue = std::int64_t;
+	const static JsonValue JsonType;
+	const static FieldValue default_value;
+};
+
+class UInt64Type
 {
 public:
 	using FieldValue = std::uint64_t;

@@ -5,5 +5,6 @@ enum EnumLoginCmd
 {
 	CMD_BEGIN = 0;
 	CMD_LOGIN = 500;
+	CMD_NOTIFY_LOGIN = 501;
 }
 

@@ -11,13 +11,8 @@ Mongodb::Mongodb() : Resource<MongoOb>()
 {
 	auto iter = this->m_thread_resource.find(std::this_thread::get_id());
 
-	if (map_key.empty())
-	{
-		auto &mgclient = *(iter->second.begin()->second->m_client);
-		auto &db_name = iter->second.begin()->second->m_db_name;
-		return mgclient[db_name];
-	}
 	auto iter_find = iter->second.find(map_key);
+	assert(iter_find != iter->second.end());
 	auto &mgclient = *(iter_find->second->m_client);
 	return mgclient[iter_find->second->m_db_name];
 }
@@ -27,7 +22,7 @@ Mongodb::Mongodb() : Resource<MongoOb>()
 	 TRACE_FUNCATION();
 	 one_resource = std::make_unique<MongoOb>();
 	 mongocxx::uri  mongo_url(one_jv["url"].get<std::string>());
-	 one_resource->m_db_name = one_jv["db_name"].get<std::string>();
+	 one_resource->m_db_name = one_jv["db_name"].get<std::string>;
 	 one_resource->m_client = std::make_unique<mongocxx::client>(mongo_url);
 	 return true;
  }

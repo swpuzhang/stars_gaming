@@ -15,6 +15,7 @@
 #include "libmessage/MessageType.h"
 #include "libtools/AsioTypes.h"
 #include "libtools/Types.h"
+#include "libtools/Json"
 
 class MqSession;
 

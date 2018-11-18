@@ -1,5 +1,7 @@
 #include "IoLoopPool.h"
 #include "libtools/AsioTypes.h"
+#include "libresource/Mongodb.h"
+#include "libresource/Redis.h"
 #include <thread>
 #include <functional>
 #include <memory>
@@ -20,6 +22,8 @@ ThreadPool::ThreadPool(TY_UINT32 thread_size) :
 		m_threads.push_back(thread);
 	}
 }
+
+
 
 void ThreadPool::run(bool is_detach)
 {
@@ -53,7 +57,10 @@ void ThreadPool::post_handler(std::function<void(void)> func)
 	}
 }
 
-IoLoopPool::IoLoopPool(TY_UINT32 pool_size) : m_next_index(0)
+IoLoopPool::IoLoopPool(TY_UINT32 pool_size, bool need_mongo = true, bool need_redis = true) : 
+	m_next_index(0),
+	m_is_need_mongo(need_mongo),
+	m_is_need_redis(need_redis)
 {
 	assert(pool_size > 0);
 	for (std::size_t i = 0; i < pool_size; ++i)
@@ -65,6 +72,22 @@ IoLoopPool::IoLoopPool(TY_UINT32 pool_size) : m_next_index(0)
 			boost::bind(&IoLoop::run, ioloop)));
 		ioloop->set_id(thread->get_id());
 		m_threads.push_back(thread);
+	}
+}
+
+void IoLoopPool::init_resource()
+{
+	for (auto &e : m_io_loops)
+	{
+		std::thread::id one_id = e->get_future_thread_id();
+		if (m_is_need_mongo)
+		{
+			MongodbInstance::get_mutable_instance().insert_one(one_id);
+		}
+		if (m_is_need_redis)
+		{
+			RedisInstance::get_mutable_instance().insert_one(one_id);
+		}
 	}
 }
 
@@ -115,4 +138,15 @@ IoLoopPool::IoLoopPtr& IoLoopPool::get_next_loop_ptr()
 	if (m_next_index == m_io_loops.size())
 		m_next_index = 0;
 	return io_loop;
+}
+
+
+std::vector<std::thread::id> IoLoopPool::get_all_thread_ids()
+{
+	std::vector<std::thread::id> all_thread_ids;
+	for (auto &e : m_io_loops)
+	{
+		all_thread_ids.push_back(e->get_future_thread_id());
+	}
+	return all_thread_ids;
 }

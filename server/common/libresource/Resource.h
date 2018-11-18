@@ -36,9 +36,9 @@ public:
 	Resource();
 	using ResourceMap = std::unordered_map<std::string, std::unique_ptr<T>>;
 	using ThreadMap = std::unordered_map<std::thread::id, ResourceMap>;
-	bool parse_config(const std::string& key_name, const std::string& config_str);
-	bool insert(std::thread::id threadid);
-
+	bool parse_config(const Json& config_jv);
+	bool insert_one(std::thread::id threadid);
+	bool insert(std::vector< std::thread::id> thread_ids);
 protected:
 	std::vector<Json>m_configs;
 	ThreadMap m_thread_resource;

@@ -6,6 +6,9 @@
 #include <boost/noncopyable.hpp>
 #include <functional>
 #include <memory>
+#include <thread>
+#include <future>
+#include <mutex>
 
 class ThreadPool : private boost::noncopyable
 {
@@ -31,7 +34,7 @@ class IoLoopPool : private boost::noncopyable
 public:
 	using IoLoopPtr = std::shared_ptr<IoLoop> ;
 	/// Construct the io_service pool.
-	explicit IoLoopPool(TY_UINT32 pool_size);
+	explicit IoLoopPool(TY_UINT32 pool_size, bool need_mongo = true, bool need_redis = true);
 
 	/// Run all io_service objects in the pool.
 	void run(bool is_detach = true);
@@ -47,6 +50,10 @@ public:
 	IoLoop& get_next_loop();
 
 	IoLoopPtr& get_next_loop_ptr();
+
+	void init_resource();
+
+	std::vector<std::thread::id> get_all_thread_ids();
 private:
 	
 	using io_work = boost::asio::executor_work_guard<
@@ -61,4 +68,7 @@ private:
 	TY_UINT32 m_next_index;
 
 	std::vector<std::shared_ptr<std::thread> > m_threads;
+
+	bool m_is_need_mongo;
+	bool m_is_need_redis;
 };

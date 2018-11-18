@@ -27,6 +27,12 @@ void gen_file()
 		ofile << "class class_name \\\n{\\\npublic:\\\n";
 		for (int j = 1; j <= i; ++j)
 		{
+			ofile << "std::string filed_##field" << j << "() { return #field" << j << "; }\\\n";
+		}
+
+		
+		for (int j = 1; j <= i; ++j)
+		{
 			ofile << "type" << j << "::FieldValue m_##field" << j << " = type" << j << "::default_value ; \\\n";
 		}
 		ofile << "Json m_jv_temp = {\\\n";
@@ -93,6 +99,7 @@ int main()
 
 	UserAccount3 a3;
 
+	std::cout << a.filed_account() << std::endl;
 
 	a3.from_json(Json{ {"account", "zhangyang" }, {"device_code", "acdroid"}, {"user_id", 10001} });
 	std::cout << a3.m_account << std::endl;
@@ -110,9 +117,14 @@ int main()
 	AccountInfo acc_info;
 	UserInfo user_info2 = generate_new_user(acc_info);
 	
+
 	Json jv_info2 = user_info2.to_json();
 	user_info2.from_json(jv_info2);
 	std::cout << jv_info2 << std::endl;
 	gen_file(); 
+
+	Json jv_test{ {"user_id", "1234"}, {"user_name", "zhangyang"}, {"sub",  { {"age", 1}, {"add","shenzheng"} } } };
+	std::cout << jv_test << std::endl;
+
 	return 0;
 }

@@ -11,11 +11,9 @@ RedisClient& Redis::get_client(const std::string& map_key)
 {
 	auto threadid = std::this_thread::get_id();
 	auto iter = m_thread_resource.find(threadid);
-	if (map_key.empty())
-	{
-		return *(iter->second.begin()->second);
-	}
+	assert(iter != m_thread_resource.end());
 	auto iter_find = iter->second.find(map_key);
+	assert(iter_find != iter->second.end());
 	return *(iter_find->second);
 }
 
@@ -141,8 +139,8 @@ bool Redis::parse_one_resource(const Json& one_jv, std::unique_ptr<cpp_redis::cl
 {
 	TRACE_FUNCATION();
 	one_resource = std::make_unique<cpp_redis::client>();
-	std::string redis_ip = one_jv["ip"].get<std::string>();
-	int redis_port = one_jv["port"].get<int>();
+	std::string redis_ip = one_jv["ip"];
+	int redis_port = atoi(one_jv["port"].get<std::string>().c_str());
 	one_resource->connect(redis_ip, redis_port, [](const std::string& host, std::size_t port, cpp_redis::client::connect_state status)
 	{
 		if (status == cpp_redis::client::connect_state::dropped)

@@ -15,14 +15,20 @@ message LoginRequest
 	 int32 network_mode = 9; 
 	 bytes os_version = 10;
 	 bytes channel = 11; //包的渠道
+	 bytes device_name = 12;//设备名
+	 int32 user_type = 13; //玩家类型 0游客账户 1 facebook
+	 bytes header_url = 14;//头像
 }
 
 message LoginResponse
 {
-	bytes token = 1; //json{"user_id",  "time":, "app_type", "version", "channel",}
+	bytes token = 1; //json{"user_id", "user_typee", "time":, "app_type", "version", "channel",}
 	int32 user_id = 2;
 	bytes cur_version = 3;
-	bool update_type = 4;  //0 不需要更新, 1 需要更新 3 强制更新 4热更新
+	int32 update_type = 4;  //0 不需要更新, 1 需要更新 3 强制更新
+	bytes update_desc = 5;
+	bytes account = 6;
+	bytes hall_host = 7;
 }
 
 message NotifyLoginRequest

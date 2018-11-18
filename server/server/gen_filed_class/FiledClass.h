@@ -2,6 +2,7 @@
 #define FIELD_CLASS1(class_name, type1,field1) class class_name \
 {\
 public:\
+std::string filed_##field1() { return #field1; }\
 type1::FieldValue m_##field1 = type1::default_value ; \
 Json m_jv_temp = {\
 {#field1, type1::JsonType } }; \
@@ -20,6 +21,8 @@ return jv; \
 #define FIELD_CLASS2(class_name, type1,field1,type2,field2) class class_name \
 {\
 public:\
+std::string filed_##field1() { return #field1; }\
+std::string filed_##field2() { return #field2; }\
 type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
 Json m_jv_temp = {\
@@ -42,6 +45,9 @@ return jv; \
 #define FIELD_CLASS3(class_name, type1,field1,type2,field2,type3,field3) class class_name \
 {\
 public:\
+std::string filed_##field1() { return #field1; }\
+std::string filed_##field2() { return #field2; }\
+std::string filed_##field3() { return #field3; }\
 type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
 type3::FieldValue m_##field3 = type3::default_value ; \
@@ -68,6 +74,10 @@ return jv; \
 #define FIELD_CLASS4(class_name, type1,field1,type2,field2,type3,field3,type4,field4) class class_name \
 {\
 public:\
+std::string filed_##field1() { return #field1; }\
+std::string filed_##field2() { return #field2; }\
+std::string filed_##field3() { return #field3; }\
+std::string filed_##field4() { return #field4; }\
 type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
 type3::FieldValue m_##field3 = type3::default_value ; \
@@ -98,6 +108,11 @@ return jv; \
 #define FIELD_CLASS5(class_name, type1,field1,type2,field2,type3,field3,type4,field4,type5,field5) class class_name \
 {\
 public:\
+std::string filed_##field1() { return #field1; }\
+std::string filed_##field2() { return #field2; }\
+std::string filed_##field3() { return #field3; }\
+std::string filed_##field4() { return #field4; }\
+std::string filed_##field5() { return #field5; }\
 type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
 type3::FieldValue m_##field3 = type3::default_value ; \
@@ -132,6 +147,12 @@ return jv; \
 #define FIELD_CLASS6(class_name, type1,field1,type2,field2,type3,field3,type4,field4,type5,field5,type6,field6) class class_name \
 {\
 public:\
+std::string filed_##field1() { return #field1; }\
+std::string filed_##field2() { return #field2; }\
+std::string filed_##field3() { return #field3; }\
+std::string filed_##field4() { return #field4; }\
+std::string filed_##field5() { return #field5; }\
+std::string filed_##field6() { return #field6; }\
 type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
 type3::FieldValue m_##field3 = type3::default_value ; \
@@ -170,6 +191,13 @@ return jv; \
 #define FIELD_CLASS7(class_name, type1,field1,type2,field2,type3,field3,type4,field4,type5,field5,type6,field6,type7,field7) class class_name \
 {\
 public:\
+std::string filed_##field1() { return #field1; }\
+std::string filed_##field2() { return #field2; }\
+std::string filed_##field3() { return #field3; }\
+std::string filed_##field4() { return #field4; }\
+std::string filed_##field5() { return #field5; }\
+std::string filed_##field6() { return #field6; }\
+std::string filed_##field7() { return #field7; }\
 type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
 type3::FieldValue m_##field3 = type3::default_value ; \
@@ -212,6 +240,14 @@ return jv; \
 #define FIELD_CLASS8(class_name, type1,field1,type2,field2,type3,field3,type4,field4,type5,field5,type6,field6,type7,field7,type8,field8) class class_name \
 {\
 public:\
+std::string filed_##field1() { return #field1; }\
+std::string filed_##field2() { return #field2; }\
+std::string filed_##field3() { return #field3; }\
+std::string filed_##field4() { return #field4; }\
+std::string filed_##field5() { return #field5; }\
+std::string filed_##field6() { return #field6; }\
+std::string filed_##field7() { return #field7; }\
+std::string filed_##field8() { return #field8; }\
 type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
 type3::FieldValue m_##field3 = type3::default_value ; \
@@ -258,6 +294,15 @@ return jv; \
 #define FIELD_CLASS9(class_name, type1,field1,type2,field2,type3,field3,type4,field4,type5,field5,type6,field6,type7,field7,type8,field8,type9,field9) class class_name \
 {\
 public:\
+std::string filed_##field1() { return #field1; }\
+std::string filed_##field2() { return #field2; }\
+std::string filed_##field3() { return #field3; }\
+std::string filed_##field4() { return #field4; }\
+std::string filed_##field5() { return #field5; }\
+std::string filed_##field6() { return #field6; }\
+std::string filed_##field7() { return #field7; }\
+std::string filed_##field8() { return #field8; }\
+std::string filed_##field9() { return #field9; }\
 type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
 type3::FieldValue m_##field3 = type3::default_value ; \
@@ -308,6 +353,16 @@ return jv; \
 #define FIELD_CLASS10(class_name, type1,field1,type2,field2,type3,field3,type4,field4,type5,field5,type6,field6,type7,field7,type8,field8,type9,field9,type10,field10) class class_name \
 {\
 public:\
+std::string filed_##field1() { return #field1; }\
+std::string filed_##field2() { return #field2; }\
+std::string filed_##field3() { return #field3; }\
+std::string filed_##field4() { return #field4; }\
+std::string filed_##field5() { return #field5; }\
+std::string filed_##field6() { return #field6; }\
+std::string filed_##field7() { return #field7; }\
+std::string filed_##field8() { return #field8; }\
+std::string filed_##field9() { return #field9; }\
+std::string filed_##field10() { return #field10; }\
 type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
 type3::FieldValue m_##field3 = type3::default_value ; \
@@ -362,6 +417,17 @@ return jv; \
 #define FIELD_CLASS11(class_name, type1,field1,type2,field2,type3,field3,type4,field4,type5,field5,type6,field6,type7,field7,type8,field8,type9,field9,type10,field10,type11,field11) class class_name \
 {\
 public:\
+std::string filed_##field1() { return #field1; }\
+std::string filed_##field2() { return #field2; }\
+std::string filed_##field3() { return #field3; }\
+std::string filed_##field4() { return #field4; }\
+std::string filed_##field5() { return #field5; }\
+std::string filed_##field6() { return #field6; }\
+std::string filed_##field7() { return #field7; }\
+std::string filed_##field8() { return #field8; }\
+std::string filed_##field9() { return #field9; }\
+std::string filed_##field10() { return #field10; }\
+std::string filed_##field11() { return #field11; }\
 type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
 type3::FieldValue m_##field3 = type3::default_value ; \
@@ -420,6 +486,18 @@ return jv; \
 #define FIELD_CLASS12(class_name, type1,field1,type2,field2,type3,field3,type4,field4,type5,field5,type6,field6,type7,field7,type8,field8,type9,field9,type10,field10,type11,field11,type12,field12) class class_name \
 {\
 public:\
+std::string filed_##field1() { return #field1; }\
+std::string filed_##field2() { return #field2; }\
+std::string filed_##field3() { return #field3; }\
+std::string filed_##field4() { return #field4; }\
+std::string filed_##field5() { return #field5; }\
+std::string filed_##field6() { return #field6; }\
+std::string filed_##field7() { return #field7; }\
+std::string filed_##field8() { return #field8; }\
+std::string filed_##field9() { return #field9; }\
+std::string filed_##field10() { return #field10; }\
+std::string filed_##field11() { return #field11; }\
+std::string filed_##field12() { return #field12; }\
 type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
 type3::FieldValue m_##field3 = type3::default_value ; \
@@ -482,6 +560,19 @@ return jv; \
 #define FIELD_CLASS13(class_name, type1,field1,type2,field2,type3,field3,type4,field4,type5,field5,type6,field6,type7,field7,type8,field8,type9,field9,type10,field10,type11,field11,type12,field12,type13,field13) class class_name \
 {\
 public:\
+std::string filed_##field1() { return #field1; }\
+std::string filed_##field2() { return #field2; }\
+std::string filed_##field3() { return #field3; }\
+std::string filed_##field4() { return #field4; }\
+std::string filed_##field5() { return #field5; }\
+std::string filed_##field6() { return #field6; }\
+std::string filed_##field7() { return #field7; }\
+std::string filed_##field8() { return #field8; }\
+std::string filed_##field9() { return #field9; }\
+std::string filed_##field10() { return #field10; }\
+std::string filed_##field11() { return #field11; }\
+std::string filed_##field12() { return #field12; }\
+std::string filed_##field13() { return #field13; }\
 type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
 type3::FieldValue m_##field3 = type3::default_value ; \
@@ -548,6 +639,20 @@ return jv; \
 #define FIELD_CLASS14(class_name, type1,field1,type2,field2,type3,field3,type4,field4,type5,field5,type6,field6,type7,field7,type8,field8,type9,field9,type10,field10,type11,field11,type12,field12,type13,field13,type14,field14) class class_name \
 {\
 public:\
+std::string filed_##field1() { return #field1; }\
+std::string filed_##field2() { return #field2; }\
+std::string filed_##field3() { return #field3; }\
+std::string filed_##field4() { return #field4; }\
+std::string filed_##field5() { return #field5; }\
+std::string filed_##field6() { return #field6; }\
+std::string filed_##field7() { return #field7; }\
+std::string filed_##field8() { return #field8; }\
+std::string filed_##field9() { return #field9; }\
+std::string filed_##field10() { return #field10; }\
+std::string filed_##field11() { return #field11; }\
+std::string filed_##field12() { return #field12; }\
+std::string filed_##field13() { return #field13; }\
+std::string filed_##field14() { return #field14; }\
 type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
 type3::FieldValue m_##field3 = type3::default_value ; \
@@ -618,6 +723,21 @@ return jv; \
 #define FIELD_CLASS15(class_name, type1,field1,type2,field2,type3,field3,type4,field4,type5,field5,type6,field6,type7,field7,type8,field8,type9,field9,type10,field10,type11,field11,type12,field12,type13,field13,type14,field14,type15,field15) class class_name \
 {\
 public:\
+std::string filed_##field1() { return #field1; }\
+std::string filed_##field2() { return #field2; }\
+std::string filed_##field3() { return #field3; }\
+std::string filed_##field4() { return #field4; }\
+std::string filed_##field5() { return #field5; }\
+std::string filed_##field6() { return #field6; }\
+std::string filed_##field7() { return #field7; }\
+std::string filed_##field8() { return #field8; }\
+std::string filed_##field9() { return #field9; }\
+std::string filed_##field10() { return #field10; }\
+std::string filed_##field11() { return #field11; }\
+std::string filed_##field12() { return #field12; }\
+std::string filed_##field13() { return #field13; }\
+std::string filed_##field14() { return #field14; }\
+std::string filed_##field15() { return #field15; }\
 type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
 type3::FieldValue m_##field3 = type3::default_value ; \
@@ -692,6 +812,22 @@ return jv; \
 #define FIELD_CLASS16(class_name, type1,field1,type2,field2,type3,field3,type4,field4,type5,field5,type6,field6,type7,field7,type8,field8,type9,field9,type10,field10,type11,field11,type12,field12,type13,field13,type14,field14,type15,field15,type16,field16) class class_name \
 {\
 public:\
+std::string filed_##field1() { return #field1; }\
+std::string filed_##field2() { return #field2; }\
+std::string filed_##field3() { return #field3; }\
+std::string filed_##field4() { return #field4; }\
+std::string filed_##field5() { return #field5; }\
+std::string filed_##field6() { return #field6; }\
+std::string filed_##field7() { return #field7; }\
+std::string filed_##field8() { return #field8; }\
+std::string filed_##field9() { return #field9; }\
+std::string filed_##field10() { return #field10; }\
+std::string filed_##field11() { return #field11; }\
+std::string filed_##field12() { return #field12; }\
+std::string filed_##field13() { return #field13; }\
+std::string filed_##field14() { return #field14; }\
+std::string filed_##field15() { return #field15; }\
+std::string filed_##field16() { return #field16; }\
 type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
 type3::FieldValue m_##field3 = type3::default_value ; \
@@ -770,6 +906,23 @@ return jv; \
 #define FIELD_CLASS17(class_name, type1,field1,type2,field2,type3,field3,type4,field4,type5,field5,type6,field6,type7,field7,type8,field8,type9,field9,type10,field10,type11,field11,type12,field12,type13,field13,type14,field14,type15,field15,type16,field16,type17,field17) class class_name \
 {\
 public:\
+std::string filed_##field1() { return #field1; }\
+std::string filed_##field2() { return #field2; }\
+std::string filed_##field3() { return #field3; }\
+std::string filed_##field4() { return #field4; }\
+std::string filed_##field5() { return #field5; }\
+std::string filed_##field6() { return #field6; }\
+std::string filed_##field7() { return #field7; }\
+std::string filed_##field8() { return #field8; }\
+std::string filed_##field9() { return #field9; }\
+std::string filed_##field10() { return #field10; }\
+std::string filed_##field11() { return #field11; }\
+std::string filed_##field12() { return #field12; }\
+std::string filed_##field13() { return #field13; }\
+std::string filed_##field14() { return #field14; }\
+std::string filed_##field15() { return #field15; }\
+std::string filed_##field16() { return #field16; }\
+std::string filed_##field17() { return #field17; }\
 type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
 type3::FieldValue m_##field3 = type3::default_value ; \
@@ -852,6 +1005,24 @@ return jv; \
 #define FIELD_CLASS18(class_name, type1,field1,type2,field2,type3,field3,type4,field4,type5,field5,type6,field6,type7,field7,type8,field8,type9,field9,type10,field10,type11,field11,type12,field12,type13,field13,type14,field14,type15,field15,type16,field16,type17,field17,type18,field18) class class_name \
 {\
 public:\
+std::string filed_##field1() { return #field1; }\
+std::string filed_##field2() { return #field2; }\
+std::string filed_##field3() { return #field3; }\
+std::string filed_##field4() { return #field4; }\
+std::string filed_##field5() { return #field5; }\
+std::string filed_##field6() { return #field6; }\
+std::string filed_##field7() { return #field7; }\
+std::string filed_##field8() { return #field8; }\
+std::string filed_##field9() { return #field9; }\
+std::string filed_##field10() { return #field10; }\
+std::string filed_##field11() { return #field11; }\
+std::string filed_##field12() { return #field12; }\
+std::string filed_##field13() { return #field13; }\
+std::string filed_##field14() { return #field14; }\
+std::string filed_##field15() { return #field15; }\
+std::string filed_##field16() { return #field16; }\
+std::string filed_##field17() { return #field17; }\
+std::string filed_##field18() { return #field18; }\
 type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
 type3::FieldValue m_##field3 = type3::default_value ; \
@@ -938,6 +1109,25 @@ return jv; \
 #define FIELD_CLASS19(class_name, type1,field1,type2,field2,type3,field3,type4,field4,type5,field5,type6,field6,type7,field7,type8,field8,type9,field9,type10,field10,type11,field11,type12,field12,type13,field13,type14,field14,type15,field15,type16,field16,type17,field17,type18,field18,type19,field19) class class_name \
 {\
 public:\
+std::string filed_##field1() { return #field1; }\
+std::string filed_##field2() { return #field2; }\
+std::string filed_##field3() { return #field3; }\
+std::string filed_##field4() { return #field4; }\
+std::string filed_##field5() { return #field5; }\
+std::string filed_##field6() { return #field6; }\
+std::string filed_##field7() { return #field7; }\
+std::string filed_##field8() { return #field8; }\
+std::string filed_##field9() { return #field9; }\
+std::string filed_##field10() { return #field10; }\
+std::string filed_##field11() { return #field11; }\
+std::string filed_##field12() { return #field12; }\
+std::string filed_##field13() { return #field13; }\
+std::string filed_##field14() { return #field14; }\
+std::string filed_##field15() { return #field15; }\
+std::string filed_##field16() { return #field16; }\
+std::string filed_##field17() { return #field17; }\
+std::string filed_##field18() { return #field18; }\
+std::string filed_##field19() { return #field19; }\
 type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
 type3::FieldValue m_##field3 = type3::default_value ; \
@@ -1028,6 +1218,26 @@ return jv; \
 #define FIELD_CLASS20(class_name, type1,field1,type2,field2,type3,field3,type4,field4,type5,field5,type6,field6,type7,field7,type8,field8,type9,field9,type10,field10,type11,field11,type12,field12,type13,field13,type14,field14,type15,field15,type16,field16,type17,field17,type18,field18,type19,field19,type20,field20) class class_name \
 {\
 public:\
+std::string filed_##field1() { return #field1; }\
+std::string filed_##field2() { return #field2; }\
+std::string filed_##field3() { return #field3; }\
+std::string filed_##field4() { return #field4; }\
+std::string filed_##field5() { return #field5; }\
+std::string filed_##field6() { return #field6; }\
+std::string filed_##field7() { return #field7; }\
+std::string filed_##field8() { return #field8; }\
+std::string filed_##field9() { return #field9; }\
+std::string filed_##field10() { return #field10; }\
+std::string filed_##field11() { return #field11; }\
+std::string filed_##field12() { return #field12; }\
+std::string filed_##field13() { return #field13; }\
+std::string filed_##field14() { return #field14; }\
+std::string filed_##field15() { return #field15; }\
+std::string filed_##field16() { return #field16; }\
+std::string filed_##field17() { return #field17; }\
+std::string filed_##field18() { return #field18; }\
+std::string filed_##field19() { return #field19; }\
+std::string filed_##field20() { return #field20; }\
 type1::FieldValue m_##field1 = type1::default_value ; \
 type2::FieldValue m_##field2 = type2::default_value ; \
 type3::FieldValue m_##field3 = type3::default_value ; \

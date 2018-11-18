@@ -11,30 +11,32 @@ Resource<T>::Resource()
 }
 
 template<typename T>
-bool Resource<T>::parse_config(const std::string& key_name, const std::string& config_str)
+bool Resource<T>::parse_config(const Json& config_jv)
 {
-	TRACE_FUNCATION();
-	auto jv = Json::parse(config_str);
-	if (!jv.is_valid())
-	{
-		ERROR_LOG << "error json" << config_str;
-		return false;
-	}
-	auto jv_mongo = jv[key_name];
-	std::copy(jv_mongo.begin(), jv_mongo.end(), std::back_inserter(m_configs));
+	std::copy(config_jv.begin(), config_jv.end(), std::back_inserter(m_configs));
 	return true;
 }
 
 template<typename T>
-bool Resource<T>::insert(std::thread::id threadid)
+bool Resource<T>::insert_one(std::thread::id threadid)
 {
 	TRACE_FUNCATION();
 	ResourceMap &resources = m_thread_resource[threadid];
 	for (auto &e : m_configs)
 	{
-		std::string config_name = e["config_name"].get<std::string>();
+		std::string config_name = e["config_name"];
 		auto &one_resource = resources[config_name];
 		m_parse_one_fun(e, one_resource);
+	}
+	return true;
+}
+
+template<typename T>
+bool Resource<T>::insert(std::vector< std::thread::id> thread_ids)
+{
+	for (auto &e : thread_ids)
+	{
+		insert_one(e);
 	}
 	return true;
 }

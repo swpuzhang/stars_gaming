@@ -142,7 +142,6 @@
     <ClInclude Include="BaseTool.h" />
     <ClInclude Include="BaseToolConfig.h" />
     <ClInclude Include="BigEndLittleEnd.h" />
-    <ClInclude Include="FiledClass.h" />
     <ClInclude Include="FileTool.h" />
     <ClInclude Include="FunctionBindMacro.h" />
     <ClInclude Include="IoLoopPool.h" />

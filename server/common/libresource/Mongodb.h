@@ -23,10 +23,10 @@
 #include "mongocxx/uri.hpp"
 #include "mongocxx/collection.hpp"
 #include "mongocxx/database.hpp"
-#include <bsoncxx/types.hpp>
-#include <mongocxx/client.hpp>
-#include <mongocxx/exception/exception.hpp>
-#include <mongocxx/instance.hpp>
+#include "bsoncxx/types.hpp"
+#include "mongocxx/client.hpp"
+#include "mongocxx/exception/exception.hpp"
+#include "mongocxx/instance.hpp"
 
 #include <boost/serialization/singleton.hpp>
 #include <thread>
@@ -34,24 +34,25 @@
 #include <unordered_map>
 #include <sstream>
 
-namespace MGOptions = mongocxx::options;
-decltype(bsoncxx::builder::stream::close_array)  MGCloseArray =  bsoncxx::builder::stream::close_array;
-decltype(bsoncxx::builder::stream::close_document) MGCloseDocument = bsoncxx::builder::stream::close_document;
-using  MGDocument = bsoncxx::builder::stream::document;
-decltype(bsoncxx::builder::stream::finalize) MGFinalize = bsoncxx::builder::stream::finalize;
-decltype(bsoncxx::builder::stream::open_array) MGOpenArray = bsoncxx::builder::stream::open_array;
-decltype(bsoncxx::builder::stream::open_document) MGOpenDocument  = bsoncxx::builder::stream::open_document;
+namespace MGOptions = mongocxx::v_noabi::options;
+decltype(bsoncxx::stream::close_array)  MGCloseArray =  bsoncxx::stream::close_array;
+decltype(bsoncxx::stream::close_document) MGCloseDocument = bsoncxx::stream::close_document;
+using  MGDocument = bsoncxx::stream::document;
+decltype(bsoncxx::stream::finalize) MGFinalize = bsoncxx::stream::finalize;
+decltype(bsoncxx::stream::open_array) MGOpenArray = bsoncxx::stream::open_array;
+decltype(bsoncxx::stream::open_document) MGOpenDocument  = bsoncxx::stream::open_document;
 using MGResult = bsoncxx::stdx::optional<bsoncxx::document::value>;
 using MGDocValue = bsoncxx::document::value;
-#define  MGKvp bsoncxx::builder::basic::kvp
-#define MGMakeDoc bsoncxx::builder::basic::make_document
+using BDocument = bsoncxx::types::b_document;
+#define  MGKvp bsoncxx::basic::kvp
+#define MGMakeDoc bsoncxx::basic::make_document
 
 class Mongodb: public Resource<MongoOb>
 {
 public:
 	using SELF_TYPE = Mongodb;
 	Mongodb();
-	mongocxx::database get_client(const std::string& map_key = "") const;
+	mongocxx::database get_client(const std::string& map_key = "default") const;
 	bool parse_one_resource(const Json& one_jv, std::unique_ptr < MongoOb>& one_resource);
 };
 

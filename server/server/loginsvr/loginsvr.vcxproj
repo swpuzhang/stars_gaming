@@ -31,7 +31,9 @@
     <ClInclude Include="LoginMsgFactor.h" />
     <ClInclude Include="LoginTaskManager.h" />
     <ClInclude Include="MqTaskManager.h" />
-    <ClInclude Include="test.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config.json" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -118,8 +120,8 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../common;../../3rd/bson;../../3rd/mongoc;../../3rd/bsoncxx/v_noabi;../../3rd/mongocxx/v_noabi;../../3rd;../../3rd/amqp;../../3rd/protobuf;../../message/cpp;../../common/liblog</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN32;_WINDOWS;MONGOCXX_STATIC;BSONCXX_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../../3rd/bsoncxx/v_noabi;../../3rd/mongocxx/v_noabi;../../3rd;../../3rd/amqp;../../common;../../3rd/protobuf;../../message/cpp;../../common/liblog;../common_define</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

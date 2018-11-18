@@ -7,7 +7,7 @@
 
 static std::string get_key(void)
 {
-	std::string seed = "ggacepwd";
+	std::string seed = "safsdfsdfkjl-s-123lkfls";
 	std::string key = MD5_32(seed.c_str(), seed.size());
 	return key.substr(0, 16);
 }
