@@ -98,16 +98,17 @@ void LanchProcess::run(int argc, char *argv[])
 
 	if (m_is_master)
 	{
+		int i = 1;
 		for (auto & e : m_ports)
 		{
-			m_multi_process.creat_process(m_argv[0] + " " + std::to_string(e), 1);
+			m_multi_process.creat_process(m_argv[0] + " " + std::to_string(i++) + " " + std::to_string(e), 1);
 		}
 		
 		main_pool->run(false);
 	}
 	else
 	{
-		int port = atoi(m_argv[1]);
+		int port = atoi(m_argv[2]);
 		auto task_io_pool = std::make_shared<IoLoopPool>(1);
 		auto mq_io_loop = std::make_shared<IoLoopPool>(1);
 		//µÇÂ¼Ä£¿é
@@ -122,7 +123,7 @@ void LanchProcess::run(int argc, char *argv[])
 		auto mq_task = std::make_shared<MqTaskManager>(task_io_pool->get_next_loop());
 		auto mq_dealer = std::make_shared<MessageDealer<MqTag>>(mq_task);
 		m_mq_client = std::make_unique<MqClient>(main_pool->get_next_loop(),
-			config_str, mq_dealer, msg_maker);
+			config_str, "",  mq_dealer, msg_maker);
 		m_mq_client->connect();
 
 		//tcpserver

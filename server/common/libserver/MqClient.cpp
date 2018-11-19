@@ -22,7 +22,7 @@ using namespace SystemMsg;
 using namespace SystemCmd;
 
 
-MqClient::MqClient(IoLoop& ioloop, const std::string &mq_config_str,
+MqClient::MqClient(IoLoop& ioloop, const std::string &mq_config_str, const std::string mq_sub_name,
 	const std::shared_ptr<MessageDealer<MqTag>>& msg_dealer,
 	const std::shared_ptr<MessageMaker>& msg_maker) :
 	m_io_loop(ioloop), 
@@ -33,7 +33,7 @@ MqClient::MqClient(IoLoop& ioloop, const std::string &mq_config_str,
 	m_auto_reconnect(false),
 	m_is_connecting(false)
 {
-	m_mq_info.parse_config(mq_config_str);
+	m_mq_info.parse_config(mq_config_str, mq_sub_name);
 	m_session = std::make_shared<MqSession>(m_io_loop, m_mq_info,
 		m_message_dealer, m_msg_maker);
 }
@@ -56,6 +56,21 @@ MqClient::~MqClient()
 	TRACE_FUNCATION();
 	m_timer.cancel();
 }
+
+void MqClient::bind_exchange(const std::string& exchange_name, int exchange_type, const std::string& rout_key)
+{
+	TRACE_FUNCATION();
+	m_io_loop.post(MEMFUN_THIS_BIND3(do_bind, exchange_name, exchange_type, rout_key));
+}
+
+void MqClient::do_bind(const std::string& exchange_name, int exchange_type, const std::string& rout_key)
+{
+	TRACE_FUNCATION();
+	m_mq_info.m_exchanges.insert({ exchange_name, exchange_type });
+	m_mq_info.m_binds.insert({ exchange_name, { rout_key } });
+	m_session->bind_one_exchange(exchange_name, exchange_type, rout_key);
+}
+
 
 void MqClient::do_connect()
 {

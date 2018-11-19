@@ -8,6 +8,7 @@
 #include "libtools/Types.h"
 #include "libmessage/Message.h"
 #include "libmessage/MessageType.h"
+#include "libserver/MqInfo.h"
 
 
 
@@ -31,6 +32,7 @@ public:
 	void connect();
 	void do_write(MqMsgPtr msg) override;
 	bool is_connected();
+	void bind_one_exchange(const std::string& exchange_name, int exchange_type, const std::string& rout_key);
 private:
 	void init();
 	void binding_exchange();

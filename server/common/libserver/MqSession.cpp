@@ -81,6 +81,18 @@ void MqSession::queue_error_call(const char *message)
 	ERROR_LOG << "declear queue(" << m_mq_info.m_queue << ") error ";
 }
 
+void MqSession::bind_one_exchange(const std::string& exchange_name, int exchange_type, const std::string& rout_key)
+{
+	m_mq_info.m_exchanges.insert({ exchange_name, exchange_type });
+	m_mq_info.m_binds.insert({ exchange_name,{ rout_key } });
+	if (!m_is_session_opend)
+	{
+		return;
+	}
+	m_channel->declareExchange(exchange_name, (AMQP::ExchangeType)exchange_type);
+	m_channel->bindQueue(exchange_name, m_mq_info.m_queue, rout_key);
+}
+
 void MqSession::binding_exchange()
 {
 	for (auto &one_exchange : m_mq_info.m_exchanges)

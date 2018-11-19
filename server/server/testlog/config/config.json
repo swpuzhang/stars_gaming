@@ -34,10 +34,12 @@
     },
     "gamesvr": {
       "queue": "gamesvr",
+      "has_sub" :  true,
       "binds": [
         {
           "exchange": "gamesvr.direct",
-          "routkeys": [ "gamesvr" ]
+          "routkeys": [ "gamesvr" ],
+           "has_sub" :  true
         },
         {
           "exchange": "matchsvr.topic",

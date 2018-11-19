@@ -25,13 +25,14 @@ class MqClient
 {
 public:
 	using SELF_TYPE = MqClient;
-	MqClient(IoLoop& ioloop, const std::string &mq_config_str,
+	MqClient(IoLoop& ioloop, const std::string &mq_config_str, const std::string mq_sub_name,
 		const std::shared_ptr<MessageDealer<MqTag>>& msg_dealer,
 		const std::shared_ptr<MessageMaker>& msg_maker);
 	~MqClient();
 	void close_client();
 	void connect();
 	bool send_message(const std::shared_ptr<Message<MqTag>>& msg);
+	void bind_exchange(const std::string& exchange_name, int exchange_type, const std::string& rout_key);
 
 	//发送和接收不能在同一线程
 	bool send_message(const std::shared_ptr<Message<MqTag>>& msg, 
@@ -46,7 +47,7 @@ public:
 	std::shared_ptr<MqSession>& session_ptr() {return m_session;}
 
 private:
-
+	void do_bind(const std::string& exchange_name, int exchange_type, const std::string& rout_key);
 	void do_close_client();
 	void do_connect();
 	void connect_mq();

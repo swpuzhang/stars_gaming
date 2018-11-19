@@ -11,7 +11,7 @@
 class MqInfo
 {
 public:
-	bool parse_config(const std::string& str)
+	bool parse_config(const std::string& str, const std::string& sub_str)
 	{
 		Json jv = Json::parse(str);
 		if (!jv.is_valid() || !jv.is_object())
@@ -48,6 +48,10 @@ public:
 
 		const Json& jvmq_proc = jvmq[proc_name];
 		m_queue = jvmq_proc["queue"].get<std::string>();
+		if (!sub_str.empty())
+		{
+			m_queue += ("-" + sub_str);
+		}
 		for (const Json &e : jvmq_proc["binds"])
 		{
 			std::string exchange_name = e["exchange"].get<std::string>();
@@ -69,7 +73,16 @@ public:
 			std::vector<std::string> all_rout;
 			for (const Json &rout : e["routkeys"])
 			{
-				all_rout.push_back(rout.get<std::string>());
+				std::string one_rout = rout.get<std::string>();
+
+				if (exchange_name.find(".direct") != std::string::npos)
+				{
+					if (!sub_str.empty())
+					{
+						one_rout += ("-" + sub_str);
+					}
+				}
+				all_rout.push_back(one_rout);
 			}
 			m_binds.insert({ exchange_name , all_rout });
 		}
@@ -78,7 +91,7 @@ public:
 	MqInfo() : m_port(0) {}
 	std::string m_ip;
 	int m_port;
-	AMQP::Login m_login;
+	AMQP::Login m_login; 
 	std::string m_work_dir;
 	std::string m_queue;
 	std::unordered_map<std::string, int> m_exchanges;
