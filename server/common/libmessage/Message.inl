@@ -17,7 +17,7 @@ Message<MsgTag>::Message()
 }
 
 template<class MsgTag>
-bool Message<MsgTag>::send_response(int fail_reson, PbMessagePtr& response) const
+bool Message<MsgTag>::send_response(int fail_reson, const PbMessagePtr& response) const
 {
 	TRACE_FUNCATION();
 	EMPTY_MSG(MsgTag, msg);
@@ -25,12 +25,12 @@ bool Message<MsgTag>::send_response(int fail_reson, PbMessagePtr& response) cons
 	head->set_cmdtype(header().cmdtype());
 	head->set_type((header().type() ^ MsgType::REQUEST_MASK) | MsgType::RESPONSE_MASK);
 	msg->set_header(head);
-	msg->set_message(response);
+	msg->set_pbmessage(response);
 	return m_session->send_response(msg);
 }
 
 template<class MsgTag>
-bool Message<MsgTag>::send_response(MessagePtr<MsgTag>& response) const
+bool Message<MsgTag>::send_response(const MessagePtr<MsgTag>& response) const
 {
 	TRACE_FUNCATION();
 	response->header().set_cmdtype(header().cmdtype());

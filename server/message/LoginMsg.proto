@@ -22,7 +22,7 @@ message LoginRequest
 
 message LoginResponse
 {
-	bytes token = 1; //json{"user_id", "user_typee", "time":, "app_type", "version", "channel",}
+	bytes token = 1; //json{"user_id", "user_type", "time":, "app_type", "version", "channel",}
 	int32 user_id = 2;
 	bytes cur_version = 3;
 	int32 update_type = 4;  //0 不需要更新, 1 需要更新 3 强制更新
@@ -45,6 +45,7 @@ message NotifyLoginRequest
 	int32 network_mode = 10; 
 	bytes os_version = 11;
 	bytes channel = 12; //包的渠道
+	int32 user_type = 13;
 }
 
 message NotifyLoginResponse

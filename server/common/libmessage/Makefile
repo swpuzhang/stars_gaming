@@ -22,6 +22,7 @@ OBJ = $(patsubst %.cpp, %.o, $(SRC))
 
 
 INCLUDE = -I../../common \
+-I../../3rd \
 -I../../message/cpp \
 -I../../3rd/protobuf \
 -I../../3rd/amqp \

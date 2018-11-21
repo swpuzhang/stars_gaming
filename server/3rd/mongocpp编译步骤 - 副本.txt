@@ -6,7 +6,7 @@
 cmake -DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF -DCMAKE_BUILD_TYPE=Release  -DCMAKE_INSTALL_PREFIX=./result/ .. 
 二编译mongodb-cxx-driver
 2. cd cmake-build
- cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=./result/ -DCMAKE_PREFIX_PATH=/home/zhangyang/code/mongodb-c-driver/mongo-c-driver-master/cmake-build/result/ -DBUILD_SHARED_LIBS=OFF -DBSONCXX_POLY_USE_BOOST=1 -DBOOST_ROOT=c:\local\boost_1_68_0 .. ..
+ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=./result/ -DCMAKE_PREFIX_PATH=/home/zhangyang/code/mongodb-c-driver/mongo-c-driver-master/cmake-build/result/ -DBUILD_SHARED_LIBS=OFF -DBSONCXX_POLY_USE_BOOST=1 -DBOOST_ROOT=/home/zhangyang/code/boost_1_68_0 ..
  make && make install
 
 Choose a C++17 polyfill

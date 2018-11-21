@@ -28,6 +28,7 @@ OBJ = $(patsubst %.cpp, %.o, $(SRC))
 
 INCLUDE = -I../../common \
 -I../../3rd/ \
+-I../../3rd/amqp \
 -I../../message/cpp \
 -I../../3rd/protobuf \
 -I../../3rd/amqp \
@@ -35,9 +36,10 @@ INCLUDE = -I../../common \
 -I../../3rd/bson \
 -I../../3rd/mongocxx/v_noabi \
 -I../../3rd/bsoncxx/v_noabi \
--I../../common/liblog
+-I../../common/liblog \
+-I../common_define
 
-LIBS := -llog -lserver -lmessage -lpbmsg -ltask_manager -lresource -ltools  -lprotobuf -lprotobuf-lite -lprotoc \
+LIBS := -llog -lserver -lmessage -lpbmsg -lresource -ltools  -lprotobuf -lprotobuf-lite -lprotoc \
 -lmongocxx-static -lbsoncxx-static -lmongoc-static -lsasl2 -lssl -lcrypto -lresolv -lbson-static -lm \
 -lcpp_redis -ltacopie \
 -lboost_system -lboost_thread -lboost_log -lboost_filesystem -lamqpcpp -lpthread  -ldl  -lrt -lz

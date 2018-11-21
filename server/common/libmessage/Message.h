@@ -13,7 +13,8 @@
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "libtools/Types.h"
-
+template <class MsgTag>
+class Message;
 
 #define  HEADER(HeaderType, name)\
   auto name = std::make_shared<HeaderType>()
@@ -74,8 +75,8 @@ public:
 	using HeaderType = typename MsgTag::HeaderType;
 	using HeaderPtr = typename MsgTag::HeaderPtr;
 	Message();
-	bool send_response(MessagePtr<MsgTag>& response) const;
-	bool send_response(int fail_reson, PbMessagePtr& response) const;
+	bool send_response(const MessagePtr<MsgTag>& response) const;
+	bool send_response(int fail_reson, const PbMessagePtr& response) const;
 	bool send_failed_reason(const int fail_reson) const;
 	void set_session(const SessionPtr<MsgTag>& session) { m_session = session; }
 	SessionPtr<MsgTag>& session_ptr()  { return m_session; }

@@ -13,6 +13,31 @@
 #include <map>
 #include <chrono>
 
+#include "ErrorCode.pb.h"
+#include "HallMsg.pb.h"
+#include "HallCmd.pb.h"
+#include "SvrCmd.pb.h"
+#include "SvrMsg.pb.h"
+#include "SystemCmd.pb.h"
+#include "SystemMsg.pb.h"
+#include "GameMsg.pb.h"
+#include "GameCmd.pb.h"
+#include "libserver/TcpSession.h"
+#include "LoginMsg.pb.h"
+#include "LoginCmd.pb.h"
+
+using namespace SystemMsg;
+using namespace SystemCmd;
+
+using namespace SvrMsg;
+using namespace SvrCmd;
+using namespace HallCmd;
+using namespace HallMsg;
+using namespace GameMsg;
+using namespace GameCmd;
+using namespace ErrorCode;
+using namespace LoginCmd;
+using namespace LoginMsg;
 
 using namespace std::chrono;
 
@@ -78,7 +103,7 @@ private:
 	void on_timeout(const SYSTEM_CODE& err);
 	UserInfo generate_new_user(const LoginRequest& login_req, const AccountInfo& account_info);
 	
-	void notify_user_login(const AccountInfo& account_info, const LoginRequest& login_req, const std::string& str_token);
+	void notify_user_login(const AccountInfo& account_info, const LoginRequest& login_req);
 
 public:
 	static std::vector<std::string> m_hall_list;

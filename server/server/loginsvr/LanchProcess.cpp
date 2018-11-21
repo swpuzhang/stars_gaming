@@ -4,6 +4,7 @@
 #include <cstring>
 #include <signal.h>
 #include <cstdlib>
+#include <cstring>
 
 #include "LanchProcess.h"
 #include "LoginTaskManager.h"
@@ -45,7 +46,7 @@ bool LanchProcess::parse_config()
 	//获取host配置
 	//本机外网IP
 	m_local_ip = m_config_json["host_config"]["ip"];
-	LoginModule.m_local_ip = (boost::asio::ip::address_v4::from_string(m_local_ip).to_uint());
+	LoginModule::m_local_ip = (boost::asio::ip::address_v4::from_string(m_local_ip).to_uint());
 
 	//获取大厅列表
 	Json &jv_hall_list = m_config_json["host_config"]["hall_list"];
@@ -59,11 +60,11 @@ bool LanchProcess::parse_config()
 		std::string str_ip = jv_hall_list[i]["ip"];
 		for (auto &e : jv_hall_list[i]["ports"])
 		{
-			std::string one_host = str_ip + ":" + e;
+			std::string one_host = str_ip + ":" + e.get<std::string>();
 			hosts.insert(one_host);
 		}
 	}
-	std::copy(hosts.begin(), hosts.end(), std::back_inserter(LoginModule.m_hall_list));
+	std::copy(hosts.begin(), hosts.end(), std::back_inserter(LoginModule::m_hall_list));
 	return true;
 }
 
@@ -89,7 +90,7 @@ void LanchProcess::run(int argc, char *argv[])
 
 	//解析mongo和redis配置文件
 	MongodbInstance::get_mutable_instance().parse_config(m_config_json["mongo"]);
-	Redis::get_mutable_instance().parse_config(m_config_json["redis"]);
+	RedisInstance::get_mutable_instance().parse_config(m_config_json["redis"]);
 
 	if (argc == 1)
 	{
@@ -108,7 +109,7 @@ void LanchProcess::run(int argc, char *argv[])
 	}
 	else
 	{
-		int port = atoi(m_argv[2]);
+		int port =  atoi(m_argv[2].c_str());
 		auto task_io_pool = std::make_shared<IoLoopPool>(1);
 		auto mq_io_loop = std::make_shared<IoLoopPool>(1);
 		//登录模块

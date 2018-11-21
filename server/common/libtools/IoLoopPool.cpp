@@ -57,7 +57,7 @@ void ThreadPool::post_handler(std::function<void(void)> func)
 	}
 }
 
-IoLoopPool::IoLoopPool(TY_UINT32 pool_size, bool need_mongo = true, bool need_redis = true) : 
+IoLoopPool::IoLoopPool(TY_UINT32 pool_size, bool need_mongo, bool need_redis) : 
 	m_next_index(0),
 	m_is_need_mongo(need_mongo),
 	m_is_need_redis(need_redis)

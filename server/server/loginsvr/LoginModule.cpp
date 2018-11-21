@@ -3,6 +3,7 @@
 #include <chrono>
 
 #include "LoginModule.h"
+#include "LanchProcess.h"
 #include "MqRoute.h"
 #include "libtools/FunctionBindMacro.h"
 #include "libtools/JsonParser.h"
@@ -12,33 +13,9 @@
 #include "libtools/BaseTool.h"
 
 #include "libmessage/Message.h"
-#include "ErrorCode.pb.h"
-#include "HallMsg.pb.h"
-#include "HallCmd.pb.h"
-#include "SvrCmd.pb.h"
-#include "SvrMsg.pb.h"
-#include "SystemCmd.pb.h"
-#include "SystemMsg.pb.h"
-#include "GameMsg.pb.h"
-#include "GameCmd.pb.h"
-#include "libserver/TcpSession.h"
-#include "LoginMsg.pb.h"
-#include "LoginCmd.pb.h"
 
-using namespace SystemMsg;
-using namespace SystemCmd;
 
-using namespace SvrMsg;
-using namespace SvrCmd;
-using namespace HallCmd;
-using namespace HallMsg;
-using namespace GameMsg;
-using namespace GameCmd;
-using namespace ErrorCode;
-using namespace LoginCmd;
-using namespace LoginMsg;
-
-std::vector<string> LoginModule::m_hall_list = {};
+std::vector<std::string> LoginModule::m_hall_list = {};
 TY_UINT32 LoginModule::m_local_ip = 0;
 
 void LoginModule::load_version_info()
@@ -46,7 +23,7 @@ void LoginModule::load_version_info()
 	mongocxx::database db = MongodbInstance::get_mutable_instance().get_client();
 	mongocxx::collection  collect = db[VERSON_COLLECT];
 	mongocxx::options::find find_opt;
-	find_opt.sort(document{} << "cur_version" << -1 << finalize);
+	find_opt.sort(MGDocument{} << "cur_version" << -1 << MGFinalize);
 	find_opt.limit(1);
 	mongocxx::cursor find_result = collect.find({}, find_opt);
 	for (auto&& doc : find_result)
@@ -123,7 +100,7 @@ void LoginModule::user_login(const TcpMsgPtr& msg)
 		//写入redis, 保存7天
 		RedisInstance::get_mutable_instance().json_to_hash(account_info.to_json(),
 			account_redis_key(account_info.m_account), ACCOUNT_EXPIRE_SEC);
-		user_info = generate_new_user(account_info);
+		user_info = generate_new_user(login_req, account_info);
 		if (!insert_new_user(user_info))
 		{
 			msg->send_failed_reason(CODE_ACOCUNT_EMPTY);
@@ -134,7 +111,7 @@ void LoginModule::user_login(const TcpMsgPtr& msg)
 	PB_MSG(LoginResponse, response);
 
 	//生成token
-	Json jv{ {"user_id" : account_info.m_user_id}, {"user_type", login_req.user_type()},
+	Json jv{ {"user_id" , account_info.m_user_id}, {"user_type", login_req.user_type()},
 		{ "app_type", login_req.app_type()}, {"version",login_req.version()}, {"os_version", login_req.os_version()},
 		{"channel", login_req.channel()}, {"time", tnow_sec} };
 
@@ -143,22 +120,22 @@ void LoginModule::user_login(const TcpMsgPtr& msg)
 	response->set_token(AES_ecb128_encrypt(jv.dump()));
 	response->set_cur_version(m_versoin_info.m_cur_version);
 	response->set_update_desc(m_versoin_info.m_update_desc);
-	if (m_versoin_info == login_req.version())
+	if (m_versoin_info.m_cur_version == login_req.version())
 	{
-		response->set_update_type(static_cast<int>(emUpdateType.NO_NEED_UPDATE));
+		response->set_update_type(static_cast<int>(emUpdateType::NO_NEED_UPDATE));
 	}
-	else ()
+	else 
 	{
 		if (m_versoin_info.m_force_version >= login_req.version())
-			response->set_update_type(static_cast<int>(emUpdateType.FORCE_UPDATE));
+			response->set_update_type(static_cast<int>(emUpdateType::FORCE_UPDATE));
 		else
-			response->set_update_type(static_cast<int>(emUpdateType.NEED_UPDATE));
+			response->set_update_type(static_cast<int>(emUpdateType::NEED_UPDATE));
 	}
 	msg->send_response(CODE_SUCCESS, response);
-	notify_user_login(account_info, login_req, response->token());
+	notify_user_login(account_info, login_req);
 }
 
-void LoginModule::notify_user_login(const AccountInfo& account_info, const LoginRequest& login_req, const std::string& str_token)
+void LoginModule::notify_user_login(const AccountInfo& account_info, const LoginRequest& login_req)
 {
 
 	FULL_MSG(MqTag::HeaderType, head, NotifyLoginRequest, pbreq, MqTag, sendmsg);
@@ -177,7 +154,7 @@ void LoginModule::notify_user_login(const AccountInfo& account_info, const Login
 	pbreq->set_network_mode(login_req.network_mode());
 	pbreq->set_os_version(login_req.os_version());
 	pbreq->set_channel(login_req.channel());
-	pbreq->set_usertoken(str_token);
+	pbreq->set_user_type (login_req.user_type());
 	LanchProcessInstance::get_mutable_instance().get_mq().send_message(sendmsg);
 }
 

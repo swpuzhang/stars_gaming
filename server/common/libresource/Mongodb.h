@@ -34,13 +34,13 @@
 #include <unordered_map>
 #include <sstream>
 
-namespace MGOptions = mongocxx::v_noabi::options;
-decltype(bsoncxx::stream::close_array)  MGCloseArray =  bsoncxx::stream::close_array;
-decltype(bsoncxx::stream::close_document) MGCloseDocument = bsoncxx::stream::close_document;
-using  MGDocument = bsoncxx::stream::document;
-decltype(bsoncxx::stream::finalize) MGFinalize = bsoncxx::stream::finalize;
-decltype(bsoncxx::stream::open_array) MGOpenArray = bsoncxx::stream::open_array;
-decltype(bsoncxx::stream::open_document) MGOpenDocument  = bsoncxx::stream::open_document;
+namespace MGOptions = mongocxx::options;
+decltype(bsoncxx::builder::stream::close_array)  MGCloseArray =  bsoncxx::builder::stream::close_array;
+decltype(bsoncxx::builder::stream::close_document) MGCloseDocument = bsoncxx::builder::stream::close_document;
+using  MGDocument = bsoncxx::builder::stream::document;
+decltype(bsoncxx::builder::stream::finalize) MGFinalize = bsoncxx::builder::stream::finalize;
+decltype(bsoncxx::builder::stream::open_array) MGOpenArray = bsoncxx::builder::stream::open_array;
+decltype(bsoncxx::builder::stream::open_document) MGOpenDocument  = bsoncxx::builder::stream::open_document;
 using MGResult = bsoncxx::stdx::optional<bsoncxx::document::value>;
 using MGDocValue = bsoncxx::document::value;
 using BDocument = bsoncxx::types::b_document;

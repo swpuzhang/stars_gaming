@@ -10,17 +10,16 @@ all :
 	cd ./liblog && $(MAKE) -j10 DEBUG=$(DEBUG)
 	cd ./libtools && $(MAKE) -j10 DEBUG=$(DEBUG)
 	cd ./libmessage && $(MAKE) -j10 DEBUG=$(DEBUG)
-	cd ./libtask_manager && $(MAKE) -j10 DEBUG=$(DEBUG)
 	cd ./libserver && $(MAKE) -j10 DEBUG=$(DEBUG)
-	
+	cd ./libresource && $(MAKE) -j10 DEBUG=$(DEBUG)
 
 .PHONY : clean
 clean :
 	cd ./liblog && $(MAKE) clean
 	cd ./libmessage && $(MAKE) clean
 	cd ./libserver && $(MAKE) clean
-	cd ./libtask_manager && $(MAKE) clean
 	cd ./libtools && $(MAKE) clean
+	cd ./libresource && $(MAKE) clean
 
 	
 	

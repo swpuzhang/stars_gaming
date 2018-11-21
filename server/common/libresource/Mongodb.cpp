@@ -22,7 +22,7 @@ Mongodb::Mongodb() : Resource<MongoOb>()
 	 TRACE_FUNCATION();
 	 one_resource = std::make_unique<MongoOb>();
 	 mongocxx::uri  mongo_url(one_jv["url"].get<std::string>());
-	 one_resource->m_db_name = one_jv["db_name"].get<std::string>;
+	 one_resource->m_db_name = one_jv["db_name"].get<std::string>();
 	 one_resource->m_client = std::make_unique<mongocxx::client>(mongo_url);
 	 return true;
  }
