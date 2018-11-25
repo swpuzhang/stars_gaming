@@ -95,6 +95,23 @@ bool PlayerManager::player_token_login(const TcpMsgPtr &msg)
 	return true;
 }
 
+boost::optional<int> PlayerManager::check_user_msg(const TcpMsgPtr &msg)
+{
+	TRACE_FUNCATION();
+	boost::optional<int> ret;
+	INFO_LOG << " check session(" << msg->session_ptr().get() << ")";
+	auto iter = m_online_user.find(reinterpret_cast<TcpSession*>(msg->session_ptr().get()));
+	if (iter == m_online_user.end())
+	{
+		return ret;
+	}
+
+	ret = iter->second->get_user_id();
+	TcpSessionPtr tcpsession_ptr = std::dynamic_pointer_cast<TcpSession>(msg->session_ptr());
+	flush_user_online(tcpsession_ptr);
+	return ret;
+}
+
 void PlayerManager::add_user_session(int user_id, const TcpSessionPtr& session)
 {
     TRACE_FUNCATION();

@@ -16,6 +16,7 @@ public:
 	void handle_message(const TcpMsgPtr&) override;
 
 protected:
+	void on_unknown_msg(const TcpMsgPtr& msg) override;
 	void on_session_close(const TcpMsgPtr& msg) override;
 	void on_session_open(const TcpMsgPtr& msg) override;
 	void on_heart_beat(const TcpMsgPtr& msg) override;

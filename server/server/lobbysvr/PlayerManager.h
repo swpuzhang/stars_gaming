@@ -1,12 +1,14 @@
 #ifndef PlayerManager_H__
 #define PlayerManager_H__
+#include <unordered_map>
+#include <boost/serialization/singleton.hpp>
+#include <boost/optional.hpp>
 
 #include "libtools/Types.h"
 #include "libtools/JsonParser.h"
 #include "libtools/BaseTool.h"
 #include "libmessage/Message.h"
-#include <unordered_map>
-#include <boost/serialization/singleton.hpp>
+
 
 class Player;
 using PLAYER_PTR = std::shared_ptr<Player>;
@@ -42,6 +44,8 @@ public:
    // void on_user_response(int user_id, const TcpMsgPtr &request, const TcpMsgPtr &response);
 
     void output_manager_info(void);
+
+	boost::optional<int> check_user_msg(const TcpMsgPtr &msg, int& user_id);
 
 private:
 	void add_user_session(int user_id, const TcpSessionPtr& session);

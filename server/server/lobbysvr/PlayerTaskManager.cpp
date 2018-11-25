@@ -1,4 +1,5 @@
 #include <functional>
+#include <boost/optional.hpp>
 #include "PlayerTaskManager.h"
 #include "PlayerManager.h"
 #include "LobbyModule.h"
@@ -65,4 +66,15 @@ void PlayerTaskManager::on_session_open(const TcpMsgPtr& msg)
 void PlayerTaskManager::on_token_login(const TcpMsgPtr& msg)
 {
 	PlayerManagerInstance::get_mutable_instance().player_token_login(msg);
+}
+
+void PlayerTaskManager::on_unknown_msg(const TcpMsgPtr& msg)
+{
+	//玩家token login后每条请求消息都会带有userid, 查找userid对应的session, 并根据消息码,发送到不同的server上处理
+	boost::optional<int> user_id = PlayerManagerInstance::get_mutable_instance().check_user_msg(msg);
+	if (!user_id)
+	{
+		msg->send_failed_reason(CODE_SESSION_HAV_NO_USER);
+		return;
+	}
 }
