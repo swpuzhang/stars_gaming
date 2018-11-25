@@ -28,7 +28,7 @@ message LoginResponse
 	int32 update_type = 4;  //0 不需要更新, 1 需要更新 3 强制更新
 	bytes update_desc = 5;
 	bytes account = 6;
-	bytes hall_host = 7;
+	bytes lobby_host = 7;
 }
 
 message NotifyLoginRequest

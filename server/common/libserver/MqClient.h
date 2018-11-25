@@ -31,13 +31,23 @@ public:
 	~MqClient();
 	void close_client();
 	void connect();
+	bool send_message(int cmd_type, const PbMessagePtr & msg, const std::string& exchange_name, const std::string& route_name);
 	bool send_message(const std::shared_ptr<Message<MqTag>>& msg);
 	void bind_exchange(const std::string& exchange_name, int exchange_type, const std::string& rout_key);
 
 	//发送和接收不能在同一线程
+	bool send_message(int cmd_type, const PbMessagePtr & msg, const std::string& exchange_name, const std::string& route_name,
+		std::shared_ptr<Message<MqTag>>& response, 
+		const std::chrono::milliseconds &millisenconds = std::chrono::milliseconds(10000));
+
 	bool send_message(const std::shared_ptr<Message<MqTag>>& msg, 
 		std::shared_ptr<Message<MqTag>>& response,
 		const std::chrono::milliseconds &millisenconds = std::chrono::milliseconds(10000));
+
+	bool send_message(int cmd_type, const PbMessagePtr & msg, const std::string& exchange_name, const std::string& route_name,
+		const ASYNC_FUN<MqTag>& fun,
+		const std::chrono::milliseconds &millisenconds = std::chrono::milliseconds(10000),
+		IoLoop* io_loop = NULL);
 
 	bool send_message(const std::shared_ptr<Message<MqTag>>& msg,
 		const ASYNC_FUN<MqTag>& fun,

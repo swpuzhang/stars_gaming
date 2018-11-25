@@ -4,8 +4,8 @@
 #include "libserver/AsyncRequest.h"
 
 #include "ErrorCode.pb.h"
-#include "HallMsg.pb.h"
-#include "HallCmd.pb.h"
+#include "LobbyMsg.pb.h"
+#include "LobbyCmd.pb.h"
 #include "SvrCmd.pb.h"
 #include "SvrMsg.pb.h"
 #include "SystemCmd.pb.h"
@@ -21,8 +21,8 @@ using namespace SystemCmd;
 
 using namespace SvrMsg;
 using namespace SvrCmd;
-using namespace HallCmd;
-using namespace HallMsg;
+using namespace LobbyCmd;
+using namespace LobbyMsg;
 using namespace GameMsg;
 using namespace GameCmd;
 using namespace ErrorCode;

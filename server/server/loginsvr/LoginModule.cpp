@@ -15,7 +15,7 @@
 #include "libmessage/Message.h"
 
 
-std::vector<std::string> LoginModule::m_hall_list = {};
+std::vector<std::string> LoginModule::m_lobby_list = {};
 TY_UINT32 LoginModule::m_local_ip = 0;
 
 void LoginModule::load_version_info()
@@ -115,7 +115,7 @@ void LoginModule::user_login(const TcpMsgPtr& msg)
 		{ "app_type", login_req.app_type()}, {"version",login_req.version()}, {"os_version", login_req.os_version()},
 		{"channel", login_req.channel()}, {"time", tnow_sec} };
 
-	response->set_hall_host(m_hall_list[rand() % m_hall_list.size()]);
+	response->set_lobby_host(m_lobby_list[rand() % m_lobby_list.size()]);
 	response->set_user_id(account_info.m_user_id);
 	response->set_token(AES_ecb128_encrypt(jv.dump()));
 	response->set_cur_version(m_versoin_info.m_cur_version);
@@ -140,8 +140,8 @@ void LoginModule::notify_user_login(const AccountInfo& account_info, const Login
 
 	FULL_MSG(MqTag::HeaderType, head, NotifyLoginRequest, pbreq, MqTag, sendmsg);
 	head->set_cmdtype(CMD_NOTIFY_LOGIN);
-	head->set_send_exchange(EXCHANGE_LOGIN_TOPIC);
-	head->set_send_routkey(ROUTE_USER_LOGIN);
+	head->set_recv_exchange(EXCHANGE_LOGIN_TOPIC);
+	head->set_recv_routkey(ROUTE_USER_LOGIN);
 	pbreq->set_user_id(account_info.m_user_id);
 	pbreq->set_account(account_info.m_account);
 	pbreq->set_device_code(login_req.device_code());

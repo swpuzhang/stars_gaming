@@ -444,12 +444,12 @@ message UserBoxTimePauseResponse
 	
 }
 
-message UserLoginRequest
+message NotifyTokenLoginRequest
 {
 	int32 userId = 1;
 }
 
-message UserLoginResponse
+message NotifyTokenLoginResponse
 {
 	
 }

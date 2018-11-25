@@ -29,7 +29,7 @@ bool LanchProcess::parse_config()
 	//获取本server的配置
 	std::string process_name = SystemTool::get_process_name();
 	Json &jv_server_config = m_config_json[process_name];
-	if (jv_server_config.is_valid())
+	if (!jv_server_config.is_valid())
 	{
 		return false;
 	}
@@ -49,22 +49,22 @@ bool LanchProcess::parse_config()
 	LoginModule::m_local_ip = (boost::asio::ip::address_v4::from_string(m_local_ip).to_uint());
 
 	//获取大厅列表
-	Json &jv_hall_list = m_config_json["host_config"]["hall_list"];
-	if (jv_hall_list.is_valid() || !jv_hall_list.is_array())
+	Json &jv_lobby_list = m_config_json["host_config"]["lobby_list"];
+	if (!jv_lobby_list.is_valid() || !jv_lobby_list.is_array())
 	{
 		return false;
 	}
 	std::set<std::string> hosts;
-	for (size_t i = 0; i < jv_hall_list.size(); ++i)
+	for (size_t i = 0; i < jv_lobby_list.size(); ++i)
 	{
-		std::string str_ip = jv_hall_list[i]["ip"];
-		for (auto &e : jv_hall_list[i]["ports"])
+		std::string str_ip = jv_lobby_list[i]["ip"];
+		for (auto &e : jv_lobby_list[i]["ports"])
 		{
 			std::string one_host = str_ip + ":" + e.get<std::string>();
 			hosts.insert(one_host);
 		}
 	}
-	std::copy(hosts.begin(), hosts.end(), std::back_inserter(LoginModule::m_hall_list));
+	std::copy(hosts.begin(), hosts.end(), std::back_inserter(LoginModule::m_lobby_list));
 	return true;
 }
 

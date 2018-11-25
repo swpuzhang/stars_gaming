@@ -118,6 +118,26 @@ void MqClient::do_close_client()
 	m_timer.cancel();
 }
 
+bool MqClient::send_message(int cmd_type, const PbMessagePtr & msg, const std::string& exchange_name, const std::string& route_name)
+{
+	TRACE_FUNCATION();
+	
+	if (m_session)
+	{
+		EMPTY_MSG(MqTag, sendmsg);
+		HEADER(typename MqTag::HeaderType, head);
+		head->set_recv_exchange(exchange_name);
+		head->set_recv_routkey(route_name);
+		head->set_cmdtype(cmd_type);
+		sendmsg->set_header(head);
+		sendmsg->set_pbmessage(msg);
+		m_session->send(sendmsg);
+		return true;
+	}
+	return false;
+}
+
+
 
 bool MqClient::send_message(const std::shared_ptr<Message<MqTag>>& msg)
 {
@@ -159,6 +179,29 @@ void MqClient::on_timeout(const SYSTEM_CODE& err)
 	register_timer();
 }
 
+bool MqClient::send_message(int cmd_type, const PbMessagePtr & msg, const std::string& exchange_name, const std::string& route_name,
+	std::shared_ptr<Message<MqTag>>& response, const std::chrono::milliseconds &millisenconds)
+{
+	TRACE_FUNCATION();
+	if (response)
+		response.reset();
+	if (m_session)
+	{
+		EMPTY_MSG(MqTag, sendmsg);
+		HEADER(typename MqTag::HeaderType, head);
+		head->set_recv_exchange(exchange_name);
+		head->set_recv_routkey(route_name);
+		head->set_cmdtype(cmd_type);
+		sendmsg->set_header(head);
+		sendmsg->set_pbmessage(msg);
+		m_session->send(sendmsg, response, millisenconds);
+		return true;
+	}
+	return false;
+	
+}
+
+
 bool MqClient::send_message(const std::shared_ptr<Message<MqTag>>& msg, 
 	std::shared_ptr<Message<MqTag>>& response, 
 	const std::chrono::milliseconds &millisenconds)
@@ -169,6 +212,27 @@ bool MqClient::send_message(const std::shared_ptr<Message<MqTag>>& msg,
 	if (m_session)
 	{
 		m_session->send(msg, response, millisenconds);
+		return true;
+	}
+	return false;
+}
+
+bool MqClient::send_message(int cmd_type, const PbMessagePtr & msg, const std::string& exchange_name, const std::string& route_name,
+	const ASYNC_FUN<MqTag>& fun,
+	const std::chrono::milliseconds &millisenconds,
+	IoLoop* io_loop)
+{
+	TRACE_FUNCATION();
+	if (m_session)
+	{
+		EMPTY_MSG(MqTag, sendmsg);
+		HEADER(typename MqTag::HeaderType, head);
+		head->set_recv_exchange(exchange_name);
+		head->set_recv_routkey(route_name);
+		head->set_cmdtype(cmd_type);
+		sendmsg->set_header(head);
+		sendmsg->set_pbmessage(msg);
+		m_session->send(msg, fun, millisenconds, io_loop);
 		return true;
 	}
 	return false;

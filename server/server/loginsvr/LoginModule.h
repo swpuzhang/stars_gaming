@@ -14,8 +14,8 @@
 #include <chrono>
 
 #include "ErrorCode.pb.h"
-#include "HallMsg.pb.h"
-#include "HallCmd.pb.h"
+#include "LobbyMsg.pb.h"
+#include "LobbyCmd.pb.h"
 #include "SvrCmd.pb.h"
 #include "SvrMsg.pb.h"
 #include "SystemCmd.pb.h"
@@ -31,8 +31,8 @@ using namespace SystemCmd;
 
 using namespace SvrMsg;
 using namespace SvrCmd;
-using namespace HallCmd;
-using namespace HallMsg;
+using namespace LobbyCmd;
+using namespace LobbyMsg;
 using namespace GameMsg;
 using namespace GameCmd;
 using namespace ErrorCode;
@@ -106,7 +106,7 @@ private:
 	void notify_user_login(const AccountInfo& account_info, const LoginRequest& login_req);
 
 public:
-	static std::vector<std::string> m_hall_list;
+	static std::vector<std::string> m_lobby_list;
 	static	TY_UINT32 m_local_ip;
 private:
 	std::map<TcpSessionPtr, steady_clock::time_point> m_session_time;  //创建连接的信息

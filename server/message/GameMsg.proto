@@ -63,15 +63,6 @@ message PB_CardGroup
 	optional int32 type = 2;           //该牌组的类型
 };
 
-message UserTokenLoginRequest
-{
-	 optional bytes userToken = 1;
-}
-
-message UserTokenLoginResponse
-{
-	 
-}
 
 message ApplyFlushRoomRequest
 {
