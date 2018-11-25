@@ -1,0 +1,104 @@
+{
+  "host_config": {
+    "local_ip": "192.168.10.220",
+    "local_inner_ip": "127.0.0.111",
+    "lobby_list" [
+      {
+        "ip": "192.168.10.220",
+        "ports": [ "7500" ]
+      }
+    ]
+  },
+
+  "lobbysvr": {
+    "sub_process": "10",
+    "port": "7500"
+
+  },
+  "loginsvr": {
+    "sub_process": "1",
+    "port": "7400"
+  },
+
+  "log": {
+    "default": {
+      "level": "0",
+      "filenum": "100",
+      "filesize": "10",
+      "dir": "./log"
+    },
+    "testgameclient": {
+      "level": "0",
+      "filenum": "100",
+      "filesize": "10",
+      "dir": "./log"
+    }
+  },
+
+  "redis": [
+    {
+      "config_name": "default",
+      "ip": "127.0.0.1",
+      "port": "7000"
+    }
+  ],
+
+  "mongo": [
+    {
+      "config_name": "default",
+      "url": "mongodb://127.0.0.1:27017",
+      "db": "main_db"
+    }
+  ],
+
+  "mq": {
+    "default": {
+      "ip": "192.168.1.104",
+      "port": "5672",
+      "user": "zhangyang",
+      "passwd": "123456",
+      "dir": "test"
+    },
+    "gamesvr": {
+      "queue": "gamesvr",
+      "binds": [
+        {
+          "exchange": "gamesvr.direct",
+          "routkeys": [ "gamesvr" ]
+        },
+        {
+          "exchange": "matchsvr.topic",
+          "routkeys": [ "matchsvr" ]
+        }
+      ]
+    },
+
+    "loginsvr": {
+      "queue": "loginsvr",
+      "binds": [
+        {
+          "exchange": "loginsvr.direct",
+          "routkeys": [ "loginsvr" ]
+        },
+        {
+          "exchange": "login_topic",
+          "routkeys": [ "user_login" ]
+        }
+      ]
+    },
+
+    "testlog": {
+      "queue": "loginsvr",
+      "binds": [
+        {
+          "exchange": "gamesvr.direct",
+          "routkeys": [ "gamesvr" ]
+        },
+        {
+          "exchange": "matchsvr.topic",
+          "routkeys": [ "matchsvr" ]
+        }
+      ]
+    }
+  }
+}
