@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "liblog", "..\common\liblog\liblog.vcxproj", "{56B4F7D5-2422-499B-B21D-3A9B0A653D54}"
 EndProject
@@ -26,8 +26,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_mongo", "test_mongo\test_mongo.vcxproj", "{3AF1B108-6573-41EB-862D-27E69AA5D92E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gen_filed_class", "gen_filed_class\gen_filed_class.vcxproj", "{F191F928-4226-4DB9-A14B-AB81D858D0A1}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_field_class", "test_field_class\test_field_class.vcxproj", "{B6B2E614-EE87-4195-81A7-496D04B6D141}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common_define", "common_define\common_define.vcxproj", "{BE90282A-39A8-44B6-98D5-6F511B33449F}"
 EndProject
@@ -141,14 +139,6 @@ Global
 		{F191F928-4226-4DB9-A14B-AB81D858D0A1}.Release|x64.Build.0 = Release|x64
 		{F191F928-4226-4DB9-A14B-AB81D858D0A1}.Release|x86.ActiveCfg = Release|Win32
 		{F191F928-4226-4DB9-A14B-AB81D858D0A1}.Release|x86.Build.0 = Release|Win32
-		{B6B2E614-EE87-4195-81A7-496D04B6D141}.Debug|x64.ActiveCfg = Debug|x64
-		{B6B2E614-EE87-4195-81A7-496D04B6D141}.Debug|x64.Build.0 = Debug|x64
-		{B6B2E614-EE87-4195-81A7-496D04B6D141}.Debug|x86.ActiveCfg = Debug|Win32
-		{B6B2E614-EE87-4195-81A7-496D04B6D141}.Debug|x86.Build.0 = Debug|Win32
-		{B6B2E614-EE87-4195-81A7-496D04B6D141}.Release|x64.ActiveCfg = Release|x64
-		{B6B2E614-EE87-4195-81A7-496D04B6D141}.Release|x64.Build.0 = Release|x64
-		{B6B2E614-EE87-4195-81A7-496D04B6D141}.Release|x86.ActiveCfg = Release|Win32
-		{B6B2E614-EE87-4195-81A7-496D04B6D141}.Release|x86.Build.0 = Release|Win32
 		{BE90282A-39A8-44B6-98D5-6F511B33449F}.Debug|x64.ActiveCfg = Debug|x64
 		{BE90282A-39A8-44B6-98D5-6F511B33449F}.Debug|x64.Build.0 = Debug|x64
 		{BE90282A-39A8-44B6-98D5-6F511B33449F}.Debug|x86.ActiveCfg = Debug|Win32

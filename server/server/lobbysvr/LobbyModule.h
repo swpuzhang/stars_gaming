@@ -41,6 +41,37 @@ using namespace LoginMsg;
 
 using namespace std::chrono;
 
+class MsgRout
+{
+public:
+	void set_route(int cmd_begin, int cmd_end, const std::string& exchange, const std::string& route)
+	{
+		m_cmd_begin = cmd_begin;
+		m_cmd_end = cmd_end;
+		m_exchange = exchange;
+		m_route = route;
+	}
+	bool is_cmd_match(const int msg_cmd) const
+	{
+		if (msg_cmd >= m_cmd_begin && msg_cmd <= m_cmd_end)
+		{
+			return true;
+		}
+		return false;
+	}
+	const std::string& get_exchange() const {
+		return  m_exchange;
+	}
+	const std::string& get_route() const {
+		return  m_route;
+	}
+private:
+	int m_cmd_begin =0 ;
+	int m_cmd_end = 0;
+	std::string m_exchange;
+	std::string m_route;
+};
+
 class LobbyModule
 {
 public:
@@ -53,7 +84,7 @@ private:
 public:
 	
 private:
-	
+	std::vector<MsgRout> m_msg_route;
 };
 
 using LobbyInstance = boost::serialization::singleton<LobbyModule>;
