@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+package LobbyCmd;
+enum EnumLobbyCmd
+{
+	CMD_BEGIN = 0;    //占位，没用
+	CMD_USER_TOKEN_LOGIN = 2026;
+	CMD_GET_ROOM_LIST = 2027; //获取房间列表接口
+    CMD_GET_AUTO_MATCH_ROOM = 2028; //playnow接口
+    CMD_GET_BLIND_MATCH_ROOM = 2029; //匹配某一底注房间 接口
+    CMD_GET_CHANGE_MATCH_ROOM = 2030;//换房接口
+	CMD_PLAYER_GAME_OVER = 2031; //通知玩家游戏结束， 玩家逃跑后 在大厅会接受到此消息。
+	CMD_USER_GAME_ROOM_INFO = 2032; //通知玩家正在进行的游戏， 玩家逃跑后，在大厅重连时会收到这个消息，提示玩家连进该房间
+	CMD_SEARCH_ROOM = 2033;  //匹配房间接口
+	CMD_GET_MULTIROOM_LIST = 2034;
+	CMD_GET_AUTO_MATCH_MULTIROOM = 2035;
+	CMD_GET_BLIND_MATCH_MULTIROOM = 2036;
+	CMD_GET_CHANGE_MATCH_MULTIROOM = 2037;
+	CMD_SEARCH_MULTIROOM = 2038;
+	CMD_PLAYER_CHIPS_CHANGE = 2009; //通知玩家筹码变化
+	CMD_PLAYER_COINS_CHANGE = 2010; //通知玩家金钱变化
+	CMD_PLAYER_UPGRADE = 2011; //通知玩家经验变化
+	CMD_USER_BANKRUPT = 2015; //通知玩家破产
+	CMD_USER_COMM_NOTIFY = 2016; //通知玩家有后台通知
+	CMD_PLAYER_CHARM_UPGRADE = 2023; //通知玩家魅力值变化
+	CMD_PLAYER_LOGIN_ELSEWHERE = 2025; //通知玩家在其他地方登录，同一账号同时登录时只允许一个登录
+}
+

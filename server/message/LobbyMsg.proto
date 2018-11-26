@@ -1,0 +1,325 @@
+syntax = "proto2";
+
+package LobbyMsg;
+
+
+enum EnumKickOutReason
+{
+	KICKFOR_LOGIN_ELSEWHERE = 0;
+	KICKFOR_SEAL_ACCOUNT = 1;
+};
+
+//发送RCP消息
+message PlayerChipsChangeRequest
+{
+	enum  EnumChipChangeReason
+	{
+		refresh_chips = 0;
+		game_buyin = 1;		//打牌buyin
+		game_give_back = 2;		// 离开牌桌，场内筹码返回
+		game_start_bet = 3;	// 打牌开始后下注
+		game_timer_award =4;	// 倒计时宝箱奖励领取
+		login_award  = 5;	// 登录奖励领取
+		play_task_award  = 6;	// 打牌任务完成后奖励领取
+		goldcap_task_award = 7; // 夺金岛任务完成后奖励领取
+		sign_award = 8;			// 签到奖励
+		friend_present = 9;		// 好友赠送
+		bankrupt_relief = 10;		// 破产救济金
+		upgrade_award = 11;		// 升级奖励
+		register_award = 12;		// 注册奖励
+		buy_in_store = 13;		// 商城购买
+		buy_gift_cost = 14;		// 购买礼物扣钱
+		buy_gift_failed_return = 15;		// 购买礼物失败，返回钱
+		sale_gift = 16;		// 购买礼物失败，返回钱
+		invite_friend_award = 17; // 邀请好友奖励
+		gameover_account = 18; // 牌局结算
+		purchase_prop_php = 44;	// PHP端购买道具
+		timely_account = 200;//被炸及时结算
+		botman_chips = 201; //机器人金钱
+		game_tips = 202;
+    };
+    optional  int32 userId = 1;
+	optional  int32 changeReason = 2;		// 变更原因
+	optional  int64 currentChips = 3;  // 当前筹码数
+	optional  int64 maxChips = 4;  // 曾经拥有的最大筹码数
+    optional  int64 outChipsCount = 5;  // 当前的场外筹码数
+}
+
+
+message UserTokenLoginRequest
+{
+	 optional bytes userToken = 1;
+}
+
+message UserTokenLoginResponse
+{
+	 
+}
+
+message PlayerChipsChangeResponse
+{
+	 
+}
+
+message RoomInfo
+{
+	optional  int64 smallBlind = 1;
+    optional  int64 minCarry = 2;
+    optional  int32 playingCount = 3;
+    optional  int32 showLevel = 4;
+}
+
+
+message TypeRoomList
+{
+	optional  int32 roomType = 1;
+    repeated RoomInfo blindRooms = 2;
+}
+
+message GetRoomListRequest
+{
+	optional  int32 userId = 1;
+}
+
+message GetRoomListResponse
+{
+	repeated TypeRoomList roomList = 1;
+}
+
+
+message GetAutoMatchRoomRequest
+{
+	optional  int32 userId = 1;
+}
+
+message GetAutoMatchRoomResponse
+{
+	optional  int32 roomId = 1;
+	optional  int32 isEscape = 2;
+    optional  bytes gameHost = 3;
+}
+
+
+message GetBlindMatchRoomRequest
+{
+	optional  int32 userId = 1;
+	optional  int64 smallBlind = 2;
+}
+
+message GetBlindMatchRoomResponse
+{
+	optional  int32 roomId = 1;
+	optional  int32 isEscape = 2;
+    optional  bytes gameHost = 3;
+}
+
+
+message GetChangeMatchRoomRequest
+{
+	optional  int32 userId = 1;
+	optional  int32 currentRoomId = 2;
+	optional  int64 smallBlind = 3;
+}
+
+message GetChangeMatchRoomResponse
+{
+	optional  int32 roomId = 1;
+	optional  int32 isEscape = 2;
+    optional  bytes gameHost = 3;
+}
+
+
+message PlayerGameOverRequest
+{
+	optional  int32 userId = 1;
+	optional  int32 roomId = 2;
+	optional  int64 smallBlind = 3;
+	optional  int32 roomType = 4;
+	optional  int32 deskType = 5;
+}
+
+message PlayerGameOverResponse
+{
+}
+
+
+message UserGameRoomInfoRequest
+{
+	optional  bytes m_game_host = 1;
+	optional  int32 roomId = 2;
+	optional  int64 smallBlind = 3;
+	optional  int32 roomType = 4;
+	optional  int32 deskType = 5;
+}
+
+message UserGameRoomInfoResponse
+{
+	
+}
+
+
+message SearchRoomRequest
+{
+	optional  int32 userId = 1;
+	optional  int32 roomId = 2;
+}
+
+message SearchRoomResponse
+{
+	optional  int32 roomId = 1;
+	optional  bytes gameHost = 2;
+	optional  int64 smallBlind = 3;
+	optional  int32 playingCount = 4;
+}
+
+
+message PlayerCoinsChangeRequest
+{
+	optional  int32 userId = 1;
+	optional  int32 changeReason = 2;
+	optional  int64 currentCoins = 3;
+
+}
+
+message PlayerCoinsChangeResponse
+{
+	
+}
+
+message PlayerCharmUpgradRequest
+{
+	optional  int32 userId = 1;
+	optional  int32 newLevel = 2;
+	optional  int64 currentCharm = 3;
+	optional  int64 nextUpgradeCharm = 4;
+}
+
+message PlayerCharmUpgradResponse
+{
+	
+}
+
+message UserBankruptRequest
+{
+	optional  int32 bankruptTimes = 1;
+	optional  int64 reliefChips = 2;
+    optional  int32 awardTimes = 3;
+}
+
+message UserBankruptResponse
+{
+
+}
+
+
+message UserCommNotifyRequest
+{
+	optional  int32 notifyMsgType = 1;
+	optional  int32 notifyMsgId = 2;
+    optional  bytes notifyData = 3;
+}
+
+message UserCommNotifyResponse
+{
+}
+
+
+message PlayerLoginElsewhereRequest
+{
+	optional  int32 reason = 1;
+	optional  bytes description = 2;
+}
+
+message PlayerLoginElsewhereResponse
+{
+	
+}
+
+message PlayerUpgradeRequest
+{
+	optional  int32 userId = 1;
+	optional  int32 newLevel = 2;
+	optional  int64 currentExp = 3;  // 当前经验值
+	optional  int64 upgradeExp = 4;  // 下次升级所需经验值
+    optional  int64 awardChips = 5; // 升级奖励金钱数
+}
+
+message PlayerUpgradeResponse
+{
+}
+
+message UserTokenLoginDcenterRequest
+{
+	 optional  bytes userToken = 1;
+}
+
+message UserTokenLoginDcenterResponse
+{
+
+}
+
+
+message GetMultiroomListRequest
+{
+	optional  int32 userId = 1;
+}
+
+message GetMultiroomListResponse
+{
+	repeated TypeRoomList roomList = 1;
+}
+
+
+message GetAutoMatchMultiroomRequest
+{
+	optional  int32 userId = 1;
+}
+
+message GetAutoMatchMultiroomResponse
+{
+	optional  int32 roomId = 1;
+	optional  int32 isEscape = 2;
+    optional  bytes gameHost = 3;
+}
+
+
+message GetBlindMatchMultiroomRequest
+{
+	optional  int32 userId = 1;
+	optional  int64 smallBlind = 2;
+}
+
+message GetBlindMatchMultiroomResponse
+{
+	optional  int32 roomId = 1;
+	optional  int32 isEscape = 2;
+    optional  bytes gameHost = 3;
+}
+
+message GetChangeMatchMultiroomRequest
+{
+	optional  int32 userId = 1;
+	optional  int32 currentRoomId = 2;
+	optional  int64 smallBlind = 3;
+}
+
+message GetChangeMatchMultiroomResponse
+{
+	optional  int32 roomId = 1;
+	optional  int32 isEscape = 2;
+    optional  bytes gameHost = 3;
+}
+
+message SearchMultiroomRequest
+{
+	optional  int32 userId = 1;
+	optional  int32 roomId = 2;
+}
+
+message SearchMultiroomResponse
+{
+	optional  int32 roomId = 1;
+	optional  bytes gameHost = 2;
+	optional  int64 smallBlind = 3;
+	optional  int32 playingCount = 4;
+}
