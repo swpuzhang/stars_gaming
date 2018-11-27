@@ -36,5 +36,12 @@ void LobbyModule::dispatch_app_msg(const TcpMsgPtr &msg)
 	{
 
 	}
+	LanchProcessInstance::get_mutable_instance().get_mq().send_message(header.cmdtype(),
+		msg->pbmessage_ptr(), str_exch, str_route,
+		[msg] (const MqMsgPtr& request, const MqMsgPtr& response)
+	    {
+		msg->send_response(response);
+	    },
+		std::chrono::milliseconds(3000), m_io_loop.get());
 }
 

@@ -86,6 +86,8 @@ public:
 	template<typename T>
 	T& pbmessage() const { return dynamic_cast<T&>(*m_message); }
 	void set_pbmessage(const PbMessagePtr& msg) { m_message = msg; }
+	PbMessagePtr& pbmessage_ptr() { return m_message; }
+	const PbMessagePtr& pbmessage_ptr() const { return m_message; }
 	void set_header(const HeaderPtr& header) { m_header = header; }
 	HeaderType& header() { return *m_header; }
 	HeaderType& header() const { return *m_header; }

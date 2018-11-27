@@ -75,6 +75,7 @@ private:
 class LobbyModule
 {
 public:
+	void open(const std::shared_ptr<IoLoop>& io_loop) { m_io_loop = io_loop; }
 	using SELF_TYPE = LobbyModule;
 	LobbyModule() {}
 	void dispatch_app_msg(const TcpMsgPtr &msg);
@@ -84,6 +85,7 @@ private:
 public:
 	
 private:
+	std::shared_ptr<IoLoop> m_io_loop;
 	std::vector<MsgRout> m_msg_route;
 };
 

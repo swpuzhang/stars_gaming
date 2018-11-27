@@ -16,7 +16,7 @@
 #include <map>
 
 template <class MsgTag>
-using ASYNC_FUN = std::function<void(MessagePtr<MsgTag> request, MessagePtr<MsgTag> response)>;
+using ASYNC_FUN = std::function<void(const MessagePtr<MsgTag>& request, const MessagePtr<MsgTag>& response)>;
 
 class ThreadPool;
 
