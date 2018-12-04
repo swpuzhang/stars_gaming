@@ -1,5 +1,4 @@
 #include "Player.h"
-#include "GameRoom.h"
 #include "GameMsg.pb.h"
 #include "GameCmd.pb.h"
 #include "libserver/TcpSession.h"

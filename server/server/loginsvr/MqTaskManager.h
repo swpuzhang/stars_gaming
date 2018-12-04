@@ -1,10 +1,12 @@
 #ifndef MQ_TASK_MANAGER_H
 #define MQ_TASK_MANAGER_H
 
-#include "libtask_manager/TaskManager.h"
-#include "libtools/IoLoop.h"
 #include <vector>
 #include <unordered_map>
+
+#include "libtask_manager/TaskManager.h"
+#include "libtools/IoLoop.h"
+
 
 class MqTaskManager : public MqTask
 {

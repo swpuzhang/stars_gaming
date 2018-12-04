@@ -2,7 +2,7 @@
   "host_config": {
     "local_ip": "192.168.10.220",
     "local_inner_ip": "127.0.0.111",
-    "lobby_list" [
+    "lobby_list" : [
       {
         "ip": "192.168.10.220",
         "ports": [ "7500" ]
@@ -10,7 +10,45 @@
     ]
   },
 
+  "lobby_route": [
+    {
+      "cmd_begin": "1",
+      "cmd_end": "1000",
+      "exchange": "gamesvr.direct",
+      "route": "gamesvr",
+      "type": "2",
+      "special": {
+        "room_begin": "1000",
+        "count_per_svr": "100"
+      }
+    },
+
+    {
+      "cmd_begin": "100000",
+      "cmd_end": "110000",
+      "exchange": "moneysvr.direct",
+      "route": "moneysvr",
+      "type": "1",
+      "special": {
+        "total_count": "10"
+      }
+    },
+
+    {
+      "cmd_begin": "50000",
+      "cmd_end": "51000",
+      "exchange": "matchsvr.direct",
+      "route": "matchsvr",
+      "type": "0",
+      "special": {
+        "total_count": "10"
+      }
+    }
+
+  ],
+
   "lobbysvr": {
+    "svr_index" :  "1",
     "sub_process": "10",
     "port": "7500"
 
@@ -85,20 +123,7 @@
           "routkeys": [ "user_login" ]
         }
       ]
-    },
-
-    "testlog": {
-      "queue": "loginsvr",
-      "binds": [
-        {
-          "exchange": "gamesvr.direct",
-          "routkeys": [ "gamesvr" ]
-        },
-        {
-          "exchange": "matchsvr.topic",
-          "routkeys": [ "matchsvr" ]
-        }
-      ]
     }
   }
+
 }

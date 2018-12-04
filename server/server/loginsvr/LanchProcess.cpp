@@ -10,8 +10,8 @@
 #include "LoginTaskManager.h"
 #include "MqTaskManager.h"
 #include "LoginModule.h"
-
 #include "LoginMsgFactor.h"
+
 #include "libserver/Server.h"
 #include "libtools/MultiProcess.h"
 #include "libtools/IoLoop.h"

@@ -15,7 +15,7 @@
 
 #include "ErrorCode.pb.h"
 #include "LobbyMsg.pb.h"
-#include "HallCmd.pb.h"
+#include "LobbyCmd.pb.h"
 #include "SvrCmd.pb.h"
 #include "SvrMsg.pb.h"
 #include "SystemCmd.pb.h"
@@ -31,7 +31,7 @@ using namespace SystemCmd;
 
 using namespace SvrMsg;
 using namespace SvrCmd;
-using namespace HallCmd;
+using namespace LobbyCmd;
 using namespace LobbyMsg;
 using namespace GameMsg;
 using namespace GameCmd;
@@ -41,47 +41,74 @@ using namespace LoginMsg;
 
 using namespace std::chrono;
 
+
+class NormalRout
+{
+public:
+	NormalRout(const std::string& exch, const std::string& route);
+	std::pair<std::string, std::string> operator() (int user_id, const TcpMsgPtr& msg) const;
+private:
+	std::string m_exchange;
+	std::string m_route;
+};
+
+class HashRout
+{
+public:
+	HashRout(const Json& hash_json, const std::string& exch, const std::string& route);
+
+	std::pair<std::string, std::string> operator() (int user_id, const TcpMsgPtr& msg) const;
+
+private:
+	int m_total_cuont = 1;
+	std::string m_exchange;
+	std::string m_route;
+};
+
+class RoomRout
+{
+public:
+	RoomRout(const Json& room_json, const std::string& exch, const std::string& route);
+	std::pair<std::string, std::string> operator() (int user_id, const TcpMsgPtr& msg) const;
+private:
+	int m_room_id_begin = 100;
+	int m_room_count_per_svr = 100;
+	std::string m_exchange;
+	std::string m_route;
+};
+
 class MsgRout
 {
 public:
-	void set_route(int cmd_begin, int cmd_end, const std::string& exchange, const std::string& route)
+	enum
 	{
-		m_cmd_begin = cmd_begin;
-		m_cmd_end = cmd_end;
-		m_exchange = exchange;
-		m_route = route;
-	}
-	bool is_cmd_match(const int msg_cmd) const
-	{
-		if (msg_cmd >= m_cmd_begin && msg_cmd <= m_cmd_end)
-		{
-			return true;
-		}
-		return false;
-	}
-	const std::string& get_exchange() const {
-		return  m_exchange;
-	}
-	const std::string& get_route() const {
-		return  m_route;
-	}
+		NORMAL_ROUTE,
+		HASH_ROUTE,
+		ROOM_ROUTE,
+	};
+	MsgRout(int cmd_begin, int cmd_end, const std::string exch, const std::string& route, int route_type, const Json& special_json);
+	bool is_cmd_match(const int msg_cmd) const;
+	std::pair<std::string, std::string> get_ex_route(int user_id, const TcpMsgPtr& msg) const;
 private:
 	int m_cmd_begin =0 ;
 	int m_cmd_end = 0;
-	std::string m_exchange;
-	std::string m_route;
+	std::function<std::pair<std::string, std::string>(int user_id, const TcpMsgPtr)> m_route_fun;
+};
+
+class RoomRout
+{
+
 };
 
 class LobbyModule
 {
 public:
+	LobbyModule() = default;
+	~LobbyModule() = default;
 	void open(const std::shared_ptr<IoLoop>& io_loop) { m_io_loop = io_loop; }
+	void parse_route_config(const Json& route_json);
 	using SELF_TYPE = LobbyModule;
-	LobbyModule() {}
-	void dispatch_app_msg(const TcpMsgPtr &msg);
-private:
-
-
+	void dispatch_app_msg(int user_id, const TcpMsgPtr &msg);
 public:
 	
 private:

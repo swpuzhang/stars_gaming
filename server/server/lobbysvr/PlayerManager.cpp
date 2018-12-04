@@ -37,34 +37,19 @@ PlayerManager::~PlayerManager(void)
 
 void PlayerManager::on_session_close(const TcpMsgPtr &msg)
 {
-    TRACE_FUNCATION();
-    INFO_LOG << "session(" << msg->session_ptr().get() << ") close";
+	TRACE_FUNCATION();
+	INFO_LOG << "session(" << msg->session_ptr().get() << ") close";
 	auto iter = m_online_user.find(reinterpret_cast<TcpSession*>(msg->session_ptr().get()));
 	if (iter != m_online_user.end())
 	{
-		DEBUG_LOG << "user(" << iter->second->get_user_id() << ") session(" << 
+		DEBUG_LOG << "user(" << iter->second->get_user_id() << ") session(" <<
 			msg->session_ptr().get() << ") offline";
 		//send_login_record(iter->second->get_user_id(), USER_LOGOUT, msg.get_peer_addr());
 		PLAYER_PTR player = iter->second;
 		player->session_close();
 		m_online_user.erase(iter);
-		if (!player->get_room())
-		{
-			INFO_LOG << "destory player(" << (player->get_user_id()) << ")";
-			tell_user_logout_game(player->get_user_id());
-			auto iterplayer = m_login_user.find(player->get_user_id());
-			if (iterplayer != m_login_user.end())
-			{
-				m_login_user.erase(iterplayer);
-			}
-			else
-			{
-				ERROR_LOG << "have no user(" << (player->get_user_id()) << ")";
-				assert(0);
-			}
-		}
+		m_login_user.erase(player->get_user_id());
 	}
-   
 }
 
 bool PlayerManager::player_token_login(const TcpMsgPtr &msg)
@@ -212,39 +197,6 @@ bool PlayerManager::is_player_online(int user_id)
 	return recv_session(user_id) != nullptr;
 }
 
-void PlayerManager::tell_user_ingame_status(const TcpMsgPtr& msg)
-{
-	/*FlushUserInGameRequest request;
-
-	
-	for (auto iter = m_login_user.begin(); iter != m_login_user.end(); ++iter)
-	{
-		PLAYER_PTR player = iter->second;
-        if (NULL != player->get_room())
-        {
-			UserGameStatus* user_status = request.add_gameplayer();
-			user_status->set_userid(player->get_user_id());
-            user_status->set_gamestatus(player->get_status() == Player::PLAYER_STAND_UP ?
-				FlushUserInGameRequest::USER_IN_WATCH : FlushUserInGameRequest::USER_IN_GAME);
-			user_status->set_roomid(player->get_room()->get_room_info().m_area_id);
-        }
-	}
-
-	MQService::instance()->send_mqrequest(CMD_FLUSH_USER_IN_GAME, MQ_TRANSMIT_DIRECT, SITE_NAME_NOTIFYSVR, request);
-	*/
-}
-
-void PlayerManager::send_login_record(int user_id, TY_UINT8 user_action, const std::string& remote_addr)
-{
-    /*return;
-	HallLoginRecordRequest request;
-	request.set_userid(user_id);
-	request.set_action(user_action);
-	request.set_time((TY_UINT32)ACE_OS::time(NULL));
-	request.set_pid(ACE_OS::getpid());
-	request.set_remoteaddr(remote_addr);
-	MQService::instance()->send_mqrequest(CMD_GAME_LOGIN_RECORD, MQ_TRANSMIT_DIRECT, SITE_NAME_GAMELOGSVR + "." + Game_Process::instance()->getGameName(), request);*/
-}
 
 bool PlayerManager::check_user_token(const std::string& token, const Json& user_token)
 {
@@ -255,33 +207,8 @@ bool PlayerManager::check_user_token(const std::string& token, const Json& user_
 		LOG_ERROR("para invalid");
 		return false;
 	}
-
-	/*CheckUserTokenRequest request;
-	request.set_userid(user_token["user_id"].int_value());
-	request.set_usertoken(token);
-
-	Response response;
-	if (-1 == MQService::instance()->send_mqrequest(CMD_CHECK_USER_TOKEN, MQ_TRANSMIT_DIRECT, SITE_NAME_SECURITYSVR + "." + Game_Process::instance()->getGameName(),
-		request, response, ACE_Time_Value(2)))
-	{
-		LOG_ERROR("send CMD_CHECK_USER_LOGIN failed");
-		return true;
-	}
-
-	if (!response.success())
-	{
-		LOG_ERROR("send CMD_CHECK_USER_LOGIN failed");
-		return true;
-	}
-
-	if (ERROR_SUCCESS != response.m_result)
-	{
-		LOG_INFO("user(" + toString(request.userid()) + ") forbidden");
-		return false;
-	}*/
 	return true;
 }
-
 
 bool PlayerManager::check_player_session(int user_id, const TcpSessionPtr& session)
 {
@@ -304,36 +231,8 @@ void PlayerManager::on_kick_out_user(const TcpMsgPtr &msg)
 		ERROR_LOG << "NO_SESSION_OF_USERID(" << (request.userid()) << ")";
 		return;
 	}
-
-
-	auto iter = m_login_user.find(request.userid());
-	int room_id = 0;
-	if (iter != m_login_user.end())
-	{
-		room_id = iter->second->get_room() ? iter->second->get_room()->get_room_id() : 0;
-	}
-
-	send_player_login_elsewhere(request.userid(), recvses, request.reason(),request.description());
-
+	send_player_login_elsewhere(request.userid(), recvses, request.reason(), request.description());
 	INFO_LOG << "kick out user(" << (request.userid()) << ") in room(" << (room_id) << ")";
-
-	if (room_id)
-	{
-		/*Request quitReq;
-		quitReq.m_cmd_type = CMD_APPLY_QUIT_ROOM;
-		ApplyQuitRoomRequest pbreq;
-		pbreq.set_roomid(room_id);
-		pbreq.set_userid(request.userid());
-		quitReq.set_pbmsg(&pbreq);
-		ACE_Message_Block *mb = new ACE_Message_Block((char*)quitReq.clone());
-		if (-1 == GameArea_Manager::instance()->putq(mb))
-		{
-			LOG_ERROR("putq failed");
-			delete (Request*)mb->base();
-			delete mb;
-		}*/
-	}
-
 	shutdown_user_session(recvses);
 }
 
@@ -367,27 +266,6 @@ void PlayerManager::get_all_user(google::protobuf::RepeatedField<google::protobu
 	}
 }
 
-void PlayerManager::tell_user_logout_game(int user_id)
-{
-	/*TellUserLogoutGameRequest request;
-	request.set_userid(user_id);
-	MQService::instance()->send_mqrequest(CMD_TELL_USER_LOGOUT_GAME, MQ_TRANSMIT_DIRECT, SITE_NAME_NOTIFYSVR, request);*/
-}
-
-bool PlayerManager::is_player_in_room(int user_id, int &room_id)
-{
-	bool in_room = false;
-	auto iter = m_login_user.find(user_id);
-	if (iter != m_login_user.end())
-	{
-        if (nullptr != iter->second->get_room())
-        {
-            in_room = true;
-            room_id = iter->second->get_room()->get_room_id();
-        }
-	}
-	return in_room;
-}
 
 void PlayerManager::tell_user_login_lobby(int user_id)
 {
@@ -412,20 +290,6 @@ void PlayerManager::flush_user_online(const TcpSessionPtr& session)
     }
 }
 
-/*void PlayerManager::on_user_response(int user_id, const TcpMsgPtr &request, const Response &response)
-{
-    m_lock_user_session.acquire_read();
-	auto iter = m_login_user.find(user_id);
-    if (iter != m_login_user.end())
-    {
-        iter->second->on_recv_response(request, response);
-    }
-    else
-    {
-        LOG_WARN("user(" + toString(user_id) + ") have logout while response");
-    }
-    m_lock_user_session.release();
-}*/
 
 void PlayerManager::output_manager_info(void)
 {

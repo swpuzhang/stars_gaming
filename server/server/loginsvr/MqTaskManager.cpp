@@ -1,33 +1,17 @@
 #include <functional>
 #include "MqTaskManager.h"
-#include "libmessage/Message.h"
-#include "ErrorCode.pb.h"
-#include "LobbyMsg.pb.h"
-#include "LobbyCmd.pb.h"
-#include "SvrCmd.pb.h"
-#include "SvrMsg.pb.h"
-#include "SystemCmd.pb.h"
-#include "SystemMsg.pb.h"
-#include "GameMsg.pb.h"
-#include "GameCmd.pb.h"
+
 #include "libserver/MqSession.h"
+#include "libmessage/Message.h"
 
 using namespace SystemMsg;
 using namespace SystemCmd;
-
-using namespace SvrMsg;
-using namespace SvrCmd;
-using namespace LobbyCmd;
-using namespace LobbyMsg;
-using namespace GameMsg;
-using namespace GameCmd;
 using namespace ErrorCode;
 
 MqTaskManager::MqTaskManager(IoLoop& io_loop) : m_io_loop(io_loop)
 {
 	TRACE_FUNCATION();
 }
-
 
 void MqTaskManager::handle_message(const MqMsgPtr& msg)
 {

@@ -29,15 +29,11 @@ public:
 
 	void destory_player(const PLAYER_PTR &player);
 
-	void tell_user_ingame_status(const TcpMsgPtr& msg);
-
 	void get_all_user(google::protobuf::RepeatedField<google::protobuf::int32 >* pUsers);
 
 	bool check_player_session(int user_id, const TcpSessionPtr& session);
 
 	void on_kick_out_user(const TcpMsgPtr &msg);
-
-	bool is_player_in_room(int user_id, int &room_id);
 
     void flush_user_online(const TcpSessionPtr& session);
 
@@ -45,7 +41,7 @@ public:
 
     void output_manager_info(void);
 
-	boost::optional<int> check_user_msg(const TcpMsgPtr &msg, int& user_id);
+	boost::optional<int> check_user_msg(const TcpMsgPtr &msg)
 
 private:
 	void add_user_session(int user_id, const TcpSessionPtr& session);

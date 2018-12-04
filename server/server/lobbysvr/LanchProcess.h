@@ -30,6 +30,7 @@ private:
 	std::unique_ptr<MqClient> m_mq_client;
 	std::unique_ptr<Server> m_tcp_server;
 	std::string m_local_ip;
+	int m_svr_index = 0;
 };
 
 using LanchProcessInstance = boost::serialization::singleton<LanchProcess>;

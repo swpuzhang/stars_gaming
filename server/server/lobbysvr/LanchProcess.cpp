@@ -38,6 +38,7 @@ bool LanchProcess::parse_config()
 	int sub_count = atoi(jv_server_config["sub_process"].get<std::string>().c_str());
 	//起始端口
 	int port = atoi(jv_server_config["port"].get<std::string>().c_str());
+	m_svr_index = atoi(jv_server_config["svr_index"].get<std::string>().c_str());
 	assert(sub_count > 0 && sub_count < 100);
 	for (int i = 0; i < sub_count; ++i)
 	{
@@ -47,18 +48,20 @@ bool LanchProcess::parse_config()
 	//获取host配置
 	//本机外网IP
 	m_local_ip = m_config_json["host_config"]["ip"];
+	
 	return true;
 }
 
 void LanchProcess::run(int argc, char *argv[])
 {
 	std::srand(std::time(nullptr));
+	m_argv = std::vector<std::string>(argv, argv + argc);
+	
 	m_config_file = "./config/config.json";
 	std::string  config_str = FileTool::get_file_content(m_config_file);
 	//解析配置文件
 	m_config_json = Json::parse(config_str);
-	parse_config();
-	m_argv = std::vector<std::string>(argv, argv + argc);
+	this->parse_config();
 
 	//创建一个主loop 单线程
 	std::shared_ptr<IoLoopPool> main_pool = std::make_shared<IoLoopPool>(1);
@@ -84,20 +87,20 @@ void LanchProcess::run(int argc, char *argv[])
 		int i = 1;
 		for (auto & e : m_ports)
 		{
-			m_multi_process.creat_process(m_argv[0] + " " + std::to_string(i++) + " " + std::to_string(e), 1);
+			m_multi_process.creat_process(m_argv[0] + " " + std::to_string(m_svr_index) + "-" std::to_string(i++) + " " + std::to_string(e), 1);
 		}
 		
 		main_pool->run(false);
 	}
 	else
 	{
-		int child_id = atoi(m_argv[2].c_str());
+		std::string child_str = atoi(m_argv[2].c_str());
 		int port =  atoi(m_argv[2].c_str());
 		auto task_io_pool = std::make_shared<IoLoopPool>(1);
 		auto mq_io_loop = std::make_shared<IoLoopPool>(1);
-		//登录模块
+		//大厅模块
 		LobbyInstance::get_mutable_instance().open(task_io_pool->get_next_loop());
-
+		LobbyInstance::get_mutable_instance().parse_route_config(m_config_json["lobby_route"]);
 		//主逻辑线程需要用到mongo和redis
 		task_io_pool->init_resource();
 
@@ -108,7 +111,7 @@ void LanchProcess::run(int argc, char *argv[])
 		auto mq_dealer = std::make_shared<MessageDealer<MqTag>>(mq_task);
 		auto local_ip = boost::replace_all_copy(m_local_ip, ".", "_");
 		m_mq_client = std::make_unique<MqClient>(main_pool->get_next_loop(),
-			config_str, std::to_string(child_id) + "-" + local_ip + "-" + std::to_string(port),  mq_dealer, msg_maker);
+			config_str, child_str,  mq_dealer, msg_maker);
 		m_mq_client->connect();
 
 		//tcpserver

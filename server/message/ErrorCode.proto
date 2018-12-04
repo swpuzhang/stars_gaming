@@ -9,10 +9,8 @@ enum EnumErrorCode
 	//通信错误码
 	CODE_PARAMETER_NULL = 1; //参数为空
 	CODE_PARAMETER_INVALID = 2;  //参数不合法
-    CODE_INVALID_SITE_ID = 3;  //不合法的SITEID
-    CODE_INVALID_SITE_NAME = 4; //不合法的SITENAME
-    CODE_WAIT_RESP_TIMEOUT = 5; //等待response超时
-	CODE_SYSTEM_ERROR = 6;
+    CODE_WAIT_RESP_TIMEOUT = 3; //等待response超时
+	CODE_SYSTEM_ERROR = 4;
 	
 	//登录错误
 	CODE_ACOCUNT_EMPTY = 7;

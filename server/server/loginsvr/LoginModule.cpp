@@ -11,7 +11,6 @@
 #include "libresource/Mongodb.h"
 #include "libresource/Redis.h"
 #include "libtools/BaseTool.h"
-
 #include "libmessage/Message.h"
 
 
