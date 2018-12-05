@@ -24,5 +24,8 @@
     <ClInclude Include="MqRoute.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MongoInfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

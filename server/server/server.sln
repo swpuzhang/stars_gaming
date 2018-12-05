@@ -13,8 +13,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libserver", "..\common\libs
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libtask_manager", "..\common\libtask_manager\libtask_manager.vcxproj", "{8BB6DF7E-D54F-4A34-AD6D-F0C37C55B07A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gameclient", "gameclient\gameclient.vcxproj", "{496A64F1-D458-468E-A09D-36BEEA819247}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testlog", "testlog\testlog.vcxproj", "{DD4842CB-F208-4A84-BB62-6557DDBD2E6B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gamesvr", "gamesvr\gamesvr.vcxproj", "{CBD1B4BB-2F96-4736-93A9-5941C236364A}"
@@ -30,6 +28,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common_define", "common_define\common_define.vcxproj", "{BE90282A-39A8-44B6-98D5-6F511B33449F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lobby", "lobbysvr\Lobby.vcxproj", "{E9EBCB06-B084-45E3-8502-2C6862966FC8}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "robotsvr", "robotsvr\robotsvr.vcxproj", "{496A64F1-D458-468E-A09D-36BEEA819247}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,14 +83,6 @@ Global
 		{8BB6DF7E-D54F-4A34-AD6D-F0C37C55B07A}.Release|x64.Build.0 = Release|x64
 		{8BB6DF7E-D54F-4A34-AD6D-F0C37C55B07A}.Release|x86.ActiveCfg = Release|Win32
 		{8BB6DF7E-D54F-4A34-AD6D-F0C37C55B07A}.Release|x86.Build.0 = Release|Win32
-		{496A64F1-D458-468E-A09D-36BEEA819247}.Debug|x64.ActiveCfg = Debug|x64
-		{496A64F1-D458-468E-A09D-36BEEA819247}.Debug|x64.Build.0 = Debug|x64
-		{496A64F1-D458-468E-A09D-36BEEA819247}.Debug|x86.ActiveCfg = Debug|Win32
-		{496A64F1-D458-468E-A09D-36BEEA819247}.Debug|x86.Build.0 = Debug|Win32
-		{496A64F1-D458-468E-A09D-36BEEA819247}.Release|x64.ActiveCfg = Release|x64
-		{496A64F1-D458-468E-A09D-36BEEA819247}.Release|x64.Build.0 = Release|x64
-		{496A64F1-D458-468E-A09D-36BEEA819247}.Release|x86.ActiveCfg = Release|Win32
-		{496A64F1-D458-468E-A09D-36BEEA819247}.Release|x86.Build.0 = Release|Win32
 		{DD4842CB-F208-4A84-BB62-6557DDBD2E6B}.Debug|x64.ActiveCfg = Debug|x64
 		{DD4842CB-F208-4A84-BB62-6557DDBD2E6B}.Debug|x64.Build.0 = Debug|x64
 		{DD4842CB-F208-4A84-BB62-6557DDBD2E6B}.Debug|x86.ActiveCfg = Debug|Win32
@@ -155,6 +147,14 @@ Global
 		{E9EBCB06-B084-45E3-8502-2C6862966FC8}.Release|x64.Build.0 = Release|x64
 		{E9EBCB06-B084-45E3-8502-2C6862966FC8}.Release|x86.ActiveCfg = Release|Win32
 		{E9EBCB06-B084-45E3-8502-2C6862966FC8}.Release|x86.Build.0 = Release|Win32
+		{496A64F1-D458-468E-A09D-36BEEA819247}.Debug|x64.ActiveCfg = Debug|x64
+		{496A64F1-D458-468E-A09D-36BEEA819247}.Debug|x64.Build.0 = Debug|x64
+		{496A64F1-D458-468E-A09D-36BEEA819247}.Debug|x86.ActiveCfg = Debug|Win32
+		{496A64F1-D458-468E-A09D-36BEEA819247}.Debug|x86.Build.0 = Debug|Win32
+		{496A64F1-D458-468E-A09D-36BEEA819247}.Release|x64.ActiveCfg = Release|x64
+		{496A64F1-D458-468E-A09D-36BEEA819247}.Release|x64.Build.0 = Release|x64
+		{496A64F1-D458-468E-A09D-36BEEA819247}.Release|x86.ActiveCfg = Release|Win32
+		{496A64F1-D458-468E-A09D-36BEEA819247}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

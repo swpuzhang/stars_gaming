@@ -66,5 +66,6 @@ void RobotManager::load_robot()
 			LanchInstance::get_mutable_instance().get_client_loop()->get_next_loop(), one_info.m_user_id);
 		m_all_robots[one_info.m_user_id] = robot_ptr;
 
+
 	}
 }

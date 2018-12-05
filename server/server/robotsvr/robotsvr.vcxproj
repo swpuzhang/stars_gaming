@@ -150,14 +150,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Botman.cpp" />
     <ClCompile Include="LanchProcess.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Robot.cpp" />
+    <ClCompile Include="RobotManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Botman.h" />
     <ClInclude Include="GameMsgFactor.h" />
     <ClInclude Include="LanchProcess.h" />
+    <ClInclude Include="Robot.h" />
+    <ClInclude Include="RobotManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
