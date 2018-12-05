@@ -31,6 +31,17 @@ message LoginResponse
 	bytes lobby_host = 7;
 }
 
+
+message UserTokenLoginRequest
+{
+	bytes userToken = 1;
+}
+
+message UserTokenLoginResponse
+{
+	 
+}
+
 message NotifyLoginRequest
 {
 	int32 user_id = 1;

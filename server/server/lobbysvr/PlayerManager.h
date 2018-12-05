@@ -12,6 +12,7 @@
 
 class Player;
 using PLAYER_PTR = std::shared_ptr<Player>;
+constexpr TY_INT64 MAX_LOGIN_SEC = 5;
 
 class PlayerManager
 {
@@ -20,9 +21,8 @@ public:
 	virtual ~PlayerManager(void);
 
 	void on_session_close(const TcpMsgPtr &msg);
-
+	void on_session_open(const TcpMsgPtr &msg);
 	bool player_token_login(const TcpMsgPtr &msg);
-
 	bool is_player_online(int user_id);
 
 	PLAYER_PTR make_player(int player_id, const TcpSessionPtr& session);
@@ -60,9 +60,12 @@ private:
 
 	void tell_user_login_lobby(int user_id);
 
+	void on_timeout(const SYSTEM_CODE& err_code);
 private:
     std::unordered_map<int, PLAYER_PTR> m_login_user;     //key: user_id ,所以登陆了的玩家，包含当前短暂离线的玩家， 玩家离线5分钟后删除记录
     std::unordered_map<TcpSession*, PLAYER_PTR> m_online_user;   // key: session_id， 当前所有登陆玩家，当前在线的玩家
+	std::map<TcpSessionPtr, steady_clock::time_point> m_session_time;  //创建连接的信息
+	std::unique_ptr<boost::asio::steady_timer > m_timer;
 };
 
 using PlayerManagerInstance = boost::serialization::singleton<PlayerManager>;

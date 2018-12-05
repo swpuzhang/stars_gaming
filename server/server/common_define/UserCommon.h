@@ -19,7 +19,8 @@ FIELD_CLASS13(UserInfo,
 	IntType, user_cur_exp,
 	IntType, need_exp,
 	IntType, last_login_time,
-	IntType, last_offline_time);
+	IntType, last_offline_time,
+	IntType, is_robot);
 
 
 #endif

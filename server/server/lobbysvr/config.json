@@ -2,7 +2,7 @@
   "host_config": {
     "local_ip": "192.168.10.220",
     "local_inner_ip": "127.0.0.111",
-    "lobby_list" : [
+    "lobby_list": [
       {
         "ip": "192.168.10.220",
         "ports": [ "7500" ]
@@ -10,10 +10,16 @@
     ]
   },
 
+  //1-1000 系统底层消息
+  //1000-2000 登录消息
+  //2000-50000 gamesvr消息
+  //50000-51000 matchsvr消息
+  //52000-53000 moneysvr消息
+
   "lobby_route": [
     {
-      "cmd_begin": "1",
-      "cmd_end": "1000",
+      "cmd_begin": "2000",
+      "cmd_end": "3000",
       "exchange": "gamesvr.direct",
       "route": "gamesvr",
       "type": "2",
@@ -24,8 +30,8 @@
     },
 
     {
-      "cmd_begin": "100000",
-      "cmd_end": "110000",
+      "cmd_begin": "52000",
+      "cmd_end": "53000",
       "exchange": "moneysvr.direct",
       "route": "moneysvr",
       "type": "1",
@@ -48,7 +54,7 @@
   ],
 
   "lobbysvr": {
-    "svr_index" :  "1",
+    "svr_index": "1",
     "sub_process": "10",
     "port": "7500"
 

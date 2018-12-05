@@ -16,6 +16,7 @@ LoginTaskManager::LoginTaskManager(IoLoop& io_loop) : m_io_loop(io_loop)
 {
 	TRACE_FUNCATION();
 	register_msg_handler(CMD_LOGIN, TASK_BIND(on_login));
+	register_msg_handler(CMD_ROBOT_LOGIN, TASK_BIND(on_robot_login));
 }
 
 
@@ -45,6 +46,11 @@ void LoginTaskManager::on_session_open(const TcpMsgPtr& msg)
 }
 
 void LoginTaskManager::on_login(const TcpMsgPtr& msg)
+{
+	LoginInstance::get_mutable_instance().user_login(msg);
+}
+
+void LoginTaskManager::on_robot_login(const TcpMsgPtr& msg)
 {
 	LoginInstance::get_mutable_instance().user_login(msg);
 }

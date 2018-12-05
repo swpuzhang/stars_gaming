@@ -21,6 +21,7 @@ protected:
 	void on_session_open(const TcpMsgPtr& msg) override;
 	void on_heart_beat(const TcpMsgPtr& msg) override;
 	void on_login(const TcpMsgPtr& msg);
+	void on_robot_login(const TcpMsgPtr& msg);
 private:
 	
 	IoLoop& m_io_loop;

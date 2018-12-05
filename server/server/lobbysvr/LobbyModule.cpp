@@ -37,7 +37,7 @@ MsgRout::MsgRout(int cmd_begin, int cmd_end, const std::string exch, const std::
 }
 bool MsgRout::is_cmd_match(const int msg_cmd) const
 {
-	if (msg_cmd >= m_cmd_begin && msg_cmd <= m_cmd_end)
+	if (msg_cmd >= m_cmd_begin && msg_cmd < m_cmd_end)
 	{
 		return true;
 	}

@@ -47,7 +47,7 @@ void LoginModule::open(IoLoop & ioloop)
 }
 
 
-void LoginModule::user_login(const TcpMsgPtr& msg)
+void LoginModule::user_login(const TcpMsgPtr& msg, bool is_robot)
 {
 	//如果APP没有查找到账号文件, 而且没有获取到设备号,
 	//那么登录时会返回一个objectid(时间戳+ip+进程号+随机序号)作为账号,
@@ -100,6 +100,7 @@ void LoginModule::user_login(const TcpMsgPtr& msg)
 		RedisInstance::get_mutable_instance().json_to_hash(account_info.to_json(),
 			account_redis_key(account_info.m_account), ACCOUNT_EXPIRE_SEC);
 		user_info = generate_new_user(login_req, account_info);
+		user_info.m_is_robot = is_robot ? 1 : 0;
 		if (!insert_new_user(user_info))
 		{
 			msg->send_failed_reason(CODE_ACOCUNT_EMPTY);
@@ -172,7 +173,6 @@ UserInfo LoginModule::generate_new_user(const LoginRequest& login_req, const Acc
 	{
 		user_info.m_header_url = m_default_male_header_urls[rand() % m_default_male_header_urls.size()];
 	}
-
 	return user_info;
 }
 

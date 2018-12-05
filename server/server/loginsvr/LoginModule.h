@@ -3,6 +3,7 @@
 
 
 #include "UserCommon.h"
+#include "MongoInfo.h"
 #include <boost/serialization/singleton.hpp>
 #include <vector>
 #include <map>
@@ -27,10 +28,6 @@ using namespace LoginMsg;
 using namespace std::chrono;
 
 constexpr TY_INT64 MAX_LOGIN_SEC = 30;
-constexpr char USER_INFO_COLLECT[] = "c_user_info";
-constexpr char USER_ID_COLLECT[] = "c_user_id";
-constexpr char USER_MONEY_COLLECT[] = "c_user_money";
-constexpr char VERSON_COLLECT[] = "c_version";
 constexpr int INIT_USER_ID = 10000500;
 constexpr int ACCOUNT_EXPIRE_SEC = 7 * 3600 * 24;
 constexpr int DEFAULT_SEX = 0;  //ÄÐ
@@ -70,7 +67,7 @@ public:
 	void open(IoLoop & ioloop);
 	void user_session_open(const TcpSessionPtr& user_sessoin);
 	void user_session_close(const TcpSessionPtr& user_sessoin);
-	void user_login(const TcpMsgPtr& msg);
+	void user_login(const TcpMsgPtr& msg, bool is_robot = false);
 	void load_version_info();
 	
 private:

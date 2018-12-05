@@ -35,10 +35,18 @@ PlayerManager::~PlayerManager(void)
 {
 }
 
+void PlayerManager::on_session_open(const TcpMsgPtr &msg)
+{
+	TcpSessionPtr tcpsession_ptr = std::dynamic_pointer_cast<TcpSession>(msg->session_ptr());
+	m_session_time[tcpsession_ptr] = steady_clock::now();
+}
+
 void PlayerManager::on_session_close(const TcpMsgPtr &msg)
 {
 	TRACE_FUNCATION();
 	INFO_LOG << "session(" << msg->session_ptr().get() << ") close";
+	TcpSessionPtr tcpsession_ptr = std::dynamic_pointer_cast<TcpSession>(msg->session_ptr());
+	m_session_time.erase(tcpsession_ptr);
 	auto iter = m_online_user.find(reinterpret_cast<TcpSession*>(msg->session_ptr().get()));
 	if (iter != m_online_user.end())
 	{
@@ -50,6 +58,24 @@ void PlayerManager::on_session_close(const TcpMsgPtr &msg)
 		m_online_user.erase(iter);
 		m_login_user.erase(player->get_user_id());
 	}
+}
+
+void PlayerManager::on_timeout(const SYSTEM_CODE& err_code)
+{
+	steady_clock::time_point tnow = steady_clock::now();
+	for (auto iter = m_session_time.begin(); iter != m_session_time.end();)
+	{
+		if (tnow < iter->second + MAX_LOGIN_SEC)
+		{
+			++iter;
+			continue;
+		}
+		iter = m_session_time.erase(iter);
+	}
+	 
+	m_timer->expires_from_now(MAX_LOGIN_SEC);
+	m_timer->async_wait(MEMFUN_THIS_BIND1(on_timeout, PLACEHOLDER::_1));
+	output_manager_info();
 }
 
 bool PlayerManager::player_token_login(const TcpMsgPtr &msg)

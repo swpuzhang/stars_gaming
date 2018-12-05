@@ -45,17 +45,6 @@ message PlayerChipsChangeRequest
     optional  int64 outChipsCount = 5;  // 当前的场外筹码数
 }
 
-
-message UserTokenLoginRequest
-{
-	 optional bytes userToken = 1;
-}
-
-message UserTokenLoginResponse
-{
-	 
-}
-
 message PlayerChipsChangeResponse
 {
 	 

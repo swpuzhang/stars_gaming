@@ -13,6 +13,8 @@
 #include "SystemMsg.pb.h"
 #include "GameMsg.pb.h"
 #include "GameCmd.pb.h"
+#include "LoginCmd.pb.h"
+#include "LoginMsg.pb.h"
 
 using namespace SystemMsg;
 using namespace SystemCmd;
@@ -24,13 +26,15 @@ using namespace LobbyMsg;
 using namespace GameMsg;
 using namespace GameCmd;
 using namespace ErrorCode;
+using namespace LoginMsg;
+using namespace LoginCmd;
 
 class LoginMsgFactor : public MessageMaker
 {
 public:
 	LoginMsgFactor() : MessageMaker()
 	{
-		register_message(CMD_USER_TOKEN_LOGIN_GAMESVR, UserTokenLoginRequest(), UserTokenLoginResponse());
+		register_message(CMD_USER_TOKEN_LOGIN, UserTokenLoginRequest(), UserTokenLoginResponse());
 	}
 };
 

@@ -4,7 +4,7 @@ package LobbyCmd;
 enum EnumLobbyCmd
 {
 	CMD_BEGIN = 0;    //占位，没用
-	CMD_USER_TOKEN_LOGIN = 2026;
+	
 	CMD_GET_ROOM_LIST = 2027; //获取房间列表接口
     CMD_GET_AUTO_MATCH_ROOM = 2028; //playnow接口
     CMD_GET_BLIND_MATCH_ROOM = 2029; //匹配某一底注房间 接口
