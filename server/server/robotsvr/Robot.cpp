@@ -1,4 +1,6 @@
 #include "Robot.h"
+#include "LanchProcess.h"
+
 #include "libtools/BaseTool.h"
 #include "libtools/JsonParser.h"
 #include "libserver/AsyncRequest.h"
@@ -12,6 +14,8 @@
 #include "SystemMsg.pb.h"
 #include "GameMsg.pb.h"
 #include "GameCmd.pb.h"
+#include "LoginCmd.pb.h"
+#include "LoginMsg.pb.h"
 
 #include <string>
 #include <thread>
@@ -26,22 +30,22 @@ using namespace LobbyMsg;
 using namespace GameMsg;
 using namespace GameCmd;
 using namespace ErrorCode;
+using namespace LoginMsg;
+using namespace LoginCmd;
 
-Robot::Robot(IoLoop& io_loop, IoLoop& client_io_loop, const int& user_id) : 
+Robot::Robot(IoLoop& io_loop, IoLoop& client_io_loop, const int& user_id, const std::string& account) :
 	TcpTask(), m_io_loop(io_loop),
 	m_client_io_loop(client_io_loop),
-	m_user_id(user_id)
+	m_user_id(user_id),
+	m_account(account)
 {
 	TRACE_FUNCATION();
-}
-
-void Robot::open()
-{
 	std::shared_ptr<TcpMsgDealer> msg_dealer = std::make_shared<TcpMsgDealer>(shared_from_this());
 	const std::shared_ptr<GameMsgFactor> msg_maker = std::make_shared<GameMsgFactor>();
-	m_client.reset(new Client(m_client_io_loop, msg_dealer, msg_maker));
-	m_client->connect("127.0.0.1", 8000);
+	m_client = std::make_shared <Client>(m_client_io_loop, msg_dealer, msg_maker);
+	m_login_client = std::make_shared <Client>(m_client_io_loop, msg_dealer, msg_maker);
 }
+
 
 void Robot::on_unknown_msg(const TcpMsgPtr& msg)
 {
@@ -62,7 +66,12 @@ void Robot::handle_message(const TcpMsgPtr& msg)
 
 void Robot::on_session_close(const TcpMsgPtr& msg)
 {
-	DEBUG_LOG << "session(" << reinterpret_cast<long>(msg->session_ptr().get()) << ") close";
+	DEBUG_LOG << "session(" << msg->session_ptr().get() << ")  close";
+	TcpSessionPtr tcpsession_ptr = std::dynamic_pointer_cast<TcpSession>(msg->session_ptr());
+	if (tcpsession_ptr == m_login_client->session_ptr())
+	{
+		on_login_session_close(tcpsession_ptr);
+	}
 }
 
 
@@ -79,7 +88,17 @@ void Robot::on_token_response(TcpMsgPtr msg, TcpMsgPtr response)
 
 void Robot::on_session_open(const TcpMsgPtr& msg)
 {
-	DEBUG_LOG << "session(" << reinterpret_cast<long>(msg->session_ptr().get()) << ") open";
+	DEBUG_LOG << "session(" << msg->session_ptr().get() << ")  open";
+	TcpSessionPtr tcpsession_ptr = std::dynamic_pointer_cast<TcpSession>(msg->session_ptr());
+	if (tcpsession_ptr == m_login_client->session_ptr())
+	{
+		on_login_session_open(tcpsession_ptr);
+	}
+	else
+	{
+		
+	}
+	/*DEBUG_LOG << "session(" << reinterpret_cast<long>(msg->session_ptr().get()) << ") open";
 	FULL_MSG(TcpTag::HeaderType, head, UserTokenLoginRequest, pbreq, TcpTag, sendmsg);
 	head->set_cmdtype(CMD_USER_TOKEN_LOGIN);
 	Json jv = {
@@ -98,5 +117,52 @@ void Robot::on_session_open(const TcpMsgPtr& msg)
 		WARN_LOG << "send token failed";
 		return;
 	}
-	//std::this_thread::sleep_for(std::chrono::milliseconds(20));
+	//std::this_thread::sleep_for(std::chrono::milliseconds(20));*/
+}
+
+void Robot::action_connect_loginsvr()
+{
+	auto login_host = LanchProcessInstance::get_mutable_instance().get_login_host();
+	m_login_client->connect(login_host.first, login_host.second);
+}
+
+void Robot::action_login()
+{
+	if (!m_login_client->session_ptr())
+	{
+		action_connect_loginsvr();
+		return;
+	}
+
+	LoginRequest login_request;
+	login_request.set_account(m_account);
+	if (!m_login_client->send_message(CMD_LOGIN, login_request, [this](const TcpMsgPtr& request, const TcpMsgPtr& response) {
+		const TcpTag::HeaderType &msg_head = response->header();
+		if (msg_head.response_result() != CODE_SUCCESS)
+		{
+			ERROR_LOG << "robot account(" << m_account;
+			return;
+
+		}
+		LoginResponse login_res = response->pbmessage<LoginResponse>();
+		m_user_id = login_res.user_id();
+		m_is_need_login = false;
+		m_last_login_time = steady_clock::now();
+		m_login_client->close_client();
+		}, std::chrono::milliseconds(3000), m_io_loop))
+	{
+		action_connect_loginsvr();
+		ERROR_LOG << "send loginsvr error";
+		return;
+	}
+}
+
+void Robot::on_login_session_open(const TcpSessionPtr& session)
+{
+
+}
+
+void Robot::on_login_session_close(const TcpSessionPtr& session)
+{
+	m_login_client->close_session();
 }

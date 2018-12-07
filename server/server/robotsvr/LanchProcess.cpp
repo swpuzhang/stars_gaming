@@ -17,6 +17,7 @@
 #include "libtools/JsonParser.h"
 #include "libtools/BaseTool.h"
 #include "libtools/JsonParser.h"
+#include "libtools/SystemTool.h"
 
 #include <cstdio>
 #include <cstdlib>
@@ -67,10 +68,31 @@ std::string LanchProcess::get_short_filename(const std::string& str)
 	return "./" + short_name;
 }
 
+bool LanchProcess::parse_config()
+{
+	//获取本server的配置
+	std::string process_name = SystemTool::get_process_name();
+	Json &jv_server_config = m_config_json[process_name];
+	if (!jv_server_config.is_valid())
+	{
+		return false;
+	}
+	//子进程数量
+	int sub_count = atoi(jv_server_config["sub_process"].get<std::string>().c_str());
+	m_login_ip = jv_server_config["login_ip"].get<std::string>();
+	m_login_port = atoi(jv_server_config["login_port"].get<std::string>().c_str());
+	assert(sub_count > 0 && sub_count < 100);
+
+	//获取host配置
+	//本机外网IP
+	m_local_ip = m_config_json["host_config"]["ip"];
+	return true;
+}
+
 void LanchProcess::run(const std::string& config_file, int argc, char *argv[])
 {
 	m_config_file = config_file;
-	m_argc = argc;
+	parse_config();
 	m_argv = std::vector<std::string>(argv, argv + argc);
 	std::shared_ptr<IoLoopPool> io_pool = std::make_shared<IoLoopPool>(1);
 #ifndef _WIN32

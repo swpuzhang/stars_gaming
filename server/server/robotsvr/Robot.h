@@ -22,19 +22,25 @@ class Robot : public std::enable_shared_from_this<Robot>, public TcpTask
 public:
 
 	using SELF_TYPE = Robot;
-	Robot(IoLoop& io_loop, IoLoop& client_io_loop, const int& user_id);
-	void open();
+	Robot(IoLoop& io_loop, IoLoop& client_io_loop, const int& user_id, const std::string& account);
 	void handle_message(const TcpMsgPtr& msg) override;
-
+	void set_account(const std::string& account) { m_account = account; }
+	void set_version(const std::string& account) { m_account = account; }
 protected:
 	void on_unknown_msg(const TcpMsgPtr& msg) override;
 	void on_session_close(const TcpMsgPtr& msg) override;
 	void on_session_open(const TcpMsgPtr& msg) override;
 	void on_heart_beat(const TcpMsgPtr& msg) override;
 	//void on_token_login(const TcpMsgPtr& msg);
-
+private:
+	void action_connect_loginsvr();
+	void action_login();
+	void on_login_session_open(const TcpSessionPtr& session);
+	void on_login_session_close(const TcpSessionPtr& session);
 private:
 	int m_user_id = 0;
+	std::string m_account;
+
 	bool m_is_need_login = false;
 	const static int MAX_LOGIN_INTERVAL = 3600 * 24;
 	time_point<steady_clock> m_last_login_time = steady_clock::now();

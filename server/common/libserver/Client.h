@@ -23,7 +23,7 @@ class TcpSession;
 
 class IoLoop;
 
-class Client: public SessionManager
+class Client: public std::enable_shared_from_this<Client>, public SessionManager
 {
 public:
 	using QUEUE_PTR = std::shared_ptr<SendQueue>;
@@ -34,7 +34,7 @@ public:
 	void close_session(const std::shared_ptr<TcpSession>& sessoin) override;
 
 	void close_client();
-	void connect(const std::string& ip, const short port_num);
+	void connect(const std::string& ip, const TY_UINT16 port_num);
 	bool send_message(const std::shared_ptr<Message<TcpTag>>& msg);
 
 	//发送和接收不能在同一线程
@@ -46,6 +46,14 @@ public:
 		const ASYNC_FUN<TcpTag>& fun,
 		const std::chrono::milliseconds &millisenconds = std::chrono::milliseconds(10000), IoLoop* io_loop = NULL);
 
+	bool send_message(int cmd_type, const PbMessagePtr& msg);
+	//发送和接收不能在同一线程
+	bool send_message(int cmd_type, const PbMessagePtr& msg, MessagePtr<TcpTag>& response,
+		const std::chrono::milliseconds &millisenconds);
+	bool send_message(int cmd_type, const PbMessagePtr& msg, const ASYNC_FUN<TcpTag>& fun,
+		const std::chrono::milliseconds &millisenconds,
+		IoLoop* io_loop = nullptr);
+
 	//void on_socket_close(Session* sock);
 
 	std::shared_ptr<TcpSession> session_ptr();
@@ -53,7 +61,7 @@ public:
 private:
 
 	void do_close_client();
-	void do_connect(const std::string ip, const short port_num);
+	void do_connect(const std::string ip, const TY_UINT16 port_num);
 	void connect();
 	void on_connet_complete(const SYSTEM_CODE& err_code);
 	void on_wait_reconnect(const SYSTEM_CODE& err);

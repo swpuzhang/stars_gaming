@@ -176,14 +176,14 @@ void Client::on_check_alive(const SYSTEM_CODE& err)
 	}
 }
 
-void Client::connect(const std::string& ip, const short port_num)
+void Client::connect(const std::string& ip, const TY_UINT16 port_num)
 {
 	TRACE_FUNCATION();
 	m_io_loop.post(MEMFUN_THIS_BIND2(do_connect, ip, port_num));
 }
 
 
-void Client::do_connect(const std::string ip, const short port_num)
+void Client::do_connect(const std::string ip, const TY_UINT16 port_num)
 {
 	TRACE_FUNCATION();
 	m_auto_reconnect = true;
@@ -248,6 +248,9 @@ void Client::do_close_client()
 		m_is_wait_connect = false;
 		m_reconnet_timer.cancel();
 	}
+	m_connect_timer.cancel();
+	m_heart_beat_timer.cancel();
+	m_check_alive_timer.cancel();
 }
 
 void Client::close_session(const std::shared_ptr<TcpSession>& sessoin)
@@ -294,6 +297,48 @@ bool Client::send_message(const std::shared_ptr<Message<TcpTag>>& msg)
 	return false;
 }
 
+bool Client::send_message(int cmd_type, const PbMessagePtr& msg)
+{
+
+	TRACE_FUNCATION();
+	std::shared_ptr<TcpSession> session = session_ptr();
+	if (session)
+	{
+		session->send(cmd_type, msg);
+		return true;
+	}
+	return false;
+}
+
+bool Client::send_message(int cmd_type, const PbMessagePtr& msg, MessagePtr<TcpTag>& response,
+	const std::chrono::milliseconds &millisenconds)
+{
+	TRACE_FUNCATION();
+	std::shared_ptr<TcpSession> session = session_ptr();
+	if (session)
+	{
+		session->send(cmd_type, msg, response, millisenconds);
+		return true;
+	}
+
+	return false;
+}
+
+bool Client::send_message(int cmd_type, const PbMessagePtr& msg, const ASYNC_FUN<TcpTag>& fun,
+	const std::chrono::milliseconds &millisenconds,
+	IoLoop* io_loop)
+{
+	TRACE_FUNCATION();
+	std::shared_ptr<TcpSession> session = session_ptr();
+	if (session)
+	{
+		session->send(cmd_type, msg, fun, millisenconds, io_loop);
+		return true;
+	}
+
+	return false;
+}
+
 void Client::on_connect_timeout(const SYSTEM_CODE& err)
 {
 	TRACE_FUNCATION();
@@ -307,6 +352,7 @@ void Client::on_connect_timeout(const SYSTEM_CODE& err)
 			m_socket->close();
 		}
 	}
+
 	else
 	{
 		if (m_socket && m_socket->is_open())

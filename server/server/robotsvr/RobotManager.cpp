@@ -63,9 +63,8 @@ void RobotManager::load_robot()
 		UserInfo one_info;
 		one_info.from_json(Json::parse(bsoncxx::to_json(doc)));
 		auto robot_ptr = std::make_shared<Robot>(LanchInstance::get_mutable_instance().get_io_loop()->get_next_loop(),
-			LanchInstance::get_mutable_instance().get_client_loop()->get_next_loop(), one_info.m_user_id);
+			LanchInstance::get_mutable_instance().get_client_loop()->get_next_loop(), one_info.m_user_id, one_info.m_account);
 		m_all_robots[one_info.m_user_id] = robot_ptr;
-
-
+		robot_ptr->action_connect_loginsvr();
 	}
 }
