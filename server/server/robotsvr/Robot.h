@@ -35,12 +35,17 @@ protected:
 private:
 	void action_connect_loginsvr();
 	void action_login();
+	void action_token_login();
 	void on_login_session_open(const TcpSessionPtr& session);
 	void on_login_session_close(const TcpSessionPtr& session);
+	void on_lobby_session_open(const TcpSessionPtr& session);
+	void on_lobby_session_close(const TcpSessionPtr& session);
 private:
 	int m_user_id = 0;
 	std::string m_account;
-
+	std::string m_lobby_ip;
+	TY_UINT16 m_lobby_port;
+	std::string m_token;
 	bool m_is_need_login = false;
 	const static int MAX_LOGIN_INTERVAL = 3600 * 24;
 	time_point<steady_clock> m_last_login_time = steady_clock::now();

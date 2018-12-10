@@ -126,6 +126,25 @@ void Robot::action_connect_loginsvr()
 	m_login_client->connect(login_host.first, login_host.second);
 }
 
+void Robot::action_token_login()
+{
+	UserTokenLoginRequest token_request;
+	token_request.set_usertoken(m_token);
+	if (!m_login_client->send_message(CMD_USER_TOKEN_LOGIN, token_request, [this](const TcpMsgPtr& request, const TcpMsgPtr& response) {
+		const TcpTag::HeaderType &msg_head = response->header();
+		if (msg_head.response_result() != CODE_SUCCESS)
+		{
+			ERROR_LOG <<  "user(" << m_user_id << ") toke_login token(" << m_token << ")";
+			return;
+		}
+		UserTokenLoginResponse token_res = response->pbmessage<UserTokenLoginResponse>();
+	}, std::chrono::milliseconds(3000), m_io_loop))
+	{
+		ERROR_LOG << "token login error";
+		return;
+	}
+}
+
 void Robot::action_login()
 {
 	if (!m_login_client->session_ptr())
@@ -136,7 +155,8 @@ void Robot::action_login()
 
 	LoginRequest login_request;
 	login_request.set_account(m_account);
-	if (!m_login_client->send_message(CMD_LOGIN, login_request, [this](const TcpMsgPtr& request, const TcpMsgPtr& response) {
+	
+	if (!m_login_client->send_message(CMD_ROBOT_LOGIN, login_request, [this](const TcpMsgPtr& request, const TcpMsgPtr& response) {
 		const TcpTag::HeaderType &msg_head = response->header();
 		if (msg_head.response_result() != CODE_SUCCESS)
 		{
@@ -146,9 +166,16 @@ void Robot::action_login()
 		}
 		LoginResponse login_res = response->pbmessage<LoginResponse>();
 		m_user_id = login_res.user_id();
+		m_lobby_ip = login_res.lobby_ip();
+		m_lobby_port = login_res.lobby_port();
+		m_token = login_res.token();
 		m_is_need_login = false;
 		m_last_login_time = steady_clock::now();
 		m_login_client->close_client();
+		if (!m_client->session_ptr())
+		{
+			m_client->connect(m_lobby_ip, m_lobby_port);
+		}
 		}, std::chrono::milliseconds(3000), m_io_loop))
 	{
 		action_connect_loginsvr();
@@ -159,10 +186,20 @@ void Robot::action_login()
 
 void Robot::on_login_session_open(const TcpSessionPtr& session)
 {
-
+	action_login();
 }
 
 void Robot::on_login_session_close(const TcpSessionPtr& session)
 {
-	m_login_client->close_session();
+
+}
+
+void Robot::on_lobby_session_open(const TcpSessionPtr& session)
+{
+
+}
+
+void Robot::on_lobby_session_close(const TcpSessionPtr& session)
+{
+
 }

@@ -88,7 +88,7 @@ private:
 	void notify_user_login(const AccountInfo& account_info, const LoginRequest& login_req);
 
 public:
-	static std::vector<std::string> m_lobby_list;
+	static std::vector<std::pair<std::string, TY_UINT16>> m_lobby_list;
 	static	TY_UINT32 m_local_ip;
 private:
 	std::map<TcpSessionPtr, steady_clock::time_point> m_session_time;  //创建连接的信息

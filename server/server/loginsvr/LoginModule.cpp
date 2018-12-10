@@ -14,7 +14,7 @@
 #include "libmessage/Message.h"
 
 
-std::vector<std::string> LoginModule::m_lobby_list = {};
+std::vector<std::pair<std::string. TY_UINT16>> LoginModule::m_lobby_list = {};
 TY_UINT32 LoginModule::m_local_ip = 0;
 
 void LoginModule::load_version_info()
@@ -114,8 +114,9 @@ void LoginModule::user_login(const TcpMsgPtr& msg, bool is_robot)
 	Json jv{ {"user_id" , account_info.m_user_id}, {"user_type", login_req.user_type()},
 		{ "app_type", login_req.app_type()}, {"version",login_req.version()}, {"os_version", login_req.os_version()},
 		{"channel", login_req.channel()}, {"time", tnow_sec} };
-
-	response->set_lobby_host(m_lobby_list[rand() % m_lobby_list.size()]);
+	auto lobby_host = m_lobby_list[rand() % m_lobby_list.size()];
+	response->set_lobby_ip(lobby_host.first);
+	response->set_lobby_port(lobby_host.second);
 	response->set_user_id(account_info.m_user_id);
 	response->set_token(AES_ecb128_encrypt(jv.dump()));
 	response->set_cur_version(m_versoin_info.m_cur_version);

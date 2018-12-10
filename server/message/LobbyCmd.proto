@@ -5,10 +5,7 @@ enum EnumLobbyCmd
 {
 	CMD_BEGIN = 0;    //占位，没用
 	
-	CMD_GET_ROOM_LIST = 2027; //获取房间列表接口
-    CMD_GET_AUTO_MATCH_ROOM = 2028; //playnow接口
-    CMD_GET_BLIND_MATCH_ROOM = 2029; //匹配某一底注房间 接口
-    CMD_GET_CHANGE_MATCH_ROOM = 2030;//换房接口
+   
 	CMD_PLAYER_GAME_OVER = 2031; //通知玩家游戏结束， 玩家逃跑后 在大厅会接受到此消息。
 	CMD_USER_GAME_ROOM_INFO = 2032; //通知玩家正在进行的游戏， 玩家逃跑后，在大厅重连时会收到这个消息，提示玩家连进该房间
 	CMD_SEARCH_ROOM = 2033;  //匹配房间接口

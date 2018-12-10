@@ -54,14 +54,13 @@ bool LanchProcess::parse_config()
 	{
 		return false;
 	}
-	std::set<std::string> hosts;
+	std::set<std::pair<std::string, TY_UINT16>> hosts;
 	for (size_t i = 0; i < jv_lobby_list.size(); ++i)
 	{
 		std::string str_ip = jv_lobby_list[i]["ip"];
 		for (auto &e : jv_lobby_list[i]["ports"])
 		{
-			std::string one_host = str_ip + ":" + e.get<std::string>();
-			hosts.insert(one_host);
+			hosts.insert({ str_ip,   atoi(e.get<std::string>()) });
 		}
 	}
 	std::copy(hosts.begin(), hosts.end(), std::back_inserter(LoginModule::m_lobby_list));

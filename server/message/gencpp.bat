@@ -5,8 +5,8 @@ protoc -I=./ --cpp_out=./cpp/ ./SystemMsg.proto
 protoc -I=./ --cpp_out=./cpp/ ./ErrorCode.proto
 protoc -I=./ --cpp_out=./cpp/ ./SystemCmd.proto
 protoc -I=./ --cpp_out=./cpp/ ./MsgHeader.proto
-protoc -I=./ --cpp_out=./cpp/ ./RoomCmd.proto
-protoc -I=./ --cpp_out=./cpp/ ./RoomMsg.proto
+protoc -I=./ --cpp_out=./cpp/ ./MatchCmd.proto
+protoc -I=./ --cpp_out=./cpp/ ./MatchMsg.proto
 protoc -I=./ --cpp_out=./cpp/ ./SvrCmd.proto
 protoc -I=./ --cpp_out=./cpp/ ./SvrMsg.proto
 protoc -I=./ --cpp_out=./cpp/ ./LobbyCmd.proto
