@@ -57,6 +57,6 @@ public:
 };
 
 typedef boost::serialization::singleton<Mongodb> MongodbInstance;
-#define MongoInst MongodbInstance::get_mutable_instance();
+const static Mongodb& MongoInst = MongodbInstance::get_mutable_instance();
 #include "Resource.inl"
 #endif // RESOURCE_H

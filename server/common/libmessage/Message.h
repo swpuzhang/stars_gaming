@@ -46,11 +46,6 @@ class TcpSession;
 using TcpSessionPtr = std::shared_ptr<TcpSession>;
 using MqSessionPtr = std::shared_ptr<MqSession>;
 
-constexpr int  MSG_BUF_SIZE = 1024 * 128;
-constexpr int  MQ_BUF_SIZE = 1024 * 1024 * 10;
-constexpr int HEADER_LENGTH = sizeof(TY_UINT32);
-
-
 template <class MsgTag>
 class Message
 {

@@ -60,5 +60,5 @@ public:
 };
 
 typedef boost::serialization::singleton<Redis> RedisInstance;
-#define RedisInst RedisInstance::get_mutable_instance();
+const static  Redis& RedisInst =  RedisInstance::get_mutable_instance();
 #endif

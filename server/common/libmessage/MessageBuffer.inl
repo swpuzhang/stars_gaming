@@ -47,7 +47,7 @@ MsgMutableBuffer<MsgTag>::MsgMutableBuffer()
 {
 	this->m_header_length = (0);
 	this->m_msg_length = (0);
-	this->m_buffer = (new TY_BYTE[MSG_BUF_SIZE + HEADER_LENGTH]);
+	this->m_buffer = (new TY_BYTE[MsgTag::get_max_buf_size() + HEADER_LENGTH]);
 }
 
 /*template <>
